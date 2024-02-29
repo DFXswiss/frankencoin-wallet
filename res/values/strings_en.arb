@@ -1,0 +1,8 @@
+{
+    "create_wallet": "Create Wallet",
+    "restore_wallet": "Restore Wallet",
+    "your_seed": "Your Frankencoin-seed",
+    "your_seed_disclaimer": "This is your unique and private seed and it is the only way to recover your wallet in case of loss or malfunction.",
+    "welcome_frankecoin_wallet": "Welcome in the \nFrankencoin Wallet",
+    "welcome_disclaimer": "By using Frankencoin Wallet you agree to our terms and conditions."
+}

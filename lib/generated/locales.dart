@@ -1,0 +1,1 @@
+const locales = ['de', 'en', ];
