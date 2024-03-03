@@ -10,7 +10,7 @@ class BalanceInfo {
     required this.chainId,
     required this.contractAddress,
     required this.address,
-    required this.balance
+    required this.balance,
   });
 
   Id get id => fastHash("$chainId:$contractAddress:$address");
@@ -22,4 +22,5 @@ class BalanceInfo {
   String address;
 
   String balance; // This has to be a String, because BigInt is not supported
+
 }

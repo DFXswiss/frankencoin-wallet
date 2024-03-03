@@ -47,8 +47,12 @@ dependencies:
   shared_preferences: ^2.2.2
   flutter_secure_storage: ^9.0.0
   web3dart: ^2.7.1
+  erc20: ^1.0.1
+  http: ^1.1.0
   mobx: ^2.3.0+1
   flutter_mobx: ^2.2.0+2
+  qr_flutter: ^4.1.0
+
 
 dev_dependencies:
   flutter_test:
@@ -73,7 +77,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/images/frankencoin.png
+   - assets/images/
+   - assets/images/crypto/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

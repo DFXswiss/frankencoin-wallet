@@ -6,8 +6,11 @@ import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/entites/wallet_info.dart';
 import 'package:frankencoin_wallet/src/screens/router.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
+import 'package:frankencoin_wallet/src/wallet/load_wallet.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,10 +18,15 @@ Future<void> main() async {
   final dir = await getApplicationSupportDirectory();
   final isar = await Isar.open([BalanceInfoSchema, WalletInfoSchema],
       directory: dir.path, inspector: false);
+  final sharedPreferences = await SharedPreferences.getInstance();
 
-  setupDependencyInjection(isar);
+  setupDependencyInjection(isar: isar, sharedPreferences: sharedPreferences);
 
-  runApp(const FankencoinApp());
+  final walletCreated = getIt.get<WalletViewModel>().isCreated;
+
+  if (walletCreated) await loadCurrentWallet();
+
+  runApp(FankencoinApp(walletCreated: walletCreated));
 }
 
 class FankencoinApp extends StatelessWidget {
@@ -45,7 +53,7 @@ class FankencoinApp extends StatelessWidget {
       locale: const Locale("de"),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: createRoute,
-      initialRoute: Routes.welcome,
+      initialRoute: walletCreated ? Routes.dashboard : Routes.welcome,
     );
   }
 }

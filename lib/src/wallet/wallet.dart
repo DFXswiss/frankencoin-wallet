@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:bip32/bip32.dart';
 import 'package:bip39/bip39.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:frankencoin_wallet/src/entites/wallet_info.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 
 class Wallet {
@@ -27,6 +24,13 @@ class Wallet {
   factory Wallet.random() {
     final mnemonic = generateMnemonic();
     return Wallet(mnemonic);
+  }
+
+  static Future<Wallet> load() async {
+    const secureStorage = FlutterSecureStorage();
+    final seed = await secureStorage.read(key: "wallet_seed");
+    if (seed == null) throw Exception("Missing Seed");
+    return Wallet(seed);
   }
 
   void selectAccount(int index) =>

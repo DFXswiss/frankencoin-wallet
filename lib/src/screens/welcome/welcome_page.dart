@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
-import 'package:frankencoin_wallet/src/wallet/wallet.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 
 class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+  const WelcomePage(this.walletVW, {super.key});
+
+  final WalletViewModel walletVW;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class WelcomePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 20),
                 child: CupertinoButton(
-                  onPressed: null,
+                  onPressed: () => _onRestoreWallet(context),
                   child: Text(
                     S.of(context).restore_wallet,
                     style: const TextStyle(
@@ -67,13 +68,12 @@ class WelcomePage extends StatelessWidget {
   }
 
   Future<void> _onCreateWallet(BuildContext context) async {
-    final wallet = Wallet.random();
-    await wallet.save();
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool("walletCreated", true);
+    final wallet = await walletVW.createNewWallet();
 
     Navigator.of(context)
         .pushNamed(Routes.walletCreate, arguments: wallet.seed);
   }
+
+  void _onRestoreWallet(BuildContext context) =>
+      Navigator.of(context).pushNamed(Routes.walletRestore);
 }

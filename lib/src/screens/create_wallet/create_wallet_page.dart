@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/screens/routes.dart';
 
 class CreateWalletPage extends StatelessWidget {
   const CreateWalletPage(this.seed, {super.key});
@@ -38,7 +39,7 @@ class CreateWalletPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: CupertinoButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).pushNamed(Routes.dashboard),
                 color: const Color.fromRGBO(251, 113, 133, 1.0),
                 child: Text(
                   S.of(context).create_wallet,
