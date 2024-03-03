@@ -80,6 +80,14 @@ flutter:
    - assets/images/
    - assets/images/crypto/
 
+fonts:
+   - family: Lato
+     fonts:
+       - asset: assets/fonts/Lato-Regular.ttf
+       - asset: assets/fonts/Lato-Medium.ttf
+       - asset: assets/fonts/Lato-Semibold.ttf
+       - asset: assets/fonts/Lato-Bold.ttf
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

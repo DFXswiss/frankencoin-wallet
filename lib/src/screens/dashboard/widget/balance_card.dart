@@ -50,13 +50,34 @@ class BalanceCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(tokenInfo.name), Text(tokenInfo.symbol)],
+                    children: [
+                      Text(
+                        tokenInfo.name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Lato',
+                        ),
+                      ),
+                      Text(
+                        tokenInfo.symbol,
+                        style: const TextStyle(
+                          fontFamily: 'Lato',
+                        ),
+                      )
+                    ],
                   ))),
-          Text(balanceInfo != null
-              ? EtherAmount.inWei(BigInt.parse(balanceInfo!.balance))
-                  .getValueInUnit(EtherUnit.ether)
-                  .toString()
-              : "0.0")
+          Text(
+            balanceInfo != null
+                ? EtherAmount.inWei(BigInt.parse(balanceInfo!.balance))
+                    .getValueInUnit(EtherUnit.ether)
+                    .toString()
+                : "0.0",
+            style: const TextStyle(
+              fontSize: 16,
+              fontFamily: 'Lato',
+            ),
+          )
         ],
       ),
     );
