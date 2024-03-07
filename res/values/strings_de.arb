@@ -4,8 +4,10 @@
     "restore_wallet": "Wallet wiederherstellen",
     "restore_wallet_from_seed": "Wallet mit Seed wiederherstellen",
     "restore_wallet_from_seed_description": "Es handelt sich dabei um eine Phrase bestehend aus 12 Wörtern, welche Sie bei der Erstellung Ihrer Wallet erhalten haben.",
+    "send": "Senden",
     "your_seed": "Dein Frankencoin-Seed",
     "your_seed_disclaimer": "Dies ist Ihr einzigartiger und privater Seed und der einzige Weg, um Ihre Wallet im Falle eines Verlusts oder einer Fehlfunktion wiederherzustellen.",
+    "wallet_address_receiver": "Emfänger-Wallet",
     "welcome_frankecoin_wallet": "Willkommen im \nFrankencoin Wallet",
     "welcome_disclaimer": "Durch die Nutzung von Frankencoin Wallet stimmen Sie unseren Nutzungsbedinungen zu."
 }

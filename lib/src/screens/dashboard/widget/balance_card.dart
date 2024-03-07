@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
-import 'package:frankencoin_wallet/src/entites/erc20_token_info.dart';
-import 'package:frankencoin_wallet/src/utils/erc20_tokens.dart';
+import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:web3dart/web3dart.dart';
 
 class BalanceCard extends StatelessWidget {
@@ -9,15 +8,11 @@ class BalanceCard extends StatelessWidget {
 
   final BalanceInfo? balanceInfo;
 
-  late final ERC20TokenInfo tokenInfo;
-
-  BalanceCard({
+  const BalanceCard({
     super.key,
     required this.balanceInfo,
     required this.cryptoCurrency,
-  }) {
-    tokenInfo = getERC20TokenInfoFromCryptoCurrency(cryptoCurrency);
-  }
+  });
 
   String get leadingImagePath {
     switch (cryptoCurrency) {
@@ -52,7 +47,7 @@ class BalanceCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        tokenInfo.name,
+                        cryptoCurrency.name,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -60,7 +55,7 @@ class BalanceCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        tokenInfo.symbol,
+                        cryptoCurrency.symbol,
                         style: const TextStyle(
                           fontFamily: 'Lato',
                         ),
@@ -72,7 +67,7 @@ class BalanceCard extends StatelessWidget {
                 ? EtherAmount.inWei(BigInt.parse(balanceInfo!.balance))
                     .getValueInUnit(EtherUnit.ether)
                     .toString()
-                : "0.0",
+                : "0.00",
             style: const TextStyle(
               fontSize: 16,
               fontFamily: 'Lato',

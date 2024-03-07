@@ -26,19 +26,7 @@ class _RestorePageBody extends StatefulWidget {
 }
 
 class _RestorePageState extends State<_RestorePageBody> {
-  final TextEditingController _controller = SeedEditingController(
-      //     styles:
-      //         TextPartStyleDefinitions(definitionList: <TextPartStyleDefinition>[
-      //   TextPartStyleDefinition(
-      //     style: const TextStyle(
-      //       color: Colors.green,
-      //       fontWeight: FontWeight.bold,
-      //       decoration: TextDecoration.underline,
-      //     ),
-      //     pattern: ' ',
-      //   )
-      // ])
-      );
+  final TextEditingController _controller = SeedEditingController();
 
   String extractedSeed = "";
   bool _seedIsReady = false;

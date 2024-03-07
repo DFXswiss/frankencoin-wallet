@@ -1,9 +1,8 @@
 import 'package:erc20/erc20.dart';
+import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
-import 'package:frankencoin_wallet/src/utils/erc20_tokens.dart';
 import 'package:frankencoin_wallet/src/utils/fast_hash.dart';
-import 'package:http/http.dart';
 import 'package:isar/isar.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
@@ -14,12 +13,8 @@ class BalanceViewModel = BalanceViewModelBase with _$BalanceViewModel;
 
 abstract class BalanceViewModelBase with Store {
   final Isar _isar;
-  final Web3Client _client = Web3Client(
-      "https://eth-mainnet.g.alchemy.com/v2/0MudgAjBDrDwM7q55SdR13ggiukHg5xN",
-      Client());
   final AppStore appStore;
 
-  final int chainId = 1;
   final String nativeTicker = "ETH";
 
   BalanceViewModelBase(this._isar, this.appStore) {
@@ -51,6 +46,7 @@ abstract class BalanceViewModelBase with Store {
   @action
   Future<void> loadBalances() async {
     final address = appStore.wallet!.currentAccount.primaryAddress.address.hex;
+    final chainId = appStore.chainId;
 
     final id = fastHash("$chainId:$nativeTicker:$address");
     balances[CryptoCurrency.eth] = _isar.balanceInfos.getSync(id) ??
@@ -61,9 +57,9 @@ abstract class BalanceViewModelBase with Store {
           balance: "0",
         );
 
-    for (final erc20Token in erc20Tokens) {
+    for (final erc20Token in CryptoCurrency.erc20Tokens) {
       final id = fastHash("$chainId:${erc20Token.address}:$address");
-      balances[erc20Token.selector] = _isar.balanceInfos.getSync(id) ??
+      balances[erc20Token] = _isar.balanceInfos.getSync(id) ??
           BalanceInfo(
             chainId: chainId,
             contractAddress: erc20Token.address,
@@ -76,27 +72,30 @@ abstract class BalanceViewModelBase with Store {
   Future<List<BalanceInfo>> _updateERC20Balances(
       EthereumAddress address) async {
     final balances = <BalanceInfo>[];
-    for (final erc20Token in erc20Tokens) {
+    final chainId = appStore.chainId;
+
+    for (final erc20Token in CryptoCurrency.erc20Tokens) {
       final erc20 = ERC20(
         address: EthereumAddress.fromHex(erc20Token.address),
-        client: _client,
+        client: appStore.client,
       );
       final balance = await erc20.balanceOf(address);
 
       balances.add(BalanceInfo(
-          chainId: chainId,
-          contractAddress: erc20Token.address,
-          address: address.hex,
-          balance: balance.toString()));
+        chainId: chainId,
+        contractAddress: erc20Token.address,
+        address: address.hex,
+        balance: balance.toString(),
+      ));
     }
 
     return balances;
   }
 
   Future<BalanceInfo> _updateBalance(EthereumAddress address) async {
-    final balance = await _client.getBalance(address);
+    final balance = await appStore.client.getBalance(address);
     return BalanceInfo(
-        chainId: chainId,
+        chainId: appStore.chainId,
         contractAddress: nativeTicker,
         address: address.hex,
         balance: balance.getInWei.toString());

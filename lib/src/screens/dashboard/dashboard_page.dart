@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widget/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
-import 'package:frankencoin_wallet/src/utils/erc20_tokens.dart';
+import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -30,9 +30,10 @@ class DashboardPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
                     IconButton(
                       onPressed: () =>
-                          Navigator.of(context).pushNamed(Routes.receive),
+                          Navigator.of(context).pushNamed(Routes.walletRestore),
                       icon: const Icon(CupertinoIcons.money_dollar_circle),
                       color: const Color.fromRGBO(251, 113, 133, 1.0),
                     ),
@@ -44,7 +45,7 @@ class DashboardPage extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () =>
-                          Navigator.of(context).pushNamed(Routes.walletRestore),
+                          Navigator.of(context).pushNamed(Routes.send),
                       icon: const Icon(Icons.arrow_upward),
                       color: const Color.fromRGBO(251, 113, 133, 1.0),
                     ),

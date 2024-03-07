@@ -5,9 +5,11 @@ import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/screens/send/send_page.dart';
 import 'package:frankencoin_wallet/src/screens/welcome/welcome_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 
 Route<dynamic> createRoute(RouteSettings settings) {
@@ -32,6 +34,10 @@ Route<dynamic> createRoute(RouteSettings settings) {
       return MaterialPageRoute<void>(
           builder: (_) =>
               ReceivePage(getIt.get<AppStore>().wallet!.currentAccount));
+
+    case Routes.send:
+      return MaterialPageRoute<void>(
+          builder: (_) => SendPage(getIt.get<SendViewModel>()));
 
     default:
       return MaterialPageRoute<void>(
