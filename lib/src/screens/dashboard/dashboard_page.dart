@@ -62,6 +62,13 @@ class DashboardPage extends StatelessWidget {
                     cryptoCurrency: CryptoCurrency.xchf,
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: BalanceCard(
+                    balanceInfo: balanceViewModel.balances[CryptoCurrency.usdc],
+                    cryptoCurrency: CryptoCurrency.usdc,
+                  ),
+                ),
                 BalanceCard(
                   balanceInfo: balanceViewModel.balances[CryptoCurrency.eth],
                   cryptoCurrency: CryptoCurrency.eth,

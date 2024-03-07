@@ -7,6 +7,8 @@ import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/currency_picker.dart';
+import 'package:frankencoin_wallet/src/screens/send/widget/successful_tx_dialog.dart';
+import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
@@ -114,12 +116,12 @@ class _SendPageBodyState extends State<_SendPageBody> {
                 ? widget.sendVM.createTransaction
                 : null,
             color: const Color.fromRGBO(251, 113, 133, 1.0),
-            child: widget.sendVM.status != SendTransactionStatus.none
-                ? const CupertinoActivityIndicator()
-                : Text(
+            child: widget.sendVM.state is InitialExecutionState
+                ? Text(
                     S.of(context).send,
                     style: const TextStyle(fontSize: 16),
-                  ),
+                  )
+                : const CupertinoActivityIndicator(),
           ),
         ),
       ),
@@ -153,14 +155,43 @@ class _SendPageBodyState extends State<_SendPageBody> {
       }
     });
 
-    reaction((p0) => widget.sendVM.status, (SendTransactionStatus status) {
-      if (status == SendTransactionStatus.awaitingConfirmation) {
+    reaction((_) => widget.sendVM.state, (ExecutionState state) {
+      print(state);
+      if (state is AwaitingConfirmationExecutionState) {
+        final cryptoAmountString = EVMChainFormatter.parseEVMChainAmount(
+            widget.sendVM.rawCryptoAmount.replaceAll(",", "."));
+
+        final cryptoAmount =
+            EtherAmount.fromInt(EtherUnit.wei, cryptoAmountString);
+        final estimatedFee =
+            EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
+                .getValueInUnit(EtherUnit.ether);
+        final receiverAddress = widget.sendVM.address;
+        final spendCurrency = widget.sendVM.spendCurrency;
+
         showDialog<void>(
-            context: context,
-            builder: (_) => ConfirmationAlert(
-                  onConfirm: () {},
-                  onDecline: () {},
-                ));
+          context: context,
+          builder: (BuildContext context) => ConfirmationAlert(
+            amount: cryptoAmount.getValueInUnit(EtherUnit.ether).toString(),
+            estimatedFee: estimatedFee.toString(),
+            receiverAddress: receiverAddress,
+            spendCurrency: spendCurrency,
+            onConfirm: () => widget.sendVM.commitTransaction(),
+            onDecline: () => widget.sendVM.state = InitialExecutionState(),
+          ),
+        );
+      }
+
+      if (state is ExecutedSuccessfullyState) {
+        final txId = state.payload as String;
+
+        showDialog<void>(
+          context: context,
+          builder: (_) => SuccessfulTxDialog(
+            txId: txId,
+            onConfirm: () {},
+          ),
+        );
       }
     });
 

@@ -35,10 +35,10 @@ abstract class SendViewModelBase with Store {
   TransactionPriority priority = TransactionPriority.medium;
 
   @computed
-  bool get isReadyToCreate => status == SendTransactionStatus.none && rawCryptoAmount.isNotEmpty && address.isNotEmpty;
+  bool get isReadyToCreate => state is InitialExecutionState && rawCryptoAmount.isNotEmpty && address.isNotEmpty;
 
   @observable
-  SendTransactionStatus status = SendTransactionStatus.none;
+  ExecutionState state = InitialExecutionState();
 
   @observable
   CryptoCurrency spendCurrency = CryptoCurrency.zchf;
@@ -92,7 +92,7 @@ abstract class SendViewModelBase with Store {
     final chainId = appStore.chainId;
 
     // ToDo: Balance Check
-    status = SendTransactionStatus.creating;
+    state = CreatingExecutionState();
 
     final transaction = Transaction(
       from: currentAddress,
@@ -121,21 +121,43 @@ abstract class SendViewModelBase with Store {
             transaction: transaction,
           );
     }
-    status = SendTransactionStatus.awaitingConfirmation;
+    state = AwaitingConfirmationExecutionState();
   }
 
   @action
   Future<void> commitTransaction() async {
     if (_sendTransaction == null) throw Exception("No pending transaction");
-    await _sendTransaction!.call();
+    state = CommittingExecutionState();
+    try {
+      final txId = await _sendTransaction!.call();
+      state = ExecutedSuccessfullyState(payload: txId);
+    } catch (e) {
+      print("Failed ${e.toString()}");
+      state = FailureState(e.toString());
+    }
   }
 }
 
-enum SendTransactionStatus {
-  none,
-  creating,
-  awaitingConfirmation,
-  committing,
-  committed,
-  error;
+abstract class ExecutionState {}
+
+class InitialExecutionState extends ExecutionState {}
+
+class IsExecutingState extends ExecutionState {}
+
+class CreatingExecutionState extends IsExecutingState {}
+
+class AwaitingConfirmationExecutionState extends IsExecutingState {}
+
+class CommittingExecutionState extends IsExecutingState {}
+
+class ExecutedSuccessfullyState extends ExecutionState {
+  ExecutedSuccessfullyState({this.payload});
+
+  final dynamic payload;
+}
+
+class FailureState extends InitialExecutionState {
+  FailureState(this.error);
+
+  final String error;
 }

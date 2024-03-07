@@ -1,14 +1,27 @@
 import 'package:flutter/cupertino.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 
 class ConfirmationAlert extends StatelessWidget {
+  final String amount;
+  final String estimatedFee;
+  final CryptoCurrency spendCurrency;
+  final String receiverAddress;
+
   final Function onConfirm;
   final Function onDecline;
+
+  final String nativeSymbol = "ETH";
 
   const ConfirmationAlert({
     super.key,
     required this.onConfirm,
     required this.onDecline,
+    required this.amount,
+    required this.estimatedFee,
+    required this.spendCurrency,
+    required this.receiverAddress,
   });
 
   @override
@@ -20,10 +33,10 @@ class ConfirmationAlert extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(bottom: 10),
-            child: const Text(
-              "Sicher?",
+            child: Text(
+              "${S.of(context).confirm_sending}:",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w600,
@@ -31,10 +44,74 @@ class ConfirmationAlert extends StatelessWidget {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 5),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "${S.of(context).amount}:",
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Lato',
+                    ),
+                  ),
+                ),
+                Text(
+                  amount,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontFamily: 'Lato',
+                  ),
+                ),
+                Text(
+                  " ${spendCurrency.symbol}",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Lato',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "${S.of(context).estimated_fee}:",
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Lato',
+                    ),
+                  ),
+                ),
+                Text(
+                  estimatedFee,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontFamily: 'Lato',
+                  ),
+                ),
+                Text(
+                  " $nativeSymbol",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Lato',
+                  ),
+                ),
+              ],
+            ),
+          ),
           Row(
             children: [
               CupertinoButton(
-                child: const Text("Abbrechen"),
+                child: Text(S.of(context).cancel),
                 onPressed: () {
                   onDecline.call();
                   Navigator.of(context).pop();
@@ -42,11 +119,12 @@ class ConfirmationAlert extends StatelessWidget {
               ),
               const Spacer(),
               CupertinoButton(
-                child: const Text("Akzeptieren"),
+                color: const Color.fromRGBO(251, 113, 133, 1.0),
                 onPressed: () {
                   onConfirm.call();
                   Navigator.of(context).pop();
                 },
+                child: Text(S.of(context).confirm),
               )
             ],
           )
