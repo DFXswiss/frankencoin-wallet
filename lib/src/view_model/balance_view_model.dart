@@ -77,7 +77,7 @@ abstract class BalanceViewModelBase with Store {
     await updateBalances();
 
     _updateBalancesTimer = Timer.periodic(
-        const Duration(seconds: 10), (timer) async => await updateBalances());
+        const Duration(minutes: 1), (timer) async => await updateBalances());
   }
 
   void stopSyncBalances() {

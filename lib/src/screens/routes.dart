@@ -1,5 +1,6 @@
 class Routes {
   static const dashboard = '/dashboard';
+  static const pool = '/pool';
   static const receive = '/dashboard/receive';
   static const send = '/dashboard/send';
   static const walletCreate = '/wallet/create';

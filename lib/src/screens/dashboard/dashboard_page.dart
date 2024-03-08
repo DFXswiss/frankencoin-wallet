@@ -17,8 +17,8 @@ class DashboardPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(17, 24, 39, 1.0),
-      body: WillPopScope(
-        onWillPop: () async => false,
+      body: PopScope(
+        canPop: false,
         child: SizedBox(
           width: double.infinity,
           child: Observer(
@@ -44,6 +44,12 @@ class DashboardPage extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () =>
+                          Navigator.of(context).pushNamed(Routes.pool),
+                      icon: const Icon(Icons.bar_chart),
+                      color: const Color.fromRGBO(251, 113, 133, 1.0),
+                    ),
+                    IconButton(
+                      onPressed: () =>
                           Navigator.of(context).pushNamed(Routes.send),
                       icon: const Icon(Icons.arrow_upward),
                       color: const Color.fromRGBO(251, 113, 133, 1.0),
@@ -57,8 +63,8 @@ class DashboardPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: BalanceCard(
-                    balanceInfo: balanceViewModel.balances[CryptoCurrency.xchf],
-                    cryptoCurrency: CryptoCurrency.xchf,
+                    balanceInfo: balanceViewModel.balances[CryptoCurrency.fps],
+                    cryptoCurrency: CryptoCurrency.fps,
                   ),
                 ),
                 BalanceCard(

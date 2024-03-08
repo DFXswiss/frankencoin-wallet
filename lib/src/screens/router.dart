@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
+import 'package:frankencoin_wallet/src/screens/pool/pool_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
@@ -38,6 +39,10 @@ Route<dynamic> createRoute(RouteSettings settings) {
     case Routes.send:
       return MaterialPageRoute<void>(
           builder: (_) => SendPage(getIt.get<SendViewModel>()));
+
+    case Routes.pool:
+      return MaterialPageRoute<void>(
+          builder: (_) => PoolPage(getIt.get<BalanceViewModel>()));
 
     default:
       return MaterialPageRoute<void>(

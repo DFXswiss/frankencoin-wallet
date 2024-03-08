@@ -22,6 +22,8 @@ class BalanceCard extends StatelessWidget {
         return "assets/images/crypto/xchf.png";
       case CryptoCurrency.zchf:
         return "assets/images/crypto/zchf.png";
+      case CryptoCurrency.fps:
+        return "assets/images/crypto/fps.png";
       default:
         return "assets/images/frankencoin.png";
     }
