@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widget/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
-import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -13,7 +13,7 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    balanceViewModel.updateBalances();
+    balanceViewModel.startSyncBalances();
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(17, 24, 39, 1.0),
@@ -21,8 +21,8 @@ class DashboardPage extends StatelessWidget {
         onWillPop: () async => false,
         child: SizedBox(
           width: double.infinity,
-          child: Observer(builder: (context) {
-            return Column(
+          child: Observer(
+            builder: (_) => Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Row(
@@ -30,7 +30,6 @@ class DashboardPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
                     IconButton(
                       onPressed: () =>
                           Navigator.of(context).pushNamed(Routes.walletRestore),
@@ -62,20 +61,13 @@ class DashboardPage extends StatelessWidget {
                     cryptoCurrency: CryptoCurrency.xchf,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: BalanceCard(
-                    balanceInfo: balanceViewModel.balances[CryptoCurrency.usdc],
-                    cryptoCurrency: CryptoCurrency.usdc,
-                  ),
-                ),
                 BalanceCard(
                   balanceInfo: balanceViewModel.balances[CryptoCurrency.eth],
                   cryptoCurrency: CryptoCurrency.eth,
                 )
               ],
-            );
-          }),
+            ),
+          ),
         ),
       ),
     );

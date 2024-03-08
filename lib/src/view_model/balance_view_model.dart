@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:erc20/erc20.dart';
 import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
@@ -67,6 +69,19 @@ abstract class BalanceViewModelBase with Store {
             balance: "0",
           );
     }
+  }
+
+  Timer? _updateBalancesTimer;
+
+  Future<void> startSyncBalances() async {
+    await updateBalances();
+
+    _updateBalancesTimer = Timer.periodic(
+        const Duration(seconds: 10), (timer) async => await updateBalances());
+  }
+
+  void stopSyncBalances() {
+    _updateBalancesTimer?.cancel();
   }
 
   Future<List<BalanceInfo>> _updateERC20Balances(
