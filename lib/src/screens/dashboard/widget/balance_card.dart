@@ -32,8 +32,12 @@ class BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: const Color.fromRGBO(15, 23, 42, 1.0),
+      ),
+      padding: const EdgeInsets.all(15),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -52,14 +56,16 @@ class BalanceCard extends StatelessWidget {
                         cryptoCurrency.name,
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           fontFamily: 'Lato',
+                          color: Colors.white
                         ),
                       ),
                       Text(
                         cryptoCurrency.symbol,
                         style: const TextStyle(
                           fontFamily: 'Lato',
+                          color: Colors.white
                         ),
                       )
                     ],
@@ -68,11 +74,12 @@ class BalanceCard extends StatelessWidget {
             balanceInfo != null
                 ? EtherAmount.inWei(BigInt.parse(balanceInfo!.balance))
                     .getValueInUnit(EtherUnit.ether)
-                    .toString()
-                : "0.00",
+                    .toStringAsFixed(4)
+                : "0.0000",
             style: const TextStyle(
               fontSize: 16,
               fontFamily: 'Lato',
+              color: Colors.white
             ),
           )
         ],

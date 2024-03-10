@@ -1,6 +1,7 @@
 {
     "amount": "Amount",
     "back": "Back",
+    "balance": "Balance",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "create_wallet": "Create Wallet",

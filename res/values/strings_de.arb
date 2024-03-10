@@ -1,6 +1,7 @@
 {
     "amount": "Betrag",
     "back": "Zurück",
+    "balance": "Guthaben",
     "cancel": "Abbrechen",
     "confirm": "Bestätigen",
     "confirm_sending": "Senden bestätigen",
