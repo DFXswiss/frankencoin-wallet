@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
@@ -41,7 +40,10 @@ class BalanceSection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(leadingImagePath, width: 35,),
+                Image.asset(
+                  leadingImagePath,
+                  width: 35,
+                ),
                 Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: Text(
@@ -64,13 +66,6 @@ class BalanceSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Spacer(),
-                IconButton(
-                  onPressed: () =>
-                      Navigator.of(context).pushNamed(Routes.walletRestore),
-                  icon: const Icon(CupertinoIcons.money_dollar_circle),
-                  color: const Color.fromRGBO(251, 113, 133, 1.0),
-                ),
                 const Spacer(),
                 IconButton(
                   onPressed: () =>
