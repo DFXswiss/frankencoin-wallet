@@ -6,7 +6,8 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/confirmation_alert.dart';
-import 'package:frankencoin_wallet/src/screens/send/widget/successful_tx_dialog.dart';
+import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
+import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
@@ -89,12 +90,12 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
                       .balanceVM
                       .balances[widget.equityVM.sendCurrency]!
                       .balance))
-                  .getValueInUnit(EtherUnit.ether)
-                  .toString();
+                  .getValueInUnit(EtherUnit.ether);
               return CupertinoButton(
-                onPressed: () => _amountController.text = rawBalanceAmount,
+                onPressed: () =>
+                    _amountController.text = rawBalanceAmount.toString(),
                 child: Text(
-                  rawBalanceAmount,
+                  rawBalanceAmount.toStringAsFixed(3),
                   style: const TextStyle(fontSize: 16, fontFamily: 'Lato'),
                 ),
               );
@@ -112,7 +113,8 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
               color: Color.fromRGBO(251, 113, 133, 1.0),
             )),
         Padding(
-          padding: const EdgeInsets.only(left: 26, right: 26, top: 10),
+          padding:
+              const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
           child: CupertinoTextField(
             prefix: Padding(
               padding: const EdgeInsets.all(5),
@@ -127,8 +129,19 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             enabled: false,
           ),
         ),
+        Observer(
+          builder: (_) => Padding(
+            padding: const EdgeInsets.only(left: 26, right: 26),
+            child: EstimatedTxFee(
+              estimatedFee: EtherAmount.inWei(
+                      BigInt.from(widget.equityVM.sendVM.estimatedFee))
+                  .getValueInUnit(EtherUnit.ether),
+              nativeSymbol: "ETH",
+            ),
+          ),
+        ),
         Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          padding: const EdgeInsets.only(top: 10),
           child: Observer(
             builder: (_) => CupertinoButton(
               onPressed: widget.equityVM.isReadyToCreate
@@ -181,8 +194,9 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
       if (state is AwaitingConfirmationExecutionState) {
         final amount = EtherAmount.inWei(widget.equityVM.investAmount)
             .getValueInUnit(EtherUnit.ether);
-        final estimatedFee = EtherAmount.inWei(BigInt.from(widget.equityVM.sendVM.estimatedFee))
-            .getValueInUnit(EtherUnit.ether);
+        final estimatedFee =
+            EtherAmount.inWei(BigInt.from(widget.equityVM.sendVM.estimatedFee))
+                .getValueInUnit(EtherUnit.ether);
 
         showDialog<void>(
           context: context,

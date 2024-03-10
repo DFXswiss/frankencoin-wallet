@@ -7,7 +7,8 @@ import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/currency_picker.dart';
-import 'package:frankencoin_wallet/src/screens/send/widget/successful_tx_dialog.dart';
+import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
+import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:mobx/mobx.dart';
@@ -58,7 +59,7 @@ class _SendPageBodyState extends State<_SendPageBody> {
 
     return Column(children: [
       Padding(
-        padding: const EdgeInsets.all(26),
+        padding: const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
         child: CupertinoTextField(
           controller: _addressController,
           placeholder: S.of(context).wallet_address_receiver,
@@ -75,7 +76,7 @@ class _SendPageBodyState extends State<_SendPageBody> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.all(26),
+        padding: const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
         child: CupertinoTextField(
           controller: _cryptoAmountController,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -92,12 +93,12 @@ class _SendPageBodyState extends State<_SendPageBody> {
                     .balanceVM
                     .balances[widget.sendVM.spendCurrency]!
                     .balance))
-                .getValueInUnit(EtherUnit.ether)
-                .toString();
+                .getValueInUnit(EtherUnit.ether);
             return CupertinoButton(
-              onPressed: () => widget.sendVM.rawCryptoAmount = rawBalanceAmount,
+              onPressed: () =>
+                  widget.sendVM.rawCryptoAmount = rawBalanceAmount.toString(),
               child: Text(
-                rawBalanceAmount,
+                rawBalanceAmount.toStringAsFixed(3),
               ),
             );
           }),
@@ -107,14 +108,16 @@ class _SendPageBodyState extends State<_SendPageBody> {
         ),
       ),
       Observer(
-        builder: (_) => Text(
-          EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
-              .getValueInUnit(EtherUnit.ether)
-              .toString(),
-          style: const TextStyle(color: Colors.white),
+        builder: (_) => Padding(
+          padding: const EdgeInsets.only(left: 26, right: 26),
+          child: EstimatedTxFee(
+            estimatedFee:
+                EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
+                    .getValueInUnit(EtherUnit.ether),
+            nativeSymbol: "ETH",
+          ),
         ),
       ),
-      const Spacer(),
       Padding(
         padding: const EdgeInsets.only(top: 20, bottom: 20),
         child: Observer(

@@ -60,8 +60,9 @@ class SuccessfulTxDialog extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                        onPressed: () => _copyToClipboard(txId),
-                        icon: const Icon(Icons.copy))
+                      onPressed: () => _copyToClipboard(txId),
+                      icon: const Icon(Icons.copy),
+                    )
                   ],
                 ),
               ],
