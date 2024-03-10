@@ -6,6 +6,7 @@
     "confirm_sending": "Senden bestätigen",
     "create_wallet": "Wallet erstellen",
     "estimated_fee": "Geschätzte Gebühr",
+    "invest": "Investieren",
     "restore_wallet": "Wallet wiederherstellen",
     "restore_wallet_from_seed": "Wallet mit Seed wiederherstellen",
     "restore_wallet_from_seed_description": "Es handelt sich dabei um eine Phrase bestehend aus 12 Wörtern, welche Sie bei der Erstellung Ihrer Wallet erhalten haben.",

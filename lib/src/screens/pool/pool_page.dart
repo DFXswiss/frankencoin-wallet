@@ -2,24 +2,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
+import 'package:frankencoin_wallet/src/screens/send/widget/confirmation_alert.dart';
+import 'package:frankencoin_wallet/src/screens/send/widget/successful_tx_dialog.dart';
+import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
+import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
 class PoolPage extends BasePage {
   final BalanceViewModel balanceVM;
+  final EquityViewModel equityVM;
 
-  PoolPage(this.balanceVM, {super.key});
+  PoolPage(this.balanceVM, this.equityVM, {super.key});
 
   @override
-  Widget body(BuildContext context) => _PoolPageBody(balanceVM);
+  String? get title => S.current.invest;
+
+  @override
+  Widget body(BuildContext context) => _PoolPageBody(balanceVM, equityVM);
 }
 
 class _PoolPageBody extends StatefulWidget {
   final BalanceViewModel balanceVM;
+  final EquityViewModel equityVM;
 
-  const _PoolPageBody(this.balanceVM);
+  const _PoolPageBody(this.balanceVM, this.equityVM);
 
   @override
   State<StatefulWidget> createState() => _PoolPageBodyState();
@@ -29,11 +41,17 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _receiveController = TextEditingController();
 
-  CryptoCurrency sendCurrency = CryptoCurrency.zchf;
+  @override
+  void initState() {
+    super.initState();
+    widget.equityVM.sendVM.syncFee();
+  }
 
-  CryptoCurrency get reverseCurrency => sendCurrency == CryptoCurrency.zchf
-      ? CryptoCurrency.fps
-      : CryptoCurrency.zchf;
+  @override
+  void dispose() {
+    super.dispose();
+    widget.equityVM.sendVM.stopSyncFee();
+  }
 
   String getLeadingImagePath(CryptoCurrency cryptoCurrency) {
     switch (cryptoCurrency) {
@@ -48,35 +66,46 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
 
   @override
   Widget build(BuildContext context) {
+    _setEffects(context);
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
+          padding:
+              const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
           child: CupertinoTextField(
             prefix: Padding(
               padding: const EdgeInsets.all(5),
-              child: Image.asset(getLeadingImagePath(sendCurrency), width: 40),
+              child: Observer(
+                  builder: (_) => Image.asset(
+                      getLeadingImagePath(widget.equityVM.sendCurrency),
+                      width: 42)),
             ),
             placeholder: "0.0000",
             controller: _amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             suffix: Observer(builder: (_) {
-              final rawBalanceAmount = EtherAmount.inWei(BigInt.parse(
-                      widget.balanceVM.balances[sendCurrency]!.balance))
+              final rawBalanceAmount = EtherAmount.inWei(BigInt.parse(widget
+                      .balanceVM
+                      .balances[widget.equityVM.sendCurrency]!
+                      .balance))
                   .getValueInUnit(EtherUnit.ether)
                   .toString();
-              return TextButton(
+              return CupertinoButton(
                 onPressed: () => _amountController.text = rawBalanceAmount,
                 child: Text(
                   rawBalanceAmount,
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16, fontFamily: 'Lato'),
                 ),
               );
             }),
           ),
         ),
         IconButton(
-            onPressed: () => setState(() => sendCurrency = reverseCurrency),
+            onPressed: () {
+              widget.equityVM.sendCurrency = widget.equityVM.reverseCurrency;
+              _amountController.text = "";
+            },
             iconSize: 25,
             icon: const Icon(
               CupertinoIcons.arrow_up_arrow_down,
@@ -87,17 +116,98 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
           child: CupertinoTextField(
             prefix: Padding(
               padding: const EdgeInsets.all(5),
-              child: Image.asset(getLeadingImagePath(reverseCurrency), width: 40),
+              child: Observer(
+                builder: (_) => Image.asset(
+                    getLeadingImagePath(widget.equityVM.reverseCurrency),
+                    width: 42),
+              ),
             ),
             placeholder: "0.0000",
             controller: _receiveController,
             enabled: false,
           ),
         ),
-        Row(
-          children: [],
-        )
+        Padding(
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          child: Observer(
+            builder: (_) => CupertinoButton(
+              onPressed: widget.equityVM.isReadyToCreate
+                  ? widget.equityVM.createTradeTransaction
+                  : null,
+              color: const Color.fromRGBO(251, 113, 133, 1.0),
+              child: widget.equityVM.state is InitialExecutionState
+                  ? Text(
+                      S.of(context).send,
+                      style: const TextStyle(fontSize: 16),
+                    )
+                  : const CupertinoActivityIndicator(),
+            ),
+          ),
+        ),
       ],
     );
+  }
+
+  bool _effectsInstalled = false;
+
+  void _setEffects(BuildContext context) {
+    if (_effectsInstalled) return;
+
+    _amountController.addListener(() {
+      final amountString = EVMChainFormatter.parseEVMChainAmount(
+          _amountController.text.replaceAll(",", "."));
+
+      final amount = BigInt.from(amountString);
+
+      if (amount != widget.equityVM.investAmount) {
+        widget.equityVM.investAmount = amount;
+      }
+    });
+
+    reaction((_) => widget.equityVM.investAmount, (BigInt investAmount) {
+      widget.equityVM.updateExpectedReturn();
+    });
+
+    reaction((_) => widget.equityVM.expectedReturn, (BigInt expectedReturn) {
+      final amount = EtherAmount.inWei(expectedReturn)
+          .getValueInUnit(EtherUnit.ether)
+          .toString();
+      print(amount);
+      if (amount != _receiveController.text) _receiveController.text = amount;
+    });
+
+    reaction((_) => widget.equityVM.state, (ExecutionState state) {
+      print(state);
+      if (state is AwaitingConfirmationExecutionState) {
+        final amount = EtherAmount.inWei(widget.equityVM.investAmount)
+            .getValueInUnit(EtherUnit.ether);
+        final estimatedFee = EtherAmount.inWei(BigInt.from(widget.equityVM.sendVM.estimatedFee))
+            .getValueInUnit(EtherUnit.ether);
+
+        showDialog<void>(
+          context: context,
+          builder: (BuildContext context) => ConfirmationAlert(
+            amount: amount.toString(),
+            estimatedFee: estimatedFee.toString(),
+            spendCurrency: widget.equityVM.sendCurrency,
+            onConfirm: () => widget.equityVM.commitTransaction(),
+            onDecline: () => widget.equityVM.state = InitialExecutionState(),
+          ),
+        );
+      }
+
+      if (state is ExecutedSuccessfullyState) {
+        final txId = state.payload as String;
+
+        showDialog<void>(
+          context: context,
+          builder: (_) => SuccessfulTxDialog(
+            txId: txId,
+            onConfirm: () {},
+          ),
+        );
+      }
+    });
+    _effectsInstalled = true;
   }
 }

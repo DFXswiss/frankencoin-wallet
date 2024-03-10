@@ -17,7 +17,7 @@ class Equity extends web3.GeneratedContract {
   Future<BigInt> price({
     web3.BlockNum? atBlock,
   }) async {
-    final function = self.abi.functions[19];
+    final function = self.abi.functions[14];
     assert(checkSignature(function, 'a035b1fe'));
     final params = [];
     final response = await read(function, params, atBlock);
@@ -28,7 +28,7 @@ class Equity extends web3.GeneratedContract {
   Future<BigInt> totalSupply({
     web3.BlockNum? atBlock,
   }) async {
-    final function = self.abi.functions[26];
+    final function = self.abi.functions[27];
     assert(checkSignature(function, '18160ddd'));
     final params = [];
     final response = await read(function, params, atBlock);
@@ -46,7 +46,7 @@ class Equity extends web3.GeneratedContract {
     BigInt shares, {
     web3.BlockNum? atBlock,
   }) async {
-    final function = self.abi.functions[6];
+    final function = self.abi.functions[7];
     assert(checkSignature(function, 'ad08ce5b'));
     final params = [shares];
     final response = await read(function, params, atBlock);
@@ -60,7 +60,7 @@ class Equity extends web3.GeneratedContract {
     BigInt investment, {
     web3.BlockNum? atBlock,
   }) async {
-    final function = self.abi.functions[7];
+    final function = self.abi.functions[8];
     assert(checkSignature(function, '3ec16194'));
     final params = [investment];
     final response = await read(function, params, atBlock);
@@ -73,7 +73,7 @@ class Equity extends web3.GeneratedContract {
     web3.EthereumAddress owner, {
     web3.BlockNum? atBlock,
   }) async {
-    final function = self.abi.functions[8];
+    final function = self.abi.functions[9];
     assert(checkSignature(function, '151535b9'));
     final params = [owner];
     final response = await read(function, params, atBlock);
@@ -109,9 +109,24 @@ class Equity extends web3.GeneratedContract {
     required web3.Credentials credentials,
     web3.Transaction? transaction,
   }) async {
-    final function = self.abi.functions[14];
+    final function = self.abi.functions[15];
     assert(checkSignature(function, 'd87aa643'));
     final params = [amount, expectedShares];
+    return write(credentials, transaction, function, params);
+  }
+
+  /// Like [redeem], but with an extra parameter to protect against frontrunning.
+  /// [expectedProceeds]  The minimum acceptable redemption proceeds.
+  Future<String> redeemExpected(
+    web3.EthereumAddress target,
+    BigInt shares,
+    BigInt expectedProceeds, {
+    required web3.Credentials credentials,
+    web3.Transaction? transaction,
+  }) async {
+    final function = self.abi.functions[22];
+    assert(checkSignature(function, '0e89c370'));
+    final params = [target, shares, expectedProceeds];
     return write(credentials, transaction, function, params);
   }
 

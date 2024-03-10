@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 
@@ -49,23 +50,25 @@ class SuccessfulTxDialog extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text(
-                      txId,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'Lato',
+                    Flexible(
+                      child: Text(
+                        txId,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Lato',
+                        ),
                       ),
                     ),
                     IconButton(
                         onPressed: () => _copyToClipboard(txId),
                         icon: const Icon(Icons.copy))
                   ],
-                )
+                ),
               ],
             ),
           ),
           CupertinoButton(
-            child: Text(S.of(context).cancel),
+            child: Text(S.of(context).confirm),
             onPressed: () {
               onConfirm?.call();
               Navigator.of(context).pop();

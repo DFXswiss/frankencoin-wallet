@@ -7,7 +7,7 @@ class ConfirmationAlert extends StatelessWidget {
   final String amount;
   final String estimatedFee;
   final CryptoCurrency spendCurrency;
-  final String receiverAddress;
+  final String? receiverAddress;
 
   final Function onConfirm;
   final Function onDecline;
@@ -21,7 +21,7 @@ class ConfirmationAlert extends StatelessWidget {
     required this.amount,
     required this.estimatedFee,
     required this.spendCurrency,
-    required this.receiverAddress,
+    this.receiverAddress,
   });
 
   @override

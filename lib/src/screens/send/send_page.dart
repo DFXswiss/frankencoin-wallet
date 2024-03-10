@@ -65,6 +65,13 @@ class _SendPageBodyState extends State<_SendPageBody> {
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.deny(RegExp(r" ")),
           ],
+          suffix: Padding(
+            padding: const EdgeInsets.only(top: 2, bottom: 2),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.paste),
+            ),
+          ),
         ),
       ),
       Padding(

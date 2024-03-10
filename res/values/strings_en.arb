@@ -6,6 +6,7 @@
     "create_wallet": "Create Wallet",
     "confirm_sending": "Confirm sending",
     "estimated_fee": "Estimated fee",
+    "invest": "Invest",
     "restore_wallet": "Restore Wallet",
     "restore_wallet_from_seed": "Restore wallet with seed",
     "restore_wallet_from_seed_description": "The Seed is a 12-world-phrase, which you got during the creation of your wallet.",
