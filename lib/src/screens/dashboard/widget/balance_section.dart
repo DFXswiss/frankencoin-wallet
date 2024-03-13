@@ -21,7 +21,7 @@ class BalanceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.zero,
+      padding: EdgeInsets.only(top: 10),
       child: Container(
         padding: const EdgeInsets.all(10),
         width: double.infinity,
@@ -71,12 +71,6 @@ class BalanceSection extends StatelessWidget {
                   onPressed: () =>
                       Navigator.of(context).pushNamed(Routes.receive),
                   icon: const Icon(Icons.arrow_downward),
-                  color: const Color.fromRGBO(251, 113, 133, 1.0),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () => Navigator.of(context).pushNamed(Routes.pool),
-                  icon: const Icon(Icons.bar_chart),
                   color: const Color.fromRGBO(251, 113, 133, 1.0),
                 ),
                 const Spacer(),

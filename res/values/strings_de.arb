@@ -7,6 +7,7 @@
     "confirm_sending": "Senden bestätigen",
     "create_wallet": "Wallet erstellen",
     "estimated_fee": "Geschätzte Gebühr",
+    "error": "Fehler",
     "invest": "Investieren",
     "restore_wallet": "Wallet wiederherstellen",
     "restore_wallet_from_seed": "Wallet mit Seed wiederherstellen",

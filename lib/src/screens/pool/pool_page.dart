@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
@@ -185,12 +184,11 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
       final amount = EtherAmount.inWei(expectedReturn)
           .getValueInUnit(EtherUnit.ether)
           .toString();
-      print(amount);
+
       if (amount != _receiveController.text) _receiveController.text = amount;
     });
 
     reaction((_) => widget.equityVM.state, (ExecutionState state) {
-      print(state);
       if (state is AwaitingConfirmationExecutionState) {
         final amount = EtherAmount.inWei(widget.equityVM.investAmount)
             .getValueInUnit(EtherUnit.ether);

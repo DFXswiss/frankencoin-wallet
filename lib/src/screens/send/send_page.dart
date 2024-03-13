@@ -7,10 +7,11 @@ import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/currency_picker.dart';
-import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
-import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
+import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
+import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
+import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -59,7 +60,8 @@ class _SendPageBodyState extends State<_SendPageBody> {
 
     return Column(children: [
       Padding(
-        padding: const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
         child: CupertinoTextField(
           controller: _addressController,
           placeholder: S.of(context).wallet_address_receiver,
@@ -76,7 +78,8 @@ class _SendPageBodyState extends State<_SendPageBody> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
         child: CupertinoTextField(
           controller: _cryptoAmountController,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -201,6 +204,13 @@ class _SendPageBodyState extends State<_SendPageBody> {
             txId: txId,
             onConfirm: () {},
           ),
+        );
+      }
+
+      if (state is FailureState) {
+        showDialog(
+          context: context,
+          builder: (_) => ErrorDialog(errorMessage: state.error),
         );
       }
     });

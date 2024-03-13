@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widget/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widget/balance_section.dart';
+import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -47,6 +49,8 @@ class DashboardPage extends StatelessWidget {
                   BalanceCard(
                     balanceInfo: balanceViewModel.balances[CryptoCurrency.fps],
                     cryptoCurrency: CryptoCurrency.fps,
+                    actionLabel: S.of(context).invest,
+                    action: () => Navigator.of(context).pushNamed(Routes.pool),
                   ),
                   BalanceCard(
                     balanceInfo: balanceViewModel.balances[CryptoCurrency.eth],

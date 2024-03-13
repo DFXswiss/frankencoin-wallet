@@ -35,7 +35,10 @@ abstract class SendViewModelBase with Store {
   TransactionPriority priority = TransactionPriority.medium;
 
   @computed
-  bool get isReadyToCreate => state is InitialExecutionState && rawCryptoAmount.isNotEmpty && address.isNotEmpty;
+  bool get isReadyToCreate =>
+      state is InitialExecutionState &&
+      rawCryptoAmount.isNotEmpty &&
+      address.isNotEmpty;
 
   @observable
   ExecutionState state = InitialExecutionState();
@@ -58,7 +61,6 @@ abstract class SendViewModelBase with Store {
   Future<void> estimateGas() async =>
       _estimatedGas = (await appStore.client.estimateGas()).toInt();
 
-
   Timer? _updateGasPriceTimer;
   Timer? _estimateGasTimer;
 
@@ -66,8 +68,10 @@ abstract class SendViewModelBase with Store {
     await updateGasPrice();
     await estimateGas();
 
-    _updateGasPriceTimer = Timer.periodic(const Duration(seconds: 10), (timer) async => await updateGasPrice());
-    _estimateGasTimer = Timer.periodic(const Duration(seconds: 10), (timer) async => await estimateGas());
+    _updateGasPriceTimer = Timer.periodic(
+        const Duration(seconds: 10), (timer) async => await updateGasPrice());
+    _estimateGasTimer = Timer.periodic(
+        const Duration(seconds: 10), (timer) async => await estimateGas());
   }
 
   void stopSyncFee() {
@@ -101,27 +105,31 @@ abstract class SendViewModelBase with Store {
       value: isErc20Token ? EtherAmount.zero() : cryptoAmount,
     );
 
-    if (!isErc20Token) {
-      final signedTransaction = await appStore.client
-          .signTransaction(currentAccount, transaction, chainId: chainId);
+    try {
+      if (!isErc20Token) {
+        final signedTransaction = await appStore.client
+            .signTransaction(currentAccount, transaction, chainId: chainId);
 
-      _sendTransaction = () async =>
-          await appStore.client.sendRawTransaction(signedTransaction);
-    } else {
-      final erc20 = ERC20(
-        client: appStore.client,
-        address: EthereumAddress.fromHex(spendCurrency.address),
-        chainId: chainId,
-      );
+        _sendTransaction =
+            () => appStore.client.sendRawTransaction(signedTransaction);
+      } else {
+        final erc20 = ERC20(
+          client: appStore.client,
+          address: EthereumAddress.fromHex(spendCurrency.address),
+          chainId: chainId,
+        );
 
-      _sendTransaction = () async => await erc20.transfer(
-            EthereumAddress.fromHex(address),
-            cryptoAmount.getInWei,
-            credentials: currentAccount,
-            transaction: transaction,
-          );
+        _sendTransaction = () => erc20.transfer(
+              EthereumAddress.fromHex(address),
+              cryptoAmount.getInWei,
+              credentials: currentAccount,
+              transaction: transaction,
+            );
+      }
+      state = AwaitingConfirmationExecutionState();
+    } catch (e) {
+      state = FailureState(e.toString());
     }
-    state = AwaitingConfirmationExecutionState();
   }
 
   @action
