@@ -27,7 +27,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "dev.konsti.frankencoin_wallet"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34 // flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -48,9 +48,8 @@ android {
         applicationId "dev.konsti.frankencoin_wallet"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-//        minSdkVersion flutter.minSdkVersion
-        minSdkVersion 18
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 24 // flutter.minSdkVersion
+        targetSdkVersion 33 //flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

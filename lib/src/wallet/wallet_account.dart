@@ -30,11 +30,12 @@ class WalletAccount {
   }
 
   EthPrivateKey _getPrivateKeyAt(int addressIndex) {
-    final addressAtIndex = root.derivePath(getDerivationPath(0));
+    final addressAtIndex = root.derivePath(getDerivationPath(addressIndex));
 
     return EthPrivateKey.fromHex(hex.encode(addressAtIndex.privateKey!));
   }
 
-  Future<String> signMessage(String message, {String? address}) async =>
-      hex.encode(await primaryAddress.signPersonalMessage(ascii.encode(message)));
+  Future<String> signMessage(String message, {int addressIndex = 0}) async =>
+      hex.encode(
+          await _getPrivateKeyAt(0).signPersonalMessage(ascii.encode(message)));
 }

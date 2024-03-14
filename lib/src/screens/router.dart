@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
 import 'package:frankencoin_wallet/src/screens/pool/pool_page.dart';
+import 'package:frankencoin_wallet/src/screens/qr/qr_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/screens/send/send_page.dart';
+import 'package:frankencoin_wallet/src/screens/web_view/web_view_page.dart';
 import 'package:frankencoin_wallet/src/screens/welcome/welcome_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
@@ -43,7 +46,17 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
     case Routes.pool:
       return MaterialPageRoute<void>(
-          builder: (_) => PoolPage(getIt.get<BalanceViewModel>(), getIt.get<EquityViewModel>()));
+          builder: (_) => PoolPage(
+              getIt.get<BalanceViewModel>(), getIt.get<EquityViewModel>()));
+
+    case Routes.webView:
+      final args = settings.arguments as List;
+      final title = args.first as String;
+      final url = args[1] as Uri;
+      return CupertinoPageRoute<void>(builder: (_) => WebViewPage(title, url));
+
+    case Routes.qrScan:
+      return CupertinoPageRoute<void>(builder: (_) => QRPage());
 
     default:
       return MaterialPageRoute<void>(

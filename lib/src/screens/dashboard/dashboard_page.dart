@@ -18,8 +18,9 @@ class DashboardPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(15, 23, 42, 1),
-      body: PopScope(
-        canPop: false,
+      body: WillPopScope(
+        // canPop: false,
+        onWillPop: () async => false,
         child: SafeArea(
           bottom: false,
           child: Container(

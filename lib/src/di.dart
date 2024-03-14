@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frankencoin_wallet/src/core/dfx_service.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
@@ -16,6 +17,8 @@ void setupDependencyInjection(
   getIt.registerSingleton(sharedPreferences);
   getIt.registerSingleton(const FlutterSecureStorage());
   getIt.registerSingleton(AppStore());
+  getIt.registerSingleton(DFXService(getIt.get<AppStore>()));
+
 
   getIt.registerFactory<BalanceViewModel>(
       () => BalanceViewModel(getIt.get<Isar>(), getIt.get<AppStore>()));
@@ -25,4 +28,5 @@ void setupDependencyInjection(
       SendViewModel(getIt.get<BalanceViewModel>(), getIt.get<AppStore>()));
   getIt.registerFactory<EquityViewModel>(
       () => EquityViewModel(getIt.get<AppStore>(), getIt.get<SendViewModel>()));
+
 }

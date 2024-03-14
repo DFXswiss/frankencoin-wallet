@@ -86,7 +86,7 @@ class BalanceCard extends StatelessWidget {
               )
             ],
           ),
-          if (actionLabel != null)
+          if (actionLabel != null) ...[
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: SizedBox(
@@ -98,6 +98,7 @@ class BalanceCard extends StatelessWidget {
                 ),
               ),
             ),
+          ],
         ],
       ),
     );

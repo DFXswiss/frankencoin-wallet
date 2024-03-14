@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/core/dfx_service.dart';
+import 'package:frankencoin_wallet/src/di.dart';
+import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/widgets/vertical_icon_button.dart';
 import 'package:web3dart/web3dart.dart';
 
 class BalanceSection extends StatelessWidget {
@@ -67,17 +70,43 @@ class BalanceSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Spacer(),
-                IconButton(
+                VerticalIconButton(
                   onPressed: () =>
-                      Navigator.of(context).pushNamed(Routes.receive),
-                  icon: const Icon(Icons.arrow_downward),
-                  color: const Color.fromRGBO(251, 113, 133, 1.0),
+                      getIt.get<DFXService>().launchProvider(context, true),
+                  icon: const Icon(
+                    Icons.add,
+                    color: Color.fromRGBO(251, 113, 133, 1.0),
+                  ),
+                  label: S.of(context).buy,
                 ),
                 const Spacer(),
-                IconButton(
+                VerticalIconButton(
+                  onPressed: () =>
+                      getIt.get<DFXService>().launchProvider(context, false),
+                  icon: const Icon(
+                    Icons.remove,
+                    color: Color.fromRGBO(251, 113, 133, 1.0),
+                  ),
+                  label: S.of(context).sell,
+                ),
+                const Spacer(),
+                VerticalIconButton(
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed(Routes.receive),
+                  icon: const Icon(
+                    Icons.arrow_downward,
+                    color: Color.fromRGBO(251, 113, 133, 1.0),
+                  ),
+                  label: S.of(context).receive,
+                ),
+                const Spacer(),
+                VerticalIconButton(
                   onPressed: () => Navigator.of(context).pushNamed(Routes.send),
-                  icon: const Icon(Icons.arrow_upward),
-                  color: const Color.fromRGBO(251, 113, 133, 1.0),
+                  icon: const Icon(
+                    Icons.arrow_upward,
+                    color: Color.fromRGBO(251, 113, 133, 1.0),
+                  ),
+                  label: S.of(context).send,
                 ),
                 const Spacer(),
               ],
