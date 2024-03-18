@@ -11,6 +11,7 @@ import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
+import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
@@ -70,10 +71,16 @@ class _SendPageBodyState extends State<_SendPageBody> {
           ],
           suffix: Padding(
             padding: const EdgeInsets.only(top: 2, bottom: 2),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.paste),
-            ),
+            child: Row(children: [
+              IconButton(
+                onPressed: _pasteText,
+                icon: const Icon(Icons.paste),
+              ),
+              IconButton(
+                onPressed: () => _presentQRScanner(context),
+                icon: const Icon(Icons.qr_code),
+              ),
+            ],)
           ),
         ),
       ),
@@ -218,6 +225,14 @@ class _SendPageBodyState extends State<_SendPageBody> {
     _effectsInstalled = true;
   }
 
+  Future<void> _pasteText() async {
+    final value = await Clipboard.getData('text/plain');
+
+    if (value?.text?.isNotEmpty ?? false) {
+      _addressController.text = value!.text!;
+    }
+  }
+
   void _presentPicker(BuildContext context) {
     showDialog<void>(
       context: context,
@@ -228,6 +243,18 @@ class _SendPageBodyState extends State<_SendPageBody> {
             onSelect: (CryptoCurrency cryptoCurrency) {
               widget.sendVM.spendCurrency = cryptoCurrency;
             }),
+      ),
+    );
+  }
+
+  Future<void> _presentQRScanner(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => QRScanDialog(
+        validateQR: (_, __) => true,
+        onData: (code, raw) {
+          Navigator.of(dialogContext, rootNavigator: true).pop();
+        },
       ),
     );
   }

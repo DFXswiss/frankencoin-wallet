@@ -8,14 +8,6 @@ abstract class BasePage extends StatelessWidget {
 
   String? get title => null;
 
-  Color? get backgroundLightColor => null;
-
-  Color? get backgroundDarkColor => null;
-
-  bool get gradientBackground => false;
-
-  bool get gradientAll => false;
-
   bool get resizeToAvoidBottomInset => true;
 
   bool get extendBodyBehindAppBar => false;
@@ -62,9 +54,7 @@ abstract class BasePage extends StatelessWidget {
       );
 
   Widget? leading(BuildContext context) {
-    if (ModalRoute.of(context)?.isFirst ?? true) {
-      return null;
-    }
+    if (ModalRoute.of(context)?.isFirst ?? true) return null;
 
     return MergeSemantics(
       child: SizedBox(
@@ -110,7 +100,7 @@ abstract class BasePage extends StatelessWidget {
         leading: leading(context),
         middle: middle(context),
         trailing: trailing(context),
-        backgroundColor: Colors.transparent,
+        backgroundColor: pageBackgroundColor(context),
         border: null,
       );
 
