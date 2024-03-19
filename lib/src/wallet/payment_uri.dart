@@ -8,6 +8,18 @@ abstract class PaymentURI {
 class EthereumURI extends PaymentURI {
   EthereumURI({required super.amount, required super.address});
 
+  factory EthereumURI.fromString(String uriString) {
+    final uri = Uri.parse(uriString);
+
+    if (uri.scheme.toLowerCase() != "ethereum") {
+      throw PaymentURIParseException();
+    }
+
+    final address = uri.path;
+    final amount = uri.queryParameters["amount"] ?? "";
+    return EthereumURI(address: address, amount: amount);
+  }
+
   @override
   String toString() {
     var base = 'ethereum:$address';
@@ -19,3 +31,5 @@ class EthereumURI extends PaymentURI {
     return base;
   }
 }
+
+class PaymentURIParseException extends FormatException {}
