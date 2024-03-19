@@ -83,7 +83,7 @@ abstract class SendViewModelBase with Store {
 
   @action
   Future<void> createTransaction() async {
-    print(RegExp(r'(\b0x[a-fA-F0-9]{40}\b)').hasMatch(address));
+    print(RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false).hasMatch(address));
     final cryptoAmountString = EVMChainFormatter.parseEVMChainAmount(
         rawCryptoAmount.replaceAll(",", "."));
 

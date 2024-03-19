@@ -7,8 +7,10 @@ import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/currency_picker.dart';
+import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
+import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
@@ -70,18 +72,20 @@ class _SendPageBodyState extends State<_SendPageBody> {
             FilteringTextInputFormatter.deny(RegExp(r" ")),
           ],
           suffix: Padding(
-            padding: const EdgeInsets.only(top: 2, bottom: 2),
-            child: Row(children: [
-              IconButton(
-                onPressed: _pasteText,
-                icon: const Icon(Icons.paste),
-              ),
-              IconButton(
-                onPressed: () => _presentQRScanner(context),
-                icon: const Icon(Icons.qr_code),
-              ),
-            ],)
-          ),
+              padding: const EdgeInsets.only(top: 2, bottom: 2),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: _pasteText,
+                    icon: const Icon(Icons.paste),
+                  ),
+                  if (DeviceInfo.instance.isMobile)
+                    IconButton(
+                      onPressed: () => _presentQRScanner(context),
+                      icon: const Icon(Icons.qr_code),
+                    ),
+                ],
+              )),
         ),
       ),
       Padding(
@@ -248,14 +252,18 @@ class _SendPageBodyState extends State<_SendPageBody> {
   }
 
   Future<void> _presentQRScanner(BuildContext context) async {
-    await showDialog(
+    String address = await showDialog(
       context: context,
       builder: (dialogContext) => QRScanDialog(
-        validateQR: (_, __) => true,
-        onData: (code, raw) {
-          Navigator.of(dialogContext, rootNavigator: true).pop();
-        },
+        validateQR: (code, _) =>
+            RegExp(r'(\b0x[a-fA-F0-9]{40}\b)').hasMatch(code!),
+        onData: (code, _) =>
+            Navigator.of(dialogContext, rootNavigator: true).pop(code),
       ),
     );
+
+    final uri = EthereumURI.fromString(address);
+    _addressController.text = uri.address;
+    _cryptoAmountController.text = uri.amount;
   }
 }

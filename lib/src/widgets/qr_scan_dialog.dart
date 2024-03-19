@@ -17,8 +17,9 @@ class QRScanDialog extends StatefulWidget {
 }
 
 class _QRScanDialogState extends State<QRScanDialog> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final GlobalKey qrKey = GlobalKey();
   QRViewController? controller;
+  bool _scannedOnce = false;
 
   @override
   void reassemble() {
@@ -68,8 +69,10 @@ class _QRScanDialogState extends State<QRScanDialog> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
+      if (_scannedOnce) return;
       if (widget.validateQR?.call(scanData.code, scanData.rawBytes) == true) {
         widget.onData?.call(scanData.code, scanData.rawBytes);
+        _scannedOnce = true;
       }
     });
   }

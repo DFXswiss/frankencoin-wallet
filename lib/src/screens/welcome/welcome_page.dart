@@ -31,10 +31,11 @@ class WelcomePage extends StatelessWidget {
                 style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 5),
+                padding: const EdgeInsets.only(top: 20, bottom: 5, right: 20, left: 20),
                 child: Text(
                   S.of(context).welcome_disclaimer,
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  textAlign: TextAlign.center,
                 ),
               ),
               Padding(
