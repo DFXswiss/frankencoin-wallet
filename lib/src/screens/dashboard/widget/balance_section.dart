@@ -106,15 +106,6 @@ class BalanceSection extends StatelessWidget {
                 label: S.of(context).send,
               ),
               const Spacer(),
-              VerticalIconButton(
-                onPressed: () => Navigator.of(context).pushNamed(Routes.walletRestore),
-                icon: const Icon(
-                  Icons.qr_code,
-                  color: Color.fromRGBO(251, 113, 133, 1.0),
-                ),
-                label: "QR",
-              ),
-              const Spacer(),
             ],
           ),
         ],
