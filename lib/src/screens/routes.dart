@@ -6,6 +6,7 @@ class Routes {
   static const send = '/dashboard/send';
   static const walletCreate = '/wallet/create';
   static const walletRestore = '/wallet/restore';
+  static const walletRestoreSeed = '/wallet/restore/seed';
   static const webView = '/dfx';
   static const welcome = '/welcome';
 }

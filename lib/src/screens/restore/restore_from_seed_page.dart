@@ -7,25 +7,25 @@ import 'package:frankencoin_wallet/src/screens/restore/seed_editing_controller.d
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 
-class RestorePage extends BasePage {
-  RestorePage(this.walletVM, {super.key});
+class RestoreFromSeedPage extends BasePage {
+  RestoreFromSeedPage(this.walletVM, {super.key});
 
   final WalletViewModel walletVM;
 
   @override
-  Widget body(BuildContext context) => _RestorePageBody(walletVM: walletVM);
+  Widget body(BuildContext context) => _RestoreFromSeedPageBody(walletVM: walletVM);
 }
 
-class _RestorePageBody extends StatefulWidget {
+class _RestoreFromSeedPageBody extends StatefulWidget {
   final WalletViewModel walletVM;
 
-  const _RestorePageBody({required this.walletVM});
+  const _RestoreFromSeedPageBody({required this.walletVM});
 
   @override
-  State<StatefulWidget> createState() => _RestorePageState();
+  State<StatefulWidget> createState() => _RestoreFromSeedPageState();
 }
 
-class _RestorePageState extends State<_RestorePageBody> {
+class _RestoreFromSeedPageState extends State<_RestoreFromSeedPageBody> {
   final TextEditingController _controller = SeedEditingController();
 
   String extractedSeed = "";

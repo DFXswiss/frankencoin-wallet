@@ -5,7 +5,8 @@ import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
 import 'package:frankencoin_wallet/src/screens/pool/pool_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
-import 'package:frankencoin_wallet/src/screens/restore/restore_page.dart';
+import 'package:frankencoin_wallet/src/screens/restore/restore_from_seed_page.dart';
+import 'package:frankencoin_wallet/src/screens/restore/restore_options_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/screens/send/send_page.dart';
 import 'package:frankencoin_wallet/src/screens/web_view/web_view_page.dart';
@@ -26,9 +27,13 @@ Route<dynamic> createRoute(RouteSettings settings) {
       final seed = settings.arguments as String;
       return MaterialPageRoute<void>(builder: (_) => CreateWalletPage(seed));
 
+    case Routes.walletRestoreSeed:
+      return MaterialPageRoute<void>(
+          builder: (_) => RestoreFromSeedPage(getIt.get<WalletViewModel>()));
+
     case Routes.walletRestore:
       return MaterialPageRoute<void>(
-          builder: (_) => RestorePage(getIt.get<WalletViewModel>()));
+          builder: (_) => RestoreOptionsPage(getIt.get<WalletViewModel>()));
 
     case Routes.dashboard:
       return MaterialPageRoute<void>(

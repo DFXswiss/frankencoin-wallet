@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -31,7 +32,8 @@ class WelcomePage extends StatelessWidget {
                 style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 5, right: 20, left: 20),
+                padding: const EdgeInsets.only(
+                    top: 20, bottom: 5, right: 20, left: 20),
                 child: Text(
                   S.of(context).welcome_disclaimer,
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -76,6 +78,11 @@ class WelcomePage extends StatelessWidget {
         .pushNamed(Routes.walletCreate, arguments: wallet.seed);
   }
 
-  void _onRestoreWallet(BuildContext context) =>
+  void _onRestoreWallet(BuildContext context) {
+    if (DeviceInfo.instance.isDesktop) {
+      Navigator.of(context).pushNamed(Routes.walletRestoreSeed);
+    } else {
       Navigator.of(context).pushNamed(Routes.walletRestore);
+    }
+  }
 }
