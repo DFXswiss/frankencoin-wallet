@@ -122,7 +122,7 @@ class DFXService {
       try {
         accessToken = await signIn();
       } on Exception catch (e) {
-        if (e.toString().contains('409')) {
+        if (e.toString().contains('404')) {
           accessToken = await signUp();
         } else {
           rethrow;
