@@ -23,14 +23,14 @@ class RestoreOptionsPage extends BasePage {
           title: S.of(context).restore_wallet_from_seed_option,
           description:
               S.of(context).restore_wallet_from_seed_option_description,
-          leadingImagePath: "assets/images/crypto/zchf.png", // ToDo: (Konsti) Replace
+          leadingIcon: Icons.key,
           action: () => Navigator.of(context).pushNamed(Routes.walletRestoreSeed),
         ),
         OptionCard(
           title: S.of(context).restore_wallet_with_seed_qr_option,
           description:
               S.of(context).restore_wallet_with_seed_qr_option_description,
-          leadingImagePath: "assets/images/crypto/xchf.png", // ToDo: (Konsti) Replace
+          leadingIcon: Icons.qr_code,
           action: () => _onRestore(context),
         ),
       ],

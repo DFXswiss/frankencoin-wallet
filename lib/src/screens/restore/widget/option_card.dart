@@ -7,13 +7,13 @@ class OptionCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
-    required this.leadingImagePath,
+    required this.leadingIcon,
     this.action,
   });
 
   final String title;
   final String description;
-  final String leadingImagePath;
+  final IconData leadingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,8 @@ class OptionCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(leadingImagePath, width: 40),
+                Icon(leadingIcon, size: 40, color: const Color.fromRGBO(251, 113, 133, 1.0)),
+                // Image.asset(leadingImagePath, width: 40),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
@@ -44,17 +45,20 @@ class OptionCard extends StatelessWidget {
                         Text(
                           title,
                           style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Lato',
-                              color: Colors.white),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Lato',
+                            color: Colors.white,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 5),
                           child: Text(
                             description,
                             style: const TextStyle(
-                                fontFamily: 'Lato', color: Colors.white),
+                              fontFamily: 'Lato',
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
