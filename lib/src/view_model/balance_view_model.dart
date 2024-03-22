@@ -80,9 +80,7 @@ abstract class BalanceViewModelBase with Store {
         const Duration(minutes: 1), (timer) async => await updateBalances());
   }
 
-  void stopSyncBalances() {
-    _updateBalancesTimer?.cancel();
-  }
+  void stopSyncBalances() => _updateBalancesTimer?.cancel();
 
   Future<List<BalanceInfo>> _updateERC20Balances(
       EthereumAddress address) async {

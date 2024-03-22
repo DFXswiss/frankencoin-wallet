@@ -1,5 +1,6 @@
 {
     "amount": "Betrag",
+    "are_you_sure": "Sind Sie sicher?",
     "back": "Zurück",
     "balance": "Guthaben",
     "buy": "Kaufen",
@@ -7,6 +8,7 @@
     "confirm": "Bestätigen",
     "confirm_sending": "Senden bestätigen",
     "create_wallet": "Wallet erstellen",
+    "danger_zone": "Gefahrenzone",
     "dfx_unavailable": "DFX nicht erreichbar",
     "estimated_fee": "Geschätzte Gebühr",
     "error": "Fehler",
@@ -16,16 +18,19 @@
     "restore_wallet_from_seed": "Wallet mit Seed wiederherstellen",
     "restore_wallet_from_seed_description": "Es handelt sich dabei um eine Phrase bestehend aus 12 Wörtern, welche Sie bei der Erstellung Ihrer Wallet erhalten haben.",
     "restore_wallet_from_seed_option": "Mit Seed wiederherstellen",
-    "restore_wallet_from_seed_option_description": "Stellen Sie Ihre Wallet aus der 12-Wort-Phrase wieder her, welche Sie bei der Erstellung Ihrer Wallet erhalten haben.",
+    "restore_wallet_from_seed_option_description": "Stellen Sie Ihre Wallet aus der geheimen 12-Wort-Phrase wieder her, welche Sie bei der Erstellung Ihrer Wallet erhalten haben.",
     "restore_wallet_with_seed_qr_option": "Von SeedQR wiederherstellen",
     "restore_wallet_with_seed_qr_option_description": "Stellen Sie Ihre Wallet aus einem qültigem SeedQR wieder her, welcher normalerweise auf eine Stahlplatte graviert wurde.",
     "sell": "Verkaufen",
     "send": "Senden",
+    "settings": "Einstellungen",
+    "sign_out": "Abmelden",
+    "sign_out_confirmation": "Wenn Sie sich abmelden, ohne Ihre geheime 12-Wort-Phrase zu speichern, verlieren Sie den Zugriff auf Ihre Wallet\n\nMelden Sie sich nur ab, wenn Sie Ihre geheime 12-Wort-Phrase sicher gespeichert haben.",
     "successful_transaction": "Erfolgreiche Transaktion",
     "transaction_id": "Transaktions-ID",
     "your_seed": "Dein Frankencoin-Seed",
     "your_seed_disclaimer": "Dies ist Ihr einzigartiger und privater Seed und der einzige Weg, um Ihre Wallet im Falle eines Verlusts oder einer Fehlfunktion wiederherzustellen.",
     "wallet_address_receiver": "Emfänger-Wallet",
     "welcome_frankecoin_wallet": "Willkommen im \nFrankencoin Wallet",
-    "welcome_disclaimer": "Durch die Nutzung von Frankencoin Wallet stimmen Sie unseren Nutzungsbedinungen zu."
+    "welcome_disclaimer": "Durch die Nutzung von Frankencoin Wallet stimmen Sie unseren <underline>Nutzungsbedinungen</underline> zu."
 }

@@ -57,7 +57,7 @@ dependencies:
   flutter_inappwebview: ^6.0.0
   crypto: ^3.0.3
   qr_code_scanner: ^1.0.1
-
+  styled_text: ^8.1.0
 
 dev_dependencies:
   flutter_test:

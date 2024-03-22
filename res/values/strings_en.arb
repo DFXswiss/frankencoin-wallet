@@ -1,8 +1,10 @@
 {
     "amount": "Amount",
+    "are_you_sure": "Are you sure?",
     "back": "Back",
     "balance": "Balance",
     "buy": "Buy",
+    "danger_zone": "Danger Zone",
     "dfx_unavailable": "DFX unavailable",
     "cancel": "Cancel",
     "confirm": "Confirm",
@@ -16,16 +18,19 @@
     "restore_wallet_from_seed": "Restore wallet with seed",
     "restore_wallet_from_seed_description": "The Seed is a 12-world-phrase, which you got during the creation of your wallet.",
     "restore_wallet_from_seed_option": "Restore with seed",
-    "restore_wallet_from_seed_option_description": "Restore your wallet with the 12-world-phrase, which you got during the creation of your wallet.",
+    "restore_wallet_from_seed_option_description": "Restore your wallet with the secret 12-word-phrase, which you got during the creation of your wallet.",
     "restore_wallet_with_seed_qr_option": "Restore from SeedQR",
     "restore_wallet_with_seed_qr_option_description": "Restore your wallet from a valid SeedQR, which is normally backed up on a steel plate.",
     "sell": "Sell",
     "send": "Send",
+    "settings": "Settings",
+    "sign_out": "Sign out",
+    "sign_out_confirmation": "If you sign out without saving your secret 12-word-phrase, you'll lose access to your wallet.\n\nOnly sign out if your secret 12-word-phrase is stored securely or backed up.",
     "successful_transaction": "Successful transaction",
     "transaction_id": "Transactions-id",
     "your_seed": "Your Frankencoin-seed",
     "your_seed_disclaimer": "This is your unique and private seed and it is the only way to recover your wallet in case of loss or malfunction.",
     "wallet_address_receiver": "Receiver wallet",
     "welcome_frankecoin_wallet": "Welcome in the \nFrankencoin Wallet",
-    "welcome_disclaimer": "By using Frankencoin Wallet you agree to our terms and conditions."
+    "welcome_disclaimer": "By using Frankencoin Wallet you agree to our <underline>terms and conditions</underline>."
 }

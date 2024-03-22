@@ -106,6 +106,15 @@ class BalanceSection extends StatelessWidget {
                 label: S.of(context).send,
               ),
               const Spacer(),
+              VerticalIconButton(
+                onPressed: () => Navigator.of(context).pushNamed(Routes.settings),
+                icon: const Icon(
+                  Icons.settings,
+                  color: Color.fromRGBO(251, 113, 133, 1.0),
+                ),
+                label: S.of(context).settings,
+              ),
+              const Spacer(),
             ],
           ),
         ],

@@ -15,18 +15,17 @@ class ErrorDialog extends InfoDialog {
   String get title => S.current.error;
 
   @override
-  Widget body(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          errorMessage,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'Lato',
+  Widget body(BuildContext context) =>
+      Column(
+        children: [
+          Text(
+            errorMessage,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Lato',
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }

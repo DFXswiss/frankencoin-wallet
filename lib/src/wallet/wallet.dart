@@ -41,4 +41,8 @@ class Wallet {
     await secureStorage.write(key: "wallet_seed", value: seed);
   }
 
+  Future<void> delete() async {
+    const secureStorage = FlutterSecureStorage();
+    await secureStorage.delete(key: "wallet_seed");
+  }
 }

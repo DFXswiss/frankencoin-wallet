@@ -4,6 +4,7 @@ class Routes {
   static const qrScan = '/qr';
   static const receive = '/dashboard/receive';
   static const send = '/dashboard/send';
+  static const settings = '/settings';
   static const walletCreate = '/wallet/create';
   static const walletRestore = '/wallet/restore';
   static const walletRestoreSeed = '/wallet/restore/seed';

@@ -4,6 +4,8 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
+import 'package:styled_text/styled_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage(this.walletVW, {super.key});
@@ -34,10 +36,22 @@ class WelcomePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(
                     top: 20, bottom: 5, right: 20, left: 20),
-                child: Text(
-                  S.of(context).welcome_disclaimer,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  textAlign: TextAlign.center,
+                child: InkWell(
+                  onTap: () => launchUrl(Uri.parse("https://konsti.dev/"), mode: LaunchMode.externalApplication),
+                  enableFeedback: false,
+                  child: StyledText(
+                    text: S.of(context).welcome_disclaimer,
+                    tags: {
+                      'underline': StyledTextTag(
+                        style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.grey,
+                        ),
+                      ),
+                    },
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               Padding(

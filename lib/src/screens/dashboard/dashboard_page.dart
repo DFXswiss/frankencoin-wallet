@@ -7,18 +7,34 @@ import 'package:frankencoin_wallet/src/screens/dashboard/widget/balance_section.
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 
-class DashboardPage extends StatelessWidget {
-  const DashboardPage(this.balanceViewModel, {super.key});
+class DashboardPage extends StatefulWidget {
+  const DashboardPage(this.balanceVM, {super.key});
 
-  final BalanceViewModel balanceViewModel;
+  final BalanceViewModel balanceVM;
+
+  @override
+  State<StatefulWidget> createState() => DashboardPageState();
+}
+
+class DashboardPageState extends State<DashboardPage> {
+  @override
+  void initState() {
+    super.initState();
+    widget.balanceVM.startSyncBalances();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.balanceVM.stopSyncBalances();
+  }
 
   @override
   Widget build(BuildContext context) {
-    balanceViewModel.startSyncBalances();
-
     return Scaffold(
       backgroundColor: const Color.fromRGBO(15, 23, 42, 1),
       body: WillPopScope(
+        // PopScope(
         // canPop: false,
         onWillPop: () async => false,
         child: SafeArea(
@@ -30,7 +46,7 @@ class DashboardPage extends StatelessWidget {
               builder: (_) => Column(
                 children: [
                   BalanceSection(
-                    balanceInfo: balanceViewModel.balances[CryptoCurrency.zchf],
+                    balanceInfo: widget.balanceVM.balances[CryptoCurrency.zchf],
                     cryptoCurrency: CryptoCurrency.zchf,
                   ),
                   Container(
@@ -48,13 +64,13 @@ class DashboardPage extends StatelessWidget {
                     height: 8,
                   ),
                   BalanceCard(
-                    balanceInfo: balanceViewModel.balances[CryptoCurrency.fps],
+                    balanceInfo: widget.balanceVM.balances[CryptoCurrency.fps],
                     cryptoCurrency: CryptoCurrency.fps,
                     actionLabel: S.of(context).invest,
                     action: () => Navigator.of(context).pushNamed(Routes.pool),
                   ),
                   BalanceCard(
-                    balanceInfo: balanceViewModel.balances[CryptoCurrency.eth],
+                    balanceInfo: widget.balanceVM.balances[CryptoCurrency.eth],
                     cryptoCurrency: CryptoCurrency.eth,
                   )
                 ],

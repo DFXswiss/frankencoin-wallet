@@ -27,4 +27,14 @@ class WalletViewModel {
 
     return wallet;
   }
+
+  Future<bool> deleteWallet() async {
+
+    appStore.wallet?.delete();
+
+    appStore.wallet = null;
+    await sharedPreferences.setBool("walletCreated", false);
+
+    return true;
+  }
 }
