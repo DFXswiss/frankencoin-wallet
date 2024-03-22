@@ -12,6 +12,7 @@
     "dfx_unavailable": "DFX nicht erreichbar",
     "estimated_fee": "Geschätzte Gebühr",
     "error": "Fehler",
+    "fps_cannot_redeem_yet": "Du kannst deine FPS noch nicht einlösen, da du die Haltefrist von 90 Tagen noch nicht erreicht hast.",
     "invest": "Investieren",
     "receive": "Empfangen",
     "restore_wallet": "Wallet wiederherstellen",

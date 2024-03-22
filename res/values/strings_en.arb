@@ -12,6 +12,7 @@
     "confirm_sending": "Confirm sending",
     "estimated_fee": "Estimated fee",
     "error": "Error",
+    "fps_cannot_redeem_yet": "You can't redeem your FPS at the moment, because you haven't reached the minimum holding period of 90 days.",
     "invest": "Invest",
     "receive": "Receive",
     "restore_wallet": "Restore Wallet",

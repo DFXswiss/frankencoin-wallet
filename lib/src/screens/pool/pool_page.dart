@@ -5,6 +5,7 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widget/confirmation_alert.dart';
+import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
@@ -217,6 +218,13 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             txId: txId,
             onConfirm: () {},
           ),
+        );
+      }
+
+      if (state is FailureState) {
+        showDialog(
+          context: context,
+          builder: (_) => ErrorDialog(errorMessage: state.error),
         );
       }
     });

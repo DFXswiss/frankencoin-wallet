@@ -1,3 +1,4 @@
+import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/pool/equity.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
@@ -79,6 +80,15 @@ abstract class EquityViewModelBase with Store {
       _sendTransaction = () async => await _equity
           .invest(investAmount, expectedReturn, credentials: currentAccount);
     } else if (sendCurrency == CryptoCurrency.fps) {
+
+      final canRedeem = await _equity.canRedeem(currentAccount.address);
+
+      if (!canRedeem) {
+        state = FailureState(S.current.fps_cannot_redeem_yet);
+        print(state);
+        return;
+      }
+
       _sendTransaction = () async => await _equity.redeemExpected(
           currentAccount.address, investAmount, expectedReturn,
           credentials: currentAccount);

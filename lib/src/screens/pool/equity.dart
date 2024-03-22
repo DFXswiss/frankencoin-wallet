@@ -35,6 +35,17 @@ class Equity extends web3.GeneratedContract {
     return (response[0] as BigInt);
   }
 
+  /// How long the holder already held onto their average FPS in seconds.
+  Future<BigInt> holdingDuration(web3.EthereumAddress owner, {
+    web3.BlockNum? atBlock,
+  }) async {
+    final function = self.abi.functions[14];
+    assert(checkSignature(function, 'c9f72b67'));
+    final params = [owner];
+    final response = await read(function, params, atBlock);
+    return (response[0] as BigInt);
+  }
+
   /// Calculate ZCHF received when depositing shares
   /// [shares] number of shares we want to exchange for ZCHF in dec18 format
   /// It returns the amount of ZCHF received for the shares
