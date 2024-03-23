@@ -20,8 +20,9 @@ class OptionCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: const Color.fromRGBO(5, 8, 23, 1)),
+        borderRadius: BorderRadius.circular(20),
+        color: const Color.fromRGBO(5, 8, 23, 1),
+      ),
       padding: const EdgeInsets.all(15),
       child: InkWell(
         onTap: action,
@@ -32,7 +33,11 @@ class OptionCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(leadingIcon, size: 40, color: const Color.fromRGBO(251, 113, 133, 1.0)),
+                Icon(
+                  leadingIcon,
+                  size: 40,
+                  color: const Color.fromRGBO(251, 113, 133, 1),
+                ),
                 // Image.asset(leadingImagePath, width: 40),
                 Expanded(
                   child: Padding(

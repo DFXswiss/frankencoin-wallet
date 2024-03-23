@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
-import 'package:frankencoin_wallet/src/screens/receive/widget/qr_address_widget.dart';
+import 'package:frankencoin_wallet/src/screens/receive/widgets/qr_address_widget.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 
 class ReceivePage extends BasePage {

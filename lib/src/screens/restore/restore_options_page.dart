@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/seedqr.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
-import 'package:frankencoin_wallet/src/screens/restore/widget/option_card.dart';
+import 'package:frankencoin_wallet/src/screens/restore/widgets/option_card.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
