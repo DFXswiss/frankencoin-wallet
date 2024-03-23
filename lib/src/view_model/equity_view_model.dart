@@ -1,5 +1,5 @@
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/pool/equity.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/core/dfx_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';

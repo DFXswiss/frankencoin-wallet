@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 
 class ConfirmationAlert extends StatelessWidget {

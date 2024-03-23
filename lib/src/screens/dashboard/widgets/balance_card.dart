@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:web3dart/web3dart.dart';
 

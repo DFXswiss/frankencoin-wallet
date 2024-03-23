@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:erc20/erc20.dart';
-import 'package:frankencoin_wallet/src/core/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/fast_hash.dart';

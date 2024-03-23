@@ -1,17 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/language.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/screens/settings/widgets/language_picker.dart';
+import 'package:frankencoin_wallet/src/screens/settings/widgets/option_row.dart';
+import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/confirm_dialog.dart';
 
 class SettingsPage extends BasePage {
-  SettingsPage(this.walletVM, this.balanceVM, {super.key});
+  SettingsPage(this.walletVM, this.balanceVM, this.settingsStore, {super.key});
 
   final WalletViewModel walletVM;
   final BalanceViewModel balanceVM;
+  final SettingsStore settingsStore;
 
   @override
   String get title => S.current.settings;
@@ -25,12 +31,34 @@ class SettingsPage extends BasePage {
           SizedBox(
             width: double.infinity,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
+              child: Text(
+                S.of(context).settings_general,
+                style: const TextStyle(color: Color.fromRGBO(251, 113, 133, 1)),
+              ),
+            ),
+          ),
+          Observer(
+            builder: (_) => OptionRow(
+              name: S.of(context).settings_language,
+              suffix: settingsStore.language.name,
+              onTap: _setLanguage,
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
               child: Text(
                 S.of(context).danger_zone,
                 style: const TextStyle(color: Color.fromRGBO(251, 113, 133, 1)),
               ),
             ),
+          ),
+          OptionRow(
+            name: S.of(context).show_seed,
+            onTap: (BuildContext context) =>
+                Navigator.of(context).pushNamed(Routes.settingsSeed),
           ),
           CupertinoButton(
             onPressed: () => _deleteWallet(context),
@@ -42,6 +70,18 @@ class SettingsPage extends BasePage {
         ],
       ),
     );
+  }
+
+  Future<void> _setLanguage(BuildContext context) async {
+    final setLanguage = await showDialog(
+      context: context,
+      builder: (_) => LanguagePicker(
+        availableLanguages: Language.values,
+        selectedLanguage: settingsStore.language,
+      ),
+    );
+
+    settingsStore.language = setLanguage;
   }
 
   Future<void> _deleteWallet(BuildContext context) async {

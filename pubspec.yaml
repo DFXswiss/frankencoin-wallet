@@ -84,6 +84,7 @@ flutter:
   assets:
    - assets/images/
    - assets/images/crypto/
+   - assets/images/flags/
 
 fonts:
    - family: Lato
