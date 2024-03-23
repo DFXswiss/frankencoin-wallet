@@ -37,7 +37,9 @@ class WelcomePage extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     top: 20, bottom: 5, right: 20, left: 20),
                 child: InkWell(
-                  onTap: () => launchUrl(Uri.parse("https://konsti.dev/"), mode: LaunchMode.externalApplication),
+                  onTap: () => launchUrl(
+                      Uri.parse("https://docs.frankencoin.app/en/tou.html"),
+                      mode: LaunchMode.externalApplication),
                   enableFeedback: false,
                   child: StyledText(
                     text: S.of(context).welcome_disclaimer,
