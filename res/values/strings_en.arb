@@ -25,6 +25,7 @@
     "restore_wallet_from_seed_option_description": "Restore your wallet with the secret 12-word-phrase, which you got during the creation of your wallet.",
     "restore_wallet_with_seed_qr_option": "Restore from SeedQR",
     "restore_wallet_with_seed_qr_option_description": "Restore your wallet from a valid SeedQR, which is normally backed up on a steel plate.",
+    "select_asset": "Select the asset",
     "sell": "Sell",
     "send": "Send",
     "settings": "Settings",

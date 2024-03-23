@@ -25,6 +25,7 @@
     "restore_wallet_from_seed_option_description": "Stellen Sie Ihre Wallet aus der geheimen 12-Wort-Phrase wieder her, welche Sie bei der Erstellung Ihrer Wallet erhalten haben.",
     "restore_wallet_with_seed_qr_option": "Von SeedQR wiederherstellen",
     "restore_wallet_with_seed_qr_option_description": "Stellen Sie Ihre Wallet aus einem qültigem SeedQR wieder her, welcher normalerweise auf eine Stahlplatte graviert wurde.",
+    "select_asset": "Wähle das Asset",
     "sell": "Verkaufen",
     "send": "Senden",
     "settings": "Einstellungen",

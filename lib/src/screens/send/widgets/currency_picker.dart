@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 
@@ -22,6 +23,8 @@ class CurrencyPicker extends StatelessWidget {
         return "assets/images/crypto/xchf.png";
       case CryptoCurrency.zchf:
         return "assets/images/crypto/zchf.png";
+      case CryptoCurrency.fps:
+        return "assets/images/crypto/fps.png";
       default:
         return "assets/images/frankencoin.png";
     }
@@ -36,10 +39,10 @@ class CurrencyPicker extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(bottom: 10),
-            child: const Text(
-              "Wähle das Asset",
+            child: Text(
+              S.of(context).select_asset,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w600,
