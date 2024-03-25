@@ -67,6 +67,7 @@ dev_dependencies:
   isar_generator: *isar_version
   flutter_launcher_icons: ^0.13.1
   mobx_codegen: ^2.6.0+1
+  web3dart_builders: ^0.1.0
 
 
 # For information on the generic Dart part of this file, see the
@@ -120,15 +121,19 @@ fonts:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
+# flutter pub run flutter_launcher_icons
 flutter_launcher_icons:
   android: true
+  adaptive_icon_background: "#FB7185"
+  adaptive_icon_foreground: "assets/images/frankencoin_wallet.png"
   ios: true
-  image_path: "assets/images/frankencoin.png"
+  remove_alpha_ios: true
+  image_path: "assets/images/frankencoin_wallet.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   windows:
     generate: true
-    image_path: "assets/images/frankencoin.png"
+    image_path: "assets/images/frankencoin_wallet.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/images/frankencoin.png"
+    image_path: "assets/images/frankencoin_wallet.png"

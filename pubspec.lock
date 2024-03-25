@@ -1146,6 +1146,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.7.3"
+  web3dart_builders:
+    dependency: "direct dev"
+    description:
+      name: web3dart_builders
+      sha256: b5f38f48c0daaf28ea6f603a01f0fca54c0ad9c793876e5a86492ff9003836f2
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   web_socket_channel:
     dependency: transitive
     description:
