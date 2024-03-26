@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
-import 'package:frankencoin_wallet/src/entites/wallet_info.dart';
+import 'package:frankencoin_wallet/src/entites/node.dart';
 import 'package:frankencoin_wallet/src/screens/router.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
@@ -18,10 +18,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final dir = await getApplicationSupportDirectory();
-  final isar = await Isar.open([BalanceInfoSchema, WalletInfoSchema],
+  final isar = await Isar.open([BalanceInfoSchema, NodeSchema],
       directory: dir.path, inspector: false);
   final sharedPreferences = await SharedPreferences.getInstance();
 
+  await setup(sharedPreferences, isar);
   setupDependencyInjection(isar: isar, sharedPreferences: sharedPreferences);
 
   final walletCreated = getIt.get<WalletViewModel>().isCreated;
@@ -29,6 +30,21 @@ Future<void> main() async {
   if (walletCreated) await loadCurrentWallet();
 
   runApp(FankencoinApp(walletCreated: walletCreated));
+}
+
+Future<void> setup(SharedPreferences sharedPreferences, Isar isar) async {
+  final isSetup = sharedPreferences.getBool("isSetup") ?? false;
+
+  if (isSetup) return;
+  isar.writeTxn(() async {
+    isar.nodes.put(Node(
+      chainId: 1,
+      name: 'publicnode.com',
+      httpsUrl: 'https://ethereum-rpc.publicnode.com',
+      wssUrl: null,
+    ));
+  });
+  sharedPreferences.setBool("isSetup", true);
 }
 
 class FankencoinApp extends StatelessWidget {

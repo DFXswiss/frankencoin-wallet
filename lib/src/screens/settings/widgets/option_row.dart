@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 class OptionRow extends StatelessWidget {
   final String name;
-  final IconData? leadingIcon;
+  final Widget? leading;
   final String? suffix;
   final void Function(BuildContext context)? onTap;
+  final bool canEdit;
 
   const OptionRow({
     super.key,
     required this.name,
-    this.leadingIcon,
+    this.leading,
     this.suffix,
     this.onTap,
+    this.canEdit = false,
   });
 
   @override
@@ -30,17 +32,18 @@ class OptionRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (leadingIcon != null) Icon(leadingIcon),
+            if (leading != null) leading!,
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: Text(
                   name,
                   style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Lato',
-                      color: Colors.white),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Lato',
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -54,8 +57,8 @@ class OptionRow extends StatelessWidget {
                 ),
               )
             ] else
-              const Icon(
-                Icons.keyboard_arrow_right,
+              Icon(
+                canEdit ? Icons.edit : Icons.keyboard_arrow_right,
                 color: Colors.white,
               ),
           ],

@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/language.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
+import 'package:frankencoin_wallet/src/entites/language.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/screens/settings/widgets/language_picker.dart';
@@ -34,9 +35,13 @@ class SettingsPage extends BasePage {
               padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
               child: Text(
                 S.of(context).settings_general,
-                style: const TextStyle(color: Color.fromRGBO(251, 113, 133, 1)),
+                style: const TextStyle(color: FrankencoinColors.frRed),
               ),
             ),
+          ),
+          OptionRow(
+            name: S.of(context).nodes,
+            onTap: (_) => Navigator.of(context).pushNamed(Routes.settingsNodes),
           ),
           Observer(
             builder: (_) => OptionRow(
@@ -51,7 +56,7 @@ class SettingsPage extends BasePage {
               padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
               child: Text(
                 S.of(context).danger_zone,
-                style: const TextStyle(color: Color.fromRGBO(251, 113, 133, 1)),
+                style: const TextStyle(color: FrankencoinColors.frRed),
               ),
             ),
           ),
@@ -64,7 +69,7 @@ class SettingsPage extends BasePage {
             onPressed: () => _deleteWallet(context),
             child: Text(
               S.of(context).sign_out,
-              style: const TextStyle(color: Color.fromRGBO(251, 113, 133, 1)),
+              style: const TextStyle(color: FrankencoinColors.frRed),
             ),
           )
         ],

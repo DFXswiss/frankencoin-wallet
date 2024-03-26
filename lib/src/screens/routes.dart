@@ -5,6 +5,7 @@ class Routes {
   static const receive = '/dashboard/receive';
   static const send = '/dashboard/send';
   static const settings = '/settings';
+  static const settingsNodes = '/settings/nodes';
   static const settingsSeed = '/settings/seed';
   static const walletCreate = '/wallet/create';
   static const walletRestore = '/wallet/restore';

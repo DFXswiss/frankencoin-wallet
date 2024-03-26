@@ -17,10 +17,11 @@ void setupDependencyInjection(
   getIt.registerSingleton(isar);
   getIt.registerSingleton(sharedPreferences);
   getIt.registerSingleton(const FlutterSecureStorage());
-  getIt.registerSingleton(AppStore());
+  getIt.registerSingleton(SettingsStoreBase.load(sharedPreferences, isar));
+
+  getIt.registerSingleton(AppStore(getIt.get<SettingsStore>()));
   getIt.registerSingleton(DFXService(getIt.get<AppStore>()));
 
-  getIt.registerSingleton(SettingsStoreBase.load(sharedPreferences));
 
 
   getIt.registerFactory<BalanceViewModel>(
