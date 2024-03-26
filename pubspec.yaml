@@ -125,7 +125,7 @@ fonts:
 flutter_launcher_icons:
   android: true
   adaptive_icon_background: "#FB7185"
-  adaptive_icon_foreground: "assets/images/frankencoin_wallet.png"
+  adaptive_icon_foreground: "assets/images/frankencoin_wallet_fg.png"
   ios: true
   remove_alpha_ios: true
   image_path: "assets/images/frankencoin_wallet.png"
