@@ -24,7 +24,8 @@ class RestoreOptionsPage extends BasePage {
           description:
               S.of(context).restore_wallet_from_seed_option_description,
           leadingIcon: Icons.key,
-          action: () => Navigator.of(context).pushNamed(Routes.walletRestoreSeed),
+          action: () =>
+              Navigator.of(context).pushNamed(Routes.walletRestoreSeed),
         ),
         OptionCard(
           title: S.of(context).restore_wallet_with_seed_qr_option,
@@ -38,25 +39,25 @@ class RestoreOptionsPage extends BasePage {
   }
 
   Future<void> _onRestore(BuildContext context) async {
-    String? address = await showDialog(
+    String? seed = await showDialog(
       context: context,
       builder: (dialogContext) => QRScanDialog(
         validateQR: (code, raw) => isSeedQr(code!) || isCompactSeedQr(raw!),
         onData: (code, raw) {
           if (isSeedQr(code!)) {
-            final address = getSeedFromSeedQr(code);
-            Navigator.of(dialogContext, rootNavigator: true).pop(address);
+            final seed = getSeedFromSeedQr(code);
+            Navigator.of(dialogContext, rootNavigator: true).pop(seed);
           } else if (isCompactSeedQr(raw!)) {
-            final address = getSeedFromCompactSeedQr(raw);
-            Navigator.of(dialogContext, rootNavigator: true).pop(address);
+            final seed = getSeedFromCompactSeedQr(raw);
+            Navigator.of(dialogContext, rootNavigator: true).pop(seed);
           }
         },
       ),
     );
 
-    if (address == null) return;
+    if (seed == null) return;
 
-    await walletVM.restoreWallet(address);
+    await walletVM.restoreWallet(seed);
     Navigator.of(context).pushNamed(Routes.dashboard);
   }
 }

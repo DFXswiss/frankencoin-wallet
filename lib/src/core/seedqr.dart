@@ -6,10 +6,13 @@ bool isSeedQr(String seedQRBytes) =>
     seedQRBytes.length == 48 || seedQRBytes.length == 96;
 
 bool isCompactSeedQr(List<int> rawByteData) =>
-    rawByteData.length == 19 || rawByteData.length == 34;
+    hex.encode(rawByteData).startsWith('410') ||
+    hex.encode(rawByteData).startsWith('420');
 
 String getSeedFromSeedQr(String seedQRBytes) {
-  if (!isSeedQr(seedQRBytes)) throw InvalidSeedQRException(seedQRBytes.length.toString());
+  if (!isSeedQr(seedQRBytes)) {
+    throw InvalidSeedQRException(seedQRBytes.length.toString());
+  }
 
   final indexes = RegExp(r'.{1,4}')
       .allMatches(seedQRBytes)
@@ -18,11 +21,15 @@ String getSeedFromSeedQr(String seedQRBytes) {
 }
 
 String getSeedFromCompactSeedQr(List<int> rawByteData) {
-  if (!isCompactSeedQr(rawByteData)) throw InvalidSeedQRException(rawByteData.length.toString());
+  if (!isCompactSeedQr(rawByteData)) {
+    throw InvalidSeedQRException(rawByteData.length.toString());
+  }
 
-  final hexRaw = hex.encode(rawByteData);
+  final is12WordSeed = hex.encode(rawByteData).startsWith('410');
+  final byteLength = is12WordSeed ? 19 : 34;
+  
+  final hexRaw = hex.encode(rawByteData.sublist(0, byteLength));
 
-  final is12WordSeed = rawByteData.length == 19;
   final binaryLength = is12WordSeed ? 132 : 264;
   final truncateAt = is12WordSeed ? 3 : 1;
   final checksumLimit = is12WordSeed ? 1 : 2;
