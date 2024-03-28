@@ -39,7 +39,7 @@ Future<void> setup(SharedPreferences sharedPreferences, Isar isar) async {
   isar.writeTxn(() async {
     isar.nodes.put(Node(
       chainId: 1,
-      name: 'publicnode.com',
+      name: 'Ethereum',
       httpsUrl: 'https://ethereum-rpc.publicnode.com',
       wssUrl: null,
     ));

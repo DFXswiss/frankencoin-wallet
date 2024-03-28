@@ -18,6 +18,7 @@ abstract class SettingsStoreBase with Store {
   }) {
     language = initialLanguage;
     node = initialNode;
+    nodes = _isar.nodes.where().findAllSync();
 
     reaction(
         (_) => language,
@@ -40,7 +41,7 @@ abstract class SettingsStoreBase with Store {
     final initialNode = isar.nodes.getSync(initialNodeId) ??
         Node(
           chainId: 1,
-          name: 'publicnode.com',
+          name: 'Ethereum',
           httpsUrl: 'https://ethereum-rpc.publicnode.com',
           wssUrl: null,
         );
@@ -62,6 +63,15 @@ abstract class SettingsStoreBase with Store {
   @observable
   late Node node;
 
-  @computed
-  List<Node> get nodes => _isar.nodes.where().findAllSync();
+  @observable
+  late List<Node> nodes;
+
+  Node getNode(int chainId) => _isar.nodes.getSync(chainId)!;
+
+  @action
+  Future<void> updateNode(Node node) async {
+    await _isar.writeTxn(() async => _isar.nodes.put(node));
+    if (this.node.id == node.id) this.node = node;
+    nodes = await _isar.nodes.where().findAll();
+  }
 }

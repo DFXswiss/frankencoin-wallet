@@ -11,7 +11,7 @@ class Node {
     required this.wssUrl,
   });
 
-  Id id = Isar.autoIncrement;
+  Id get id => chainId;
 
   int chainId;
 
