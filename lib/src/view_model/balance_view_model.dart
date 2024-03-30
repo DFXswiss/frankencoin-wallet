@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:erc20/erc20.dart';
+import 'package:frankencoin_wallet/src/core/fiat_conversion_service.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
+import 'package:frankencoin_wallet/src/entites/fiat_conversion_rate.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/fast_hash.dart';
 import 'package:isar/isar.dart';
@@ -18,6 +20,7 @@ abstract class BalanceViewModelBase with Store {
   final AppStore appStore;
 
   final String nativeTicker = "ETH";
+  final String nativeFiat = "CHF";
 
   BalanceViewModelBase(this._isar, this.appStore) {
     loadBalances();
@@ -32,9 +35,11 @@ abstract class BalanceViewModelBase with Store {
 
     final nativeBalance = await _updateBalance(address);
     final erc20Balances = await _updateERC20Balances(address);
+    // final fiatBalance = await _updateFiatBalance("ETH.ETH");
 
     _isar.writeTxn(() async {
       _isar.balanceInfos.put(nativeBalance);
+      // _isar.fiatConversionRates.put(fiatBalance);
       balances[CryptoCurrency.eth] = nativeBalance;
 
       for (final erc20Balance in erc20Balances) {
@@ -112,5 +117,19 @@ abstract class BalanceViewModelBase with Store {
         contractAddress: nativeTicker,
         address: address.hex,
         balance: balance.getInWei.toString());
+  }
+
+  Future<FiatConversionRate> _updateFiatBalance(String crypto) async {
+    final balance = await FiatConversionService.fetchPrice(
+      crypto: crypto,
+      fiat: nativeFiat,
+      torOnly: false,
+    );
+
+    return FiatConversionRate(
+      cryptoSymbol: crypto,
+      fitaSymbol: nativeFiat,
+      balance: balance,
+    );
   }
 }
