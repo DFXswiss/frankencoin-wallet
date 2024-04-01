@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 
@@ -39,10 +40,9 @@ class ShowSeedPage extends BasePage {
           ),
           const Spacer(),
           CupertinoButton(
-            color: const Color.fromRGBO(251, 113, 133, 1),
+            color: FrankencoinColors.frRed,
             onPressed: _copySeed,
             child: Text(S.of(context).copy_seed),
-
           )
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
@@ -110,7 +111,7 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             iconSize: 25,
             icon: const Icon(
               CupertinoIcons.arrow_up_arrow_down,
-              color: Color.fromRGBO(251, 113, 133, 1.0),
+              color: FrankencoinColors.frRed,
             )),
         Padding(
           padding:
@@ -147,7 +148,7 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
               onPressed: widget.equityVM.isReadyToCreate
                   ? widget.equityVM.createTradeTransaction
                   : null,
-              color: const Color.fromRGBO(251, 113, 133, 1.0),
+              color: FrankencoinColors.frRed,
               child: widget.equityVM.state is InitialExecutionState
                   ? Text(
                       S.of(context).send,

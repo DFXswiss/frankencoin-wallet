@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
@@ -19,68 +20,69 @@ class WelcomePage extends StatelessWidget {
       body: WillPopScope(
         //canPop: false,
         onWillPop: () async => false,
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 20),
-                child: Image.asset("assets/images/frankencoin.png"),
-              ),
-              Text(
-                S.of(context).welcome_frankecoin_wallet,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20, color: Colors.white),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 20, bottom: 5, right: 20, left: 20),
-                child: InkWell(
-                  onTap: () => launchUrl(
-                      Uri.parse("https://docs.frankencoin.app/en/tou.html"),
-                      mode: LaunchMode.externalApplication),
-                  enableFeedback: false,
-                  child: StyledText(
-                    text: S.of(context).welcome_disclaimer,
-                    tags: {
-                      'underline': StyledTextTag(
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.grey,
+        child: SafeArea(
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 20),
+                  child: Image.asset("assets/images/frankencoin.png"),
+                ),
+                Text(
+                  S.of(context).welcome_frankecoin_wallet,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 20, bottom: 5, right: 20, left: 20),
+                  child: InkWell(
+                    onTap: () => launchUrl(
+                        Uri.parse("https://docs.frankencoin.app/en/tou.html"),
+                        mode: LaunchMode.externalApplication),
+                    enableFeedback: false,
+                    child: StyledText(
+                      text: S.of(context).welcome_disclaimer,
+                      tags: {
+                        'underline': StyledTextTag(
+                          style: const TextStyle(
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.grey,
+                          ),
                         ),
-                      ),
-                    },
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    textAlign: TextAlign.center,
+                      },
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 5),
-                child: CupertinoButton(
-                  onPressed: () => _onCreateWallet(context),
-                  color: const Color.fromRGBO(251, 113, 133, 1.0),
-                  child: Text(
-                    S.of(context).create_wallet,
-                    style: const TextStyle(fontSize: 16),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 10),
+                  child: CupertinoButton(
+                    onPressed: () => _onCreateWallet(context),
+                    color: FrankencoinColors.frRed,
+                    child: Text(
+                      S.of(context).create_wallet,
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 20),
-                child: CupertinoButton(
+                CupertinoButton(
                   onPressed: () => _onRestoreWallet(context),
                   child: Text(
                     S.of(context).restore_wallet,
                     style: const TextStyle(
                       fontSize: 16,
-                      color: Color.fromRGBO(251, 113, 133, 1.0),
+                      color: FrankencoinColors.frRed,
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

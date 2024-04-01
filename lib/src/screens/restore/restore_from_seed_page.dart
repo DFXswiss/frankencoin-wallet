@@ -2,6 +2,7 @@ import 'package:bip39/src/wordlists/english.dart' as wordlist;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/seed_editing_controller.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
@@ -62,7 +63,7 @@ class _RestoreFromSeedPageState extends State<_RestoreFromSeedPageBody> {
           padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: CupertinoButton(
             onPressed: _seedIsReady || _isLoading ? () => _onRestore() : null,
-            color: const Color.fromRGBO(251, 113, 133, 1.0),
+            color: FrankencoinColors.frRed,
             child: _isLoading
                 ? const CupertinoActivityIndicator()
                 : Text(

@@ -25,8 +25,6 @@ class WebViewPageBody extends StatefulWidget {
 }
 
 class WebViewPageBodyState extends State<WebViewPageBody> {
-  WebViewPageBodyState();
-
   @override
   Widget build(BuildContext context) => InAppWebView(
         initialSettings: InAppWebViewSettings(

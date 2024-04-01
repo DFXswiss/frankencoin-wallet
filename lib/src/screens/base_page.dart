@@ -115,7 +115,7 @@ abstract class BasePage extends StatelessWidget {
         extendBodyBehindAppBar: extendBodyBehindAppBar,
         endDrawer: endDrawer,
         appBar: appBar(context),
-        body: body(context),
+        body: SafeArea(child: body(context)),
         floatingActionButton: floatingActionButton(context));
 
     return rootWrapper?.call(context, root) ?? root;

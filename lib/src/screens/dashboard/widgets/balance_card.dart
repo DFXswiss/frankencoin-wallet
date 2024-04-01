@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:web3dart/web3dart.dart';
@@ -92,7 +93,7 @@ class BalanceCard extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: CupertinoButton(
-                  color: const Color.fromRGBO(251, 113, 133, 1.0),
+                  color: FrankencoinColors.frRed,
                   onPressed: action,
                   child: Text(actionLabel!),
                 ),

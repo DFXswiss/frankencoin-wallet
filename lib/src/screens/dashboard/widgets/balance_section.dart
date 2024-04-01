@@ -109,7 +109,7 @@ class BalanceSection extends StatelessWidget {
                     Navigator.of(context).pushNamed(Routes.receive),
                 icon: const Icon(
                   Icons.arrow_downward,
-                  color: Color.fromRGBO(251, 113, 133, 1.0),
+                  color: FrankencoinColors.frRed,
                 ),
                 label: S.of(context).receive,
               ),

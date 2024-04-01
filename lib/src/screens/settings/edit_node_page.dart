@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/entites/node.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
@@ -70,7 +71,7 @@ class _EditNodePageBodyState extends State<_EditNodePageBody> {
           padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: CupertinoButton(
             onPressed: _isLoading ? null : _save,
-            color: const Color.fromRGBO(251, 113, 133, 1.0),
+            color: FrankencoinColors.frRed,
             child: _isLoading
                 ? const CupertinoActivityIndicator()
                 : Text(

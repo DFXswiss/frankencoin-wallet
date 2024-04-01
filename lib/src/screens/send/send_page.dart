@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
@@ -139,7 +140,7 @@ class _SendPageBodyState extends State<_SendPageBody> {
             onPressed: widget.sendVM.isReadyToCreate
                 ? widget.sendVM.createTransaction
                 : null,
-            color: const Color.fromRGBO(251, 113, 133, 1.0),
+            color: FrankencoinColors.frRed,
             child: widget.sendVM.state is InitialExecutionState
                 ? Text(
                     S.of(context).send,
