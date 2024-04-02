@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/di.dart';
+import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/screens/asset/asset_details_page.dart';
+import 'package:frankencoin_wallet/src/screens/asset/fps_asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
 import 'package:frankencoin_wallet/src/screens/pool/pool_page.dart';
@@ -19,6 +22,7 @@ import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 
@@ -43,6 +47,17 @@ Route<dynamic> createRoute(RouteSettings settings) {
     case Routes.dashboard:
       return MaterialPageRoute<void>(
           builder: (_) => DashboardPage(getIt.get<BalanceViewModel>()));
+
+    case Routes.assetDetails:
+      final cryptoCurrency = settings.arguments as CryptoCurrency;
+
+      if (cryptoCurrency == CryptoCurrency.fps) {
+        return MaterialPageRoute<void>(
+            builder: (_) => FPSAssetDetailsPage(getIt.get<FPSAssetViewModel>()));
+      }
+
+      return MaterialPageRoute<void>(
+          builder: (_) => AssetDetailsPage(cryptoCurrency));
 
     case Routes.receive:
       return MaterialPageRoute<void>(

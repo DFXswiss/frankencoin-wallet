@@ -4,6 +4,7 @@ import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 import 'package:get_it/get_it.dart';
@@ -22,8 +23,6 @@ void setupDependencyInjection(
   getIt.registerSingleton(AppStore(getIt.get<SettingsStore>()));
   getIt.registerSingleton(DFXService(getIt.get<AppStore>()));
 
-
-
   getIt.registerFactory<BalanceViewModel>(
       () => BalanceViewModel(getIt.get<Isar>(), getIt.get<AppStore>()));
   getIt.registerFactory<WalletViewModel>(() =>
@@ -32,5 +31,6 @@ void setupDependencyInjection(
       SendViewModel(getIt.get<BalanceViewModel>(), getIt.get<AppStore>()));
   getIt.registerFactory<EquityViewModel>(
       () => EquityViewModel(getIt.get<AppStore>(), getIt.get<SendViewModel>()));
-
+  getIt.registerFactory<FPSAssetViewModel>(() =>
+      FPSAssetViewModel(getIt.get<AppStore>(), getIt.get<BalanceViewModel>()));
 }

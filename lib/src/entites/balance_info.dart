@@ -23,4 +23,5 @@ class BalanceInfo {
 
   String balance; // This has to be a String, because BigInt is not supported
 
+  BigInt getBalance() => BigInt.parse(balance);
 }

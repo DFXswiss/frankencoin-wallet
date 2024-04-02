@@ -103,11 +103,11 @@ class _SendPageBodyState extends State<_SendPageBody> {
             ),
           ),
           suffix: Observer(builder: (_) {
-            final rawBalanceAmount = EtherAmount.inWei(BigInt.parse(widget
+            final rawBalanceAmount = EtherAmount.inWei(widget
                     .sendVM
                     .balanceVM
                     .balances[widget.sendVM.spendCurrency]!
-                    .balance))
+                    .getBalance())
                 .getValueInUnit(EtherUnit.ether);
             return CupertinoButton(
               onPressed: () =>

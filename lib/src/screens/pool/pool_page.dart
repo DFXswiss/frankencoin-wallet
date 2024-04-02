@@ -87,10 +87,10 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             controller: _amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             suffix: Observer(builder: (_) {
-              final rawBalanceAmount = EtherAmount.inWei(BigInt.parse(widget
+              final rawBalanceAmount = EtherAmount.inWei(widget
                       .balanceVM
                       .balances[widget.equityVM.sendCurrency]!
-                      .balance))
+                      .getBalance())
                   .getValueInUnit(EtherUnit.ether);
               return CupertinoButton(
                 onPressed: () =>

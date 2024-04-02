@@ -66,7 +66,7 @@ class BalanceSection extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
                     balanceInfo != null
-                        ? EtherAmount.inWei(BigInt.parse(balanceInfo!.balance))
+                        ? EtherAmount.inWei(balanceInfo!.getBalance())
                             .getValueInUnit(EtherUnit.ether)
                             .toStringAsFixed(4)
                         : '0.0000',

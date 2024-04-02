@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
+import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:web3dart/web3dart.dart';
 
 class BalanceCard extends StatelessWidget {
@@ -38,69 +39,73 @@ class BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: const Color.fromRGBO(15, 23, 42, 1.0),
-      ),
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(leadingImagePath, width: 40),
-              Expanded(
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            cryptoCurrency.name,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Lato',
-                                color: Colors.white),
-                          ),
-                          Text(
-                            cryptoCurrency.symbol,
-                            style: const TextStyle(
-                                fontFamily: 'Lato', color: Colors.white),
-                          )
-                        ],
-                      ))),
-              Text(
-                balanceInfo != null
-                    ? EtherAmount.inWei(BigInt.parse(balanceInfo!.balance))
-                        .getValueInUnit(EtherUnit.ether)
-                        .toStringAsFixed(4)
-                    : "0.0000",
-                style: const TextStyle(
-                    fontSize: 16, fontFamily: 'Lato', color: Colors.white),
-              )
-            ],
-          ),
-          if (actionLabel != null) ...[
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: SizedBox(
-                width: double.infinity,
-                child: CupertinoButton(
-                  color: FrankencoinColors.frRed,
-                  onPressed: action,
-                  child: Text(actionLabel!),
+    return InkWell(
+      onTap: () => Navigator.of(context)
+          .pushNamed(Routes.assetDetails, arguments: cryptoCurrency),
+      child: Container(
+        margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: const Color.fromRGBO(15, 23, 42, 1.0),
+        ),
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(leadingImagePath, width: 40),
+                Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              cryptoCurrency.name,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Lato',
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              cryptoCurrency.symbol,
+                              style: const TextStyle(
+                                  fontFamily: 'Lato', color: Colors.white),
+                            )
+                          ],
+                        ))),
+                Text(
+                  balanceInfo != null
+                      ? EtherAmount.inWei(balanceInfo!.getBalance())
+                          .getValueInUnit(EtherUnit.ether)
+                          .toStringAsFixed(4)
+                      : "0.0000",
+                  style: const TextStyle(
+                      fontSize: 16, fontFamily: 'Lato', color: Colors.white),
+                )
+              ],
+            ),
+            if (actionLabel != null) ...[
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: CupertinoButton(
+                    color: FrankencoinColors.frRed,
+                    onPressed: action,
+                    child: Text(actionLabel!),
+                  ),
                 ),
               ),
-            ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
