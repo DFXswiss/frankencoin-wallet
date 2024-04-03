@@ -6,7 +6,7 @@ import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../screens/pool/Equity.g.dart';
+import '../core/contracts/Equity.g.dart';
 
 part 'fps_asset_view_model.g.dart';
 
@@ -27,6 +27,12 @@ abstract class FPSAssetViewModelBase with Store {
 
   @observable
   BigInt totalSupply = BigInt.zero;
+
+  @observable
+  BigInt fpsHoldingSince = BigInt.zero;
+
+  @computed
+  int get holdingPeriod => (fpsHoldingSince.toInt() / 86400).floor();
 
   @computed
   BigInt get fpsBalance =>
@@ -50,9 +56,15 @@ abstract class FPSAssetViewModelBase with Store {
       totalSupply = await _equity.totalSupply();
 
   @action
+  Future<void> _updateHoldingSince() async =>
+      fpsHoldingSince = await _equity.holdingDuration(
+          (holder: appStore.wallet!.currentAccount.primaryAddress.address));
+
+  @action
   Future<void> updateAll() async {
     await _updateSharePrice();
     await _updateTotalSupply();
+    await _updateHoldingSince();
   }
 
   Timer? _updateBalancesTimer;

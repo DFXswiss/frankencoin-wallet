@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/src/core/asset_logo.dart';
+import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 
 class InfoCard extends StatelessWidget {
   final String label;
   final String value;
+  final CryptoCurrency? asset;
+  final bool centred;
 
-  const InfoCard({super.key, required this.label, required this.value});
+  const InfoCard({
+    super.key,
+    required this.label,
+    required this.value,
+    this.asset,
+    this.centred = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +25,10 @@ class InfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         color: const Color.fromRGBO(5, 8, 23, 1),
       ),
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
       child: Column(
+        crossAxisAlignment:
+            centred ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           Text(
             label,
@@ -26,15 +38,27 @@ class InfoCard extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 20,
-              fontFamily: 'Lato',
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Row(
+            mainAxisAlignment:
+                centred ? MainAxisAlignment.center : MainAxisAlignment.start,
+            children: [
+              if (asset != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child:
+                      Image.asset(getCryptoAssetImagePath(asset!), width: 28),
+                ),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Lato',
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

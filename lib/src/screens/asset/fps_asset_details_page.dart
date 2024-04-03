@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/asset/widgets/info_card.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
+import 'package:intl/intl.dart';
 import 'package:web3dart/web3dart.dart';
 
 class FPSAssetDetailsPage extends BasePage {
@@ -42,8 +45,19 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
 
   @override
   Widget build(BuildContext context) {
+    final numberFormat = NumberFormat("#,###.00", "de");
+
     return Column(
       children: [
+        Text(
+          S.of(context).balance,
+          style: const TextStyle(
+            fontSize: 20,
+            fontFamily: 'Lato',
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -71,7 +85,7 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
               style: const TextStyle(
                 fontSize: 18,
                 fontFamily: 'Lato',
-                color: Colors.white,
+                color: Colors.grey,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -79,39 +93,59 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 5, right: 5),
-          child: Row(
-          children: [
-            Expanded(
-              child: Observer(
-                builder: (_) => InfoCard(
-                  label: 'Total Supply',
-                  value: EtherAmount.inWei(widget.assetVM.totalSupply)
-                      .getValueInUnit(EtherUnit.ether)
-                      .toStringAsFixed(2),
-                ),
-              ),
+          child: Observer(
+            builder: (_) => InfoCard(
+              centred: true,
+              label: S.of(context).holding_duration,
+              value: "${widget.assetVM.holdingPeriod.toString()} ${S.of(context).days}",
             ),
-            Expanded(
-              child: Observer(
-                builder: (_) => InfoCard(
-                  label: 'FPS Price in ZCHF',
-                  value: EtherAmount.inWei(widget.assetVM.sharePrice)
-                      .getValueInUnit(EtherUnit.ether)
-                      .toStringAsFixed(2),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
-    ),
+        const Padding(padding: EdgeInsets.all(10), child: Divider()),
+        Text(
+          S.of(context).market_stats,
+          style: const TextStyle(
+            fontSize: 20,
+            fontFamily: 'Lato',
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.only(left: 5, right: 5),
-          child: Expanded(
-            child: Observer(
-              builder: (_) => InfoCard(
-                label: "Marktecap",
-                value: "${widget.assetVM.marketCap.toStringAsFixed(2)} ZCHF",
+          child: Row(
+            children: [
+              Expanded(
+                child: Observer(
+                  builder: (_) => InfoCard(
+                    label: S.of(context).total_supply,
+                    asset: CryptoCurrency.fps,
+                    value: numberFormat.format(
+                        EtherAmount.inWei(widget.assetVM.totalSupply)
+                            .getValueInUnit(EtherUnit.ether)),
+                  ),
+                ),
               ),
+              Expanded(
+                child: Observer(
+                  builder: (_) => InfoCard(
+                      label: S.of(context).fps_price,
+                      asset: CryptoCurrency.zchf,
+                      value: numberFormat.format(
+                          EtherAmount.inWei(widget.assetVM.sharePrice)
+                              .getValueInUnit(EtherUnit.ether))),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: Observer(
+            builder: (_) => InfoCard(
+              label: S.of(context).marketcap,
+              asset: CryptoCurrency.zchf,
+              value: numberFormat.format(widget.assetVM.marketCap),
             ),
           ),
         )

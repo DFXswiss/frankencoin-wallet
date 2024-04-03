@@ -1,6 +1,6 @@
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/contracts/Equity.g.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
-import 'package:frankencoin_wallet/src/screens/pool/equity.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:mobx/mobx.dart';
@@ -64,10 +64,10 @@ abstract class EquityViewModelBase with Store {
   }
 
   Future<BigInt> estimateProceeds(BigInt shares) =>
-      _equity.calculateProceeds(shares);
+      _equity.calculateProceeds((shares: shares));
 
   Future<BigInt> estimateShares(BigInt investment) =>
-      _equity.calculateShares(investment);
+      _equity.calculateShares((investment: investment));
 
   Future<String> Function()? _sendTransaction;
 
@@ -77,21 +77,23 @@ abstract class EquityViewModelBase with Store {
     final currentAccount = appStore.wallet!.currentAccount.primaryAddress;
 
     if (sendCurrency == CryptoCurrency.zchf) {
-      _sendTransaction = () async => await _equity
-          .invest(investAmount, expectedReturn, credentials: currentAccount);
+      _sendTransaction = () async => await _equity.invest(
+          (amount: investAmount, expectedShares: expectedReturn),
+          credentials: currentAccount);
     } else if (sendCurrency == CryptoCurrency.fps) {
-
-      final canRedeem = await _equity.canRedeem(currentAccount.address);
+      final canRedeem =
+          await _equity.canRedeem((owner: currentAccount.address));
 
       if (!canRedeem) {
         state = FailureState(S.current.fps_cannot_redeem_yet);
-        print(state);
         return;
       }
 
-      _sendTransaction = () async => await _equity.redeemExpected(
-          currentAccount.address, investAmount, expectedReturn,
-          credentials: currentAccount);
+      _sendTransaction = () async => await _equity.redeemExpected((
+            target: currentAccount.address,
+            shares: investAmount,
+            expectedProceeds: expectedReturn
+          ), credentials: currentAccount);
     }
 
     state = AwaitingConfirmationExecutionState();

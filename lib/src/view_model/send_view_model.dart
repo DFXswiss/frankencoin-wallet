@@ -111,7 +111,7 @@ abstract class SendViewModelBase with Store {
             .signTransaction(currentAccount, transaction, chainId: chainId);
 
         _sendTransaction =
-            () => appStore.client.sendRawTransaction(signedTransaction);
+            () => appStore.client.sendRawTransaction(prependTransactionType(2, signedTransaction));
       } else {
         final erc20 = ERC20(
           client: appStore.client,
