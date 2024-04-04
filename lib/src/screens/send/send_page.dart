@@ -9,6 +9,7 @@ import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/currency_picker.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
+import 'package:frankencoin_wallet/src/utils/double_extension.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
@@ -112,7 +113,7 @@ class _SendPageBodyState extends State<_SendPageBody> {
               onPressed: () =>
                   widget.sendVM.rawCryptoAmount = rawBalanceAmount.toString(),
               child: Text(
-                rawBalanceAmount.toStringAsFixed(3),
+                rawBalanceAmount.toStringTruncated(3),
               ),
             );
           }),

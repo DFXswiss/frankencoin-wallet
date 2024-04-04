@@ -6,6 +6,7 @@ import 'package:frankencoin_wallet/src/core/dfx_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/utils/double_extension.dart';
 import 'package:frankencoin_wallet/src/widgets/vertical_icon_button.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -68,7 +69,7 @@ class BalanceSection extends StatelessWidget {
                     balanceInfo != null
                         ? EtherAmount.inWei(balanceInfo!.getBalance())
                             .getValueInUnit(EtherUnit.ether)
-                            .toStringAsFixed(4)
+                            .toStringTruncated(4)
                         : '0.0000',
                     style: const TextStyle(
                       fontSize: 25,

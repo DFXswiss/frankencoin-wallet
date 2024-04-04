@@ -6,6 +6,7 @@ import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
+import 'package:frankencoin_wallet/src/utils/double_extension.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
@@ -14,6 +15,8 @@ import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
+
+import '../../utils/parse_fixed.dart';
 
 class PoolPage extends BasePage {
   final BalanceViewModel balanceVM;
@@ -94,7 +97,7 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
                 onPressed: () =>
                     _amountController.text = rawBalanceAmount.toString(),
                 child: Text(
-                  rawBalanceAmount.toStringAsFixed(3),
+                  rawBalanceAmount.toStringTruncated(3),
                   style: const TextStyle(fontSize: 16, fontFamily: 'Lato'),
                 ),
               );
@@ -166,13 +169,15 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
     if (_effectsInstalled) return;
 
     _amountController.addListener(() {
-      if (_amountController.text.isEmpty) return;
+      if (_amountController.text.isEmpty) {
+        widget.equityVM.investAmount = BigInt.zero;
+        return;
+      }
 
-      final amount = EtherAmount.fromBase10String(
-          EtherUnit.ether, _amountController.text.replaceAll(",", "."));
+      final amount = parseFixed(_amountController.text.replaceAll(",", "."), 18);
 
-      if (amount.getInWei != widget.equityVM.investAmount) {
-        widget.equityVM.investAmount = amount.getInWei;
+      if (amount != widget.equityVM.investAmount) {
+        widget.equityVM.investAmount = amount;
       }
     });
 

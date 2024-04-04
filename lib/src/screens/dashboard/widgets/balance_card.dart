@@ -4,6 +4,7 @@ import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/utils/double_extension.dart';
 import 'package:web3dart/web3dart.dart';
 
 class BalanceCard extends StatelessWidget {
@@ -40,8 +41,8 @@ class BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context)
-          .pushNamed(Routes.assetDetails, arguments: cryptoCurrency),
+      onTap: cryptoCurrency == CryptoCurrency.fps ? () => Navigator.of(context)
+          .pushNamed(Routes.assetDetails, arguments: cryptoCurrency) : null,
       child: Container(
         margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
         decoration: BoxDecoration(
@@ -84,7 +85,7 @@ class BalanceCard extends StatelessWidget {
                   balanceInfo != null
                       ? EtherAmount.inWei(balanceInfo!.getBalance())
                           .getValueInUnit(EtherUnit.ether)
-                          .toStringAsFixed(4)
+                          .toStringTruncated(4)
                       : "0.0000",
                   style: const TextStyle(
                       fontSize: 16, fontFamily: 'Lato', color: Colors.white),
