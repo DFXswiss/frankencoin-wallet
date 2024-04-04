@@ -21,12 +21,6 @@ abstract class EquityViewModelBase with Store {
             client: appStore.client);
 
   @observable
-  BigInt sharePrice = BigInt.zero;
-
-  @observable
-  BigInt totalSupply = BigInt.zero;
-
-  @observable
   BigInt investAmount = BigInt.zero;
 
   @observable
@@ -46,13 +40,6 @@ abstract class EquityViewModelBase with Store {
   @computed
   bool get isReadyToCreate =>
       state is InitialExecutionState && investAmount > BigInt.zero;
-
-  @action
-  Future<void> updateSharePrice() async => sharePrice = await _equity.price();
-
-  @action
-  Future<void> updateTotalSupply() async =>
-      sharePrice = await _equity.totalSupply();
 
   @action
   Future<void> updateExpectedReturn() async {

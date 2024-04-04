@@ -9,7 +9,6 @@ import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.d
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
-import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
@@ -88,8 +87,7 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             suffix: Observer(builder: (_) {
               final rawBalanceAmount = EtherAmount.inWei(widget
-                      .balanceVM
-                      .balances[widget.equityVM.sendCurrency]!
+                      .balanceVM.balances[widget.equityVM.sendCurrency]!
                       .getBalance())
                   .getValueInUnit(EtherUnit.ether);
               return CupertinoButton(
@@ -168,13 +166,13 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
     if (_effectsInstalled) return;
 
     _amountController.addListener(() {
-      final amountString = EVMChainFormatter.parseEVMChainAmount(
-          _amountController.text.replaceAll(",", "."));
+      if (_amountController.text.isEmpty) return;
 
-      final amount = BigInt.from(amountString);
+      final amount = EtherAmount.fromBase10String(
+          EtherUnit.ether, _amountController.text.replaceAll(",", "."));
 
-      if (amount != widget.equityVM.investAmount) {
-        widget.equityVM.investAmount = amount;
+      if (amount.getInWei != widget.equityVM.investAmount) {
+        widget.equityVM.investAmount = amount.getInWei;
       }
     });
 

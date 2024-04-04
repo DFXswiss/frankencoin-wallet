@@ -9,7 +9,6 @@ import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/currency_picker.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
-import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
@@ -183,11 +182,9 @@ class _SendPageBodyState extends State<_SendPageBody> {
     reaction((_) => widget.sendVM.state, (ExecutionState state) {
       print(state);
       if (state is AwaitingConfirmationExecutionState) {
-        final cryptoAmountString = EVMChainFormatter.parseEVMChainAmount(
-            widget.sendVM.rawCryptoAmount.replaceAll(",", "."));
+        final cryptoAmount = EtherAmount.fromBase10String(
+            EtherUnit.ether, widget.sendVM.rawCryptoAmount.replaceAll(",", "."));
 
-        final cryptoAmount =
-            EtherAmount.fromInt(EtherUnit.wei, cryptoAmountString);
         final estimatedFee =
             EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
                 .getValueInUnit(EtherUnit.ether);

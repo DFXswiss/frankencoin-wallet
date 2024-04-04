@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:erc20/erc20.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
-import 'package:frankencoin_wallet/src/utils/evm_chain_formatter.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/transaction_priority.dart';
 import 'package:mobx/mobx.dart';
@@ -84,10 +83,10 @@ abstract class SendViewModelBase with Store {
   @action
   Future<void> createTransaction() async {
     print(RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false).hasMatch(address));
-    final cryptoAmountString = EVMChainFormatter.parseEVMChainAmount(
-        rawCryptoAmount.replaceAll(",", "."));
 
-    final cryptoAmount = EtherAmount.fromInt(EtherUnit.wei, cryptoAmountString);
+    // ToDo: Check for valid Address
+    final cryptoAmount = EtherAmount.fromBase10String(
+        EtherUnit.ether, rawCryptoAmount.replaceAll(",", "."));
 
     final isErc20Token = CryptoCurrency.erc20Tokens.contains(spendCurrency);
 
