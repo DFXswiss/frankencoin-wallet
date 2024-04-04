@@ -174,7 +174,8 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
         return;
       }
 
-      final amount = parseFixed(_amountController.text.replaceAll(",", "."), 18);
+      final amount = parseFixed(_amountController.text.replaceAll(",", "."),
+          widget.equityVM.sendCurrency.decimals);
 
       if (amount != widget.equityVM.investAmount) {
         widget.equityVM.investAmount = amount;

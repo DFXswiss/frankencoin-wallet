@@ -4,12 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
+import 'package:frankencoin_wallet/src/entites/blockchain.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/currency_picker.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/utils/double_extension.dart';
+import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
@@ -104,9 +106,7 @@ class _SendPageBodyState extends State<_SendPageBody> {
           ),
           suffix: Observer(builder: (_) {
             final rawBalanceAmount = EtherAmount.inWei(widget
-                    .sendVM
-                    .balanceVM
-                    .balances[widget.sendVM.spendCurrency]!
+                    .sendVM.balanceVM.balances[widget.sendVM.spendCurrency]!
                     .getBalance())
                 .getValueInUnit(EtherUnit.ether);
             return CupertinoButton(
@@ -129,7 +129,9 @@ class _SendPageBodyState extends State<_SendPageBody> {
             estimatedFee:
                 EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
                     .getValueInUnit(EtherUnit.ether),
-            nativeSymbol: "ETH",
+            nativeSymbol:
+                Blockchain.getFromChainId(widget.sendVM.spendCurrency.chainId)
+                    .nativeSymbol,
           ),
         ),
       ),
@@ -183,8 +185,9 @@ class _SendPageBodyState extends State<_SendPageBody> {
     reaction((_) => widget.sendVM.state, (ExecutionState state) {
       print(state);
       if (state is AwaitingConfirmationExecutionState) {
-        final cryptoAmount = EtherAmount.fromBase10String(
-            EtherUnit.ether, widget.sendVM.rawCryptoAmount.replaceAll(",", "."));
+        final cryptoAmount = EtherAmount.inWei(parseFixed(
+            widget.sendVM.rawCryptoAmount.replaceAll(",", "."),
+            widget.sendVM.spendCurrency.decimals));
 
         final estimatedFee =
             EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))

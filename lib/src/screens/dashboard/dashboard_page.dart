@@ -72,6 +72,10 @@ class DashboardPageState extends State<DashboardPage> {
                   BalanceCard(
                     balanceInfo: widget.balanceVM.balances[CryptoCurrency.eth],
                     cryptoCurrency: CryptoCurrency.eth,
+                  ),
+                  BalanceCard(
+                    balanceInfo: widget.balanceVM.balances[CryptoCurrency.matic],
+                    cryptoCurrency: CryptoCurrency.matic,
                   )
                 ],
               ),

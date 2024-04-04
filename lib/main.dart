@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/default_nodes.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/entites/node.dart';
@@ -35,14 +36,13 @@ Future<void> main() async {
 Future<void> setup(SharedPreferences sharedPreferences, Isar isar) async {
   final isSetup = sharedPreferences.getBool("isSetup") ?? false;
 
-  if (isSetup) return;
-  isar.writeTxn(() async {
-    isar.nodes.put(Node(
-      chainId: 1,
-      name: 'Ethereum',
-      httpsUrl: 'https://ethereum-rpc.publicnode.com',
-      wssUrl: null,
-    ));
+  // if (isSetup) return;
+  await isar.writeTxn(() async {
+    for (final node in defaultNodes.values) {
+      if (await isar.nodes.get(node.id) == null) {
+        await isar.nodes.put(node);
+      }
+    }
   });
   sharedPreferences.setBool("isSetup", true);
 }

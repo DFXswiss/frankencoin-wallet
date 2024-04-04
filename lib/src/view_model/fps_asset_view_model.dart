@@ -19,8 +19,9 @@ abstract class FPSAssetViewModelBase with Store {
 
   FPSAssetViewModelBase(this.appStore, this.balanceVM)
       : _equity = Equity(
-            address: EthereumAddress.fromHex(CryptoCurrency.fps.address),
-            client: appStore.client);
+          address: EthereumAddress.fromHex(CryptoCurrency.fps.address),
+          client: appStore.getClient(CryptoCurrency.fps.chainId),
+        );
 
   @observable
   BigInt sharePrice = BigInt.zero;

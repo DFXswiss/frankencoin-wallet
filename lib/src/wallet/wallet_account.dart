@@ -36,6 +36,6 @@ class WalletAccount {
   }
 
   Future<String> signMessage(String message, {int addressIndex = 0}) async =>
-      hex.encode(
-          await _getPrivateKeyAt(0).signPersonalMessage(ascii.encode(message)));
+      "0x${hex.encode(
+          await _getPrivateKeyAt(0).signPersonalMessage(ascii.encode(message)))}";
 }

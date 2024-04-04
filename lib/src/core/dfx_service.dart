@@ -27,7 +27,7 @@ class DFXService {
 
   String get title => 'DFX Connect';
 
-  String get walletAddress => wallet.primaryAddress.address.hex;
+  String get walletAddress => wallet.primaryAddress.address.hexEip55;
 
   String get assetOut => 'ZCHF'; // 'ETH';
 

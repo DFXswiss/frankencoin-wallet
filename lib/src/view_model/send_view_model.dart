@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:erc20/erc20.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
+import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/transaction_priority.dart';
 import 'package:mobx/mobx.dart';
@@ -16,7 +17,12 @@ abstract class SendViewModelBase with Store {
   final BalanceViewModel balanceVM;
   final AppStore appStore;
 
-  SendViewModelBase(this.balanceVM, this.appStore);
+  SendViewModelBase(this.balanceVM, this.appStore) {
+    reaction((_) => spendCurrency, (_) async {
+      await updateGasPrice();
+      await estimateGas();
+    });
+  }
 
   @observable
   String rawCryptoAmount = '';
@@ -53,12 +59,14 @@ abstract class SendViewModelBase with Store {
   }
 
   @action
-  Future<void> updateGasPrice() async =>
-      _gasPrice = (await appStore.client.getGasPrice()).getInWei.toInt();
+  Future<void> updateGasPrice() async => _gasPrice =
+      (await appStore.getClient(spendCurrency.chainId).getGasPrice())
+          .getInWei
+          .toInt();
 
   @action
-  Future<void> estimateGas() async =>
-      _estimatedGas = (await appStore.client.estimateGas()).toInt();
+  Future<void> estimateGas() async => _estimatedGas =
+      (await appStore.getClient(spendCurrency.chainId).estimateGas()).toInt();
 
   Timer? _updateGasPriceTimer;
   Timer? _estimateGasTimer;
@@ -82,17 +90,18 @@ abstract class SendViewModelBase with Store {
 
   @action
   Future<void> createTransaction() async {
-    print(RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false).hasMatch(address));
+    print(
+        RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false).hasMatch(address));
 
     // ToDo: Check for valid Address
-    final cryptoAmount = EtherAmount.fromBase10String(
-        EtherUnit.ether, rawCryptoAmount.replaceAll(",", "."));
+    final cryptoAmount = parseFixed(
+        rawCryptoAmount.replaceAll(",", "."), spendCurrency.decimals);
 
     final isErc20Token = CryptoCurrency.erc20Tokens.contains(spendCurrency);
 
     final currentAccount = appStore.wallet!.currentAccount.primaryAddress;
     final currentAddress = currentAccount.address;
-    final chainId = appStore.chainId;
+    final client = appStore.getClient(spendCurrency.chainId);
 
     // ToDo: Balance Check
     state = CreatingExecutionState();
@@ -101,26 +110,27 @@ abstract class SendViewModelBase with Store {
       from: currentAddress,
       to: EthereumAddress.fromHex(address),
       maxPriorityFeePerGas: EtherAmount.fromInt(EtherUnit.gwei, priority.tip),
-      value: isErc20Token ? EtherAmount.zero() : cryptoAmount,
+      value: isErc20Token ? EtherAmount.zero() : EtherAmount.inWei(cryptoAmount),
     );
 
     try {
       if (!isErc20Token) {
-        final signedTransaction = await appStore.client
-            .signTransaction(currentAccount, transaction, chainId: chainId);
+        var signedTransaction = await client.signTransaction(
+            currentAccount, transaction,
+            chainId: spendCurrency.chainId);
 
         _sendTransaction =
-            () => appStore.client.sendRawTransaction(prependTransactionType(2, signedTransaction));
+            () => client.sendRawTransaction(prependTransactionType(2, signedTransaction));
       } else {
         final erc20 = ERC20(
-          client: appStore.client,
+          client: client,
           address: EthereumAddress.fromHex(spendCurrency.address),
-          chainId: chainId,
+          chainId: spendCurrency.chainId,
         );
 
         _sendTransaction = () => erc20.transfer(
               EthereumAddress.fromHex(address),
-              cryptoAmount.getInWei,
+              cryptoAmount,
               credentials: currentAccount,
               transaction: transaction,
             );

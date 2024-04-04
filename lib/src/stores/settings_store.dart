@@ -1,3 +1,4 @@
+import 'package:frankencoin_wallet/src/core/default_nodes.dart';
 import 'package:frankencoin_wallet/src/entites/language.dart';
 import 'package:frankencoin_wallet/src/entites/node.dart';
 import 'package:frankencoin_wallet/src/entites/preferences_key.dart';
@@ -66,7 +67,7 @@ abstract class SettingsStoreBase with Store {
   @observable
   late List<Node> nodes;
 
-  Node getNode(int chainId) => _isar.nodes.getSync(chainId)!;
+  Node getNode(int chainId) => _isar.nodes.getSync(chainId) ?? defaultNodes[chainId]!;
 
   @action
   Future<void> updateNode(Node node) async {

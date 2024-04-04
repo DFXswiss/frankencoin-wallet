@@ -1,5 +1,6 @@
 enum CryptoCurrency {
   eth(1, "0x0", "ETH", "Ethereum", 18),
+  matic(137, "0x0", "MATIC", "Polygon", 18),
   zchf(1, "0xB58E61C3098d85632Df34EecfB899A1Ed80921cB", "ZCHF", "Frankencoin",
       18),
   xchf(1, "0xB4272071eCAdd69d933AdcD19cA99fe80664fc08", "XCHF", "CryptoFranc",

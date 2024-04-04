@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/asset_logo.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 
@@ -15,20 +16,8 @@ class CurrencyPicker extends StatelessWidget {
     required this.onSelect,
   });
 
-  String getCurrencyImagePath(CryptoCurrency cryptoCurrency) {
-    switch (cryptoCurrency) {
-      case CryptoCurrency.eth:
-        return "assets/images/crypto/eth.png";
-      case CryptoCurrency.xchf:
-        return "assets/images/crypto/xchf.png";
-      case CryptoCurrency.zchf:
-        return "assets/images/crypto/zchf.png";
-      case CryptoCurrency.fps:
-        return "assets/images/crypto/fps.png";
-      default:
-        return "assets/images/frankencoin.png";
-    }
-  }
+  String getCurrencyImagePath(CryptoCurrency cryptoCurrency) =>
+      getCryptoAssetImagePath(cryptoCurrency);
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +49,10 @@ class CurrencyPicker extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    Image.asset(getCurrencyImagePath(cryptoCurrency),
-                        width: 40,),
+                    Image.asset(
+                      getCurrencyImagePath(cryptoCurrency),
+                      width: 40,
+                    ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 16),

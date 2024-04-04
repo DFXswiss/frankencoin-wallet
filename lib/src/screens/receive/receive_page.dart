@@ -10,7 +10,7 @@ class ReceivePage extends BasePage {
 
   @override
   Widget body(BuildContext context) {
-    final address = _walletAccount.primaryAddress.address.hex;
+    final address = _walletAccount.primaryAddress.address.hexEip55;
 
     return Center(
       child: QRAddressWidget(

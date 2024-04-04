@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
+import 'package:frankencoin_wallet/src/core/asset_logo.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
@@ -23,20 +24,7 @@ class BalanceCard extends StatelessWidget {
     this.action,
   });
 
-  String get leadingImagePath {
-    switch (cryptoCurrency) {
-      case CryptoCurrency.eth:
-        return "assets/images/crypto/eth.png";
-      case CryptoCurrency.xchf:
-        return "assets/images/crypto/xchf.png";
-      case CryptoCurrency.zchf:
-        return "assets/images/crypto/zchf.png";
-      case CryptoCurrency.fps:
-        return "assets/images/crypto/fps.png";
-      default:
-        return "assets/images/frankencoin.png";
-    }
-  }
+  String get leadingImagePath => getCryptoAssetImagePath(cryptoCurrency);
 
   @override
   Widget build(BuildContext context) {

@@ -17,8 +17,9 @@ abstract class EquityViewModelBase with Store {
 
   EquityViewModelBase(this.appStore, this.sendVM)
       : _equity = Equity(
-            address: EthereumAddress.fromHex(CryptoCurrency.fps.address),
-            client: appStore.client);
+          address: EthereumAddress.fromHex(CryptoCurrency.fps.address),
+          client: appStore.getClient(CryptoCurrency.fps.chainId),
+        );
 
   @observable
   BigInt investAmount = BigInt.zero;
