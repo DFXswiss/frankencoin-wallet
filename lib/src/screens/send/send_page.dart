@@ -183,7 +183,6 @@ class _SendPageBodyState extends State<_SendPageBody> {
     });
 
     reaction((_) => widget.sendVM.state, (ExecutionState state) {
-      print(state);
       if (state is AwaitingConfirmationExecutionState) {
         final cryptoAmount = EtherAmount.inWei(parseFixed(
             widget.sendVM.rawCryptoAmount.replaceAll(",", "."),
@@ -264,8 +263,12 @@ class _SendPageBodyState extends State<_SendPageBody> {
       ),
     );
 
-    final uri = EthereumURI.fromString(address);
-    _addressController.text = uri.address;
-    _cryptoAmountController.text = uri.amount;
+    if (address.startsWith("0x")) {
+      _addressController.text = address;
+    } else {
+      final uri = EthereumURI.fromString(address);
+      _addressController.text = uri.address;
+      _cryptoAmountController.text = uri.amount;
+    }
   }
 }
