@@ -46,7 +46,7 @@ class DashboardPageState extends State<DashboardPage> {
               builder: (_) => Column(
                 children: [
                   BalanceSection(
-                    balanceInfo: widget.balanceVM.balances[CryptoCurrency.zchf],
+                    balance: widget.balanceVM.zchfBalance,
                     cryptoCurrency: CryptoCurrency.zchf,
                   ),
                   Container(
@@ -63,6 +63,17 @@ class DashboardPageState extends State<DashboardPage> {
                     ),
                     height: 8,
                   ),
+                /*
+                BalanceCard(
+                    balanceInfo: BalanceInfo(
+                      chainId: 0,
+                      contractAddress: "0x0",
+                      address: "0x0",
+                      balance: widget.balanceVM.zchfBalance.toString(),
+                    ),
+                    cryptoCurrency: CryptoCurrency.zchf,
+                  ),
+                  */
                   BalanceCard(
                     balanceInfo: widget.balanceVM.balances[CryptoCurrency.fps],
                     cryptoCurrency: CryptoCurrency.fps,
@@ -74,9 +85,10 @@ class DashboardPageState extends State<DashboardPage> {
                     cryptoCurrency: CryptoCurrency.eth,
                   ),
                   BalanceCard(
-                    balanceInfo: widget.balanceVM.balances[CryptoCurrency.matic],
+                    balanceInfo:
+                        widget.balanceVM.balances[CryptoCurrency.matic],
                     cryptoCurrency: CryptoCurrency.matic,
-                  )
+                  ),
                 ],
               ),
             ),

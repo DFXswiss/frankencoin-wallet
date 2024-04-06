@@ -10,9 +10,7 @@ import 'package:web3dart/web3dart.dart';
 
 class BalanceCard extends StatelessWidget {
   final CryptoCurrency cryptoCurrency;
-
   final BalanceInfo? balanceInfo;
-
   final String? actionLabel;
   final void Function()? action;
 

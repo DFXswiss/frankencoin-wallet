@@ -20,7 +20,6 @@ abstract class BalanceViewModelBase with Store {
   final Isar _isar;
   final AppStore appStore;
 
-  final String nativeTicker = "ETH";
   final String nativeFiat = "CHF";
 
   BalanceViewModelBase(this._isar, this.appStore) {
@@ -29,6 +28,14 @@ abstract class BalanceViewModelBase with Store {
 
   @observable
   ObservableMap<CryptoCurrency, BalanceInfo> balances = ObservableMap();
+
+  @computed
+  BigInt get zchfBalance {
+    var balance = balances[CryptoCurrency.zchf]?.getBalance() ?? BigInt.zero;
+
+    balance += balances[CryptoCurrency.maticZCHF]?.getBalance() ?? BigInt.zero;
+    return balance;
+  }
 
   @action
   Future<void> updateBalances() async {
@@ -88,7 +95,7 @@ abstract class BalanceViewModelBase with Store {
     await updateBalances();
 
     _updateBalancesTimer = Timer.periodic(
-        const Duration(seconds: 30), (timer) async => await updateBalances());
+        const Duration(seconds: 30), (_) async => await updateBalances());
   }
 
   void stopSyncBalances() => _updateBalancesTimer?.cancel();

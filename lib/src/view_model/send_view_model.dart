@@ -93,6 +93,8 @@ abstract class SendViewModelBase with Store {
     print(
         RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false).hasMatch(address));
 
+
+
     // ToDo: Check for valid Address
     final cryptoAmount = parseFixed(
         rawCryptoAmount.replaceAll(",", "."), spendCurrency.decimals);
@@ -109,8 +111,11 @@ abstract class SendViewModelBase with Store {
     final transaction = Transaction(
       from: currentAddress,
       to: EthereumAddress.fromHex(address),
-      maxPriorityFeePerGas: EtherAmount.fromInt(EtherUnit.gwei, priority.tip),
-      value: isErc20Token ? EtherAmount.zero() : EtherAmount.inWei(cryptoAmount),
+      maxPriorityFeePerGas: spendCurrency.chainId == 1
+          ? EtherAmount.fromInt(EtherUnit.gwei, priority.tip)
+          : null,
+      value:
+          isErc20Token ? EtherAmount.zero() : EtherAmount.inWei(cryptoAmount),
     );
 
     try {
@@ -119,8 +124,8 @@ abstract class SendViewModelBase with Store {
             currentAccount, transaction,
             chainId: spendCurrency.chainId);
 
-        _sendTransaction =
-            () => client.sendRawTransaction(prependTransactionType(2, signedTransaction));
+        _sendTransaction = () => client
+            .sendRawTransaction(prependTransactionType(2, signedTransaction));
       } else {
         final erc20 = ERC20(
           client: client,

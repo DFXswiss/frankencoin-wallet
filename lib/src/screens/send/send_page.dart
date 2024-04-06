@@ -243,11 +243,12 @@ class _SendPageBodyState extends State<_SendPageBody> {
       context: context,
       builder: (_) => Observer(
         builder: (_) => CurrencyPicker(
-            availableCurrencies: CryptoCurrency.values,
-            selectedCurrency: widget.sendVM.spendCurrency,
-            onSelect: (CryptoCurrency cryptoCurrency) {
-              widget.sendVM.spendCurrency = cryptoCurrency;
-            }),
+          availableCurrencies: CryptoCurrency.spendCurrencies,
+          selectedCurrency: widget.sendVM.spendCurrency,
+          onSelect: (CryptoCurrency cryptoCurrency) {
+            widget.sendVM.spendCurrency = cryptoCurrency;
+          },
+        ),
       ),
     );
   }

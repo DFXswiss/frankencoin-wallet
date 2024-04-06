@@ -9,6 +9,7 @@ String getCryptoAssetImagePath(CryptoCurrency cryptoCurrency) {
       return "assets/images/crypto/matic.png";
     case CryptoCurrency.xchf:
       return "assets/images/crypto/xchf.png";
+    case CryptoCurrency.maticZCHF:
     case CryptoCurrency.zchf:
       return "assets/images/crypto/zchf.png";
     case CryptoCurrency.fps:
