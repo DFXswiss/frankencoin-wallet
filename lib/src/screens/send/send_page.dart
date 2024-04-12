@@ -10,7 +10,7 @@ import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/currency_picker.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
-import 'package:frankencoin_wallet/src/utils/double_extension.dart';
+import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
@@ -108,12 +108,13 @@ class _SendPageBodyState extends State<_SendPageBody> {
             final rawBalanceAmount = EtherAmount.inWei(widget
                     .sendVM.balanceVM.balances[widget.sendVM.spendCurrency]!
                     .getBalance())
-                .getValueInUnit(EtherUnit.ether);
+                .getInWei;
             return CupertinoButton(
-              onPressed: () =>
-                  widget.sendVM.rawCryptoAmount = rawBalanceAmount.toString(),
+              onPressed: () => widget.sendVM.rawCryptoAmount = formatFixed(
+                  rawBalanceAmount, widget.sendVM.spendCurrency.decimals),
               child: Text(
-                rawBalanceAmount.toStringTruncated(3),
+                formatFixed(
+                    rawBalanceAmount, widget.sendVM.spendCurrency.decimals, fractionalDigits: 3, trimZeros: false),
               ),
             );
           }),

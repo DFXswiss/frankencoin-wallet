@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/core/asset_logo.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
-import 'package:frankencoin_wallet/src/utils/double_extension.dart';
+import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
+import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
@@ -15,8 +16,6 @@ import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
-
-import '../../utils/parse_fixed.dart';
 
 class PoolPage extends BasePage {
   final BalanceViewModel balanceVM;
@@ -57,17 +56,6 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
     widget.equityVM.sendVM.stopSyncFee();
   }
 
-  String getLeadingImagePath(CryptoCurrency cryptoCurrency) {
-    switch (cryptoCurrency) {
-      case CryptoCurrency.zchf:
-        return "assets/images/crypto/zchf.png";
-      case CryptoCurrency.fps:
-        return "assets/images/crypto/fps.png";
-      default:
-        return "assets/images/frankencoin.png";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     _setEffects(context);
@@ -81,24 +69,26 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             prefix: Padding(
               padding: const EdgeInsets.all(5),
               child: Observer(
-                  builder: (_) => Image.asset(
-                      getLeadingImagePath(widget.equityVM.sendCurrency),
-                      width: 42)),
+                builder: (_) => Image.asset(
+                  getCryptoAssetImagePath(widget.equityVM.sendCurrency),
+                  width: 42,
+                ),
+              ),
             ),
             placeholder: "0.0000",
             controller: _amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             suffix: Observer(builder: (_) {
               final rawBalanceAmount = EtherAmount.inWei(widget
-                      .balanceVM.balances[widget.equityVM.sendCurrency]!
-                      .getBalance())
-                  .getValueInUnit(EtherUnit.ether);
+                  .balanceVM.balances[widget.equityVM.sendCurrency]!
+                  .getBalance())
+                  .getInWei;
               return CupertinoButton(
-                onPressed: () =>
-                    _amountController.text = rawBalanceAmount.toString(),
+                onPressed: () => _amountController.text = formatFixed(
+                    rawBalanceAmount, widget.equityVM.sendCurrency.decimals),
                 child: Text(
-                  rawBalanceAmount.toStringTruncated(3),
-                  style: const TextStyle(fontSize: 16, fontFamily: 'Lato'),
+                  formatFixed(
+                      rawBalanceAmount, widget.equityVM.sendCurrency.decimals, fractionalDigits: 3, trimZeros: false),
                 ),
               );
             }),
@@ -122,8 +112,9 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
               padding: const EdgeInsets.all(5),
               child: Observer(
                 builder: (_) => Image.asset(
-                    getLeadingImagePath(widget.equityVM.reverseCurrency),
-                    width: 42),
+                  getCryptoAssetImagePath(widget.equityVM.reverseCurrency),
+                  width: 42,
+                ),
               ),
             ),
             placeholder: "0.0000",

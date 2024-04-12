@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
@@ -91,16 +90,18 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          child: Observer(
-            builder: (_) => InfoCard(
-              centred: true,
-              label: S.of(context).holding_duration,
-              value: "${widget.assetVM.holdingPeriod.toString()} ${S.of(context).days}",
+        if (widget.assetVM.fpsBalance != BigInt.zero)
+          Padding(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            child: Observer(
+              builder: (_) => InfoCard(
+                centred: true,
+                label: S.of(context).holding_duration,
+                value:
+                    "${widget.assetVM.holdingPeriod.toString()} ${S.of(context).days}",
+              ),
             ),
           ),
-        ),
         const Padding(padding: EdgeInsets.all(10), child: Divider()),
         Text(
           S.of(context).market_stats,

@@ -1,17 +1,19 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
+import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/widgets/bottom_sheet_listener.dart';
+import 'package:frankencoin_wallet/src/widgets/primary_fullwidth_button.dart';
+import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
 
 class WalletConnectPage extends BasePage {
   WalletConnectPage(this.wcService, {super.key});
 
   @override
-  String? get title => S.current.node;
+  String? get title => "Wallet Connect";
 
   final WalletConnectWalletService wcService;
 
@@ -30,8 +32,6 @@ class _WalletConnectPageBody extends StatefulWidget {
 }
 
 class _WalletConnectPageBodyState extends State<_WalletConnectPageBody> {
-  final TextEditingController _uriController = TextEditingController();
-
   final bottomSheetService = getIt.get<BottomSheetService>();
 
   @override
@@ -40,54 +40,29 @@ class _WalletConnectPageBodyState extends State<_WalletConnectPageBody> {
       bottomSheetService: bottomSheetService,
       child: Column(
         children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
-            child: CupertinoTextField(
-              controller: _uriController,
-              placeholder: S.of(context).name,
-              suffix: const SizedBox(height: 52),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: CupertinoButton(
-              onPressed: () => widget.wcService.create(),
-              color: FrankencoinColors.frRed,
-              child: Text(
-                "Create",
-                style: const TextStyle(fontSize: 16),
+          if (DeviceInfo.instance.isMobile)
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: FullwidthButton(
+                onPressed: _newConnection,
+                label: S.of(context).new_wallet_connect_connection,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: CupertinoButton(
-              onPressed: () => widget.wcService.init(),
-              color: FrankencoinColors.frRed,
-              child: Text(
-                "Init",
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: CupertinoButton(
-              onPressed: _save,
-              color: FrankencoinColors.frRed,
-              child: Text(
-                S.of(context).save,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Future<void> _save() async {
-    await widget.wcService.pairWithUri(Uri.parse(_uriController.text));
+  Future<void> _newConnection() async {
+    String uri = await showDialog(
+      context: context,
+      builder: (dialogContext) => QRScanDialog(
+        validateQR: (code, _) => code?.startsWith("wc:") == true,
+        onData: (code, _) =>
+            Navigator.of(dialogContext, rootNavigator: true).pop(code),
+      ),
+    );
+
+    await widget.wcService.pairWithUri(Uri.parse(uri));
   }
 }

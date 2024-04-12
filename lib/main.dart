@@ -36,7 +36,7 @@ Future<void> main() async {
 Future<void> setup(SharedPreferences sharedPreferences, Isar isar) async {
   final isSetup = sharedPreferences.getBool("isSetup") ?? false;
 
-  // if (isSetup) return;
+  if (isSetup) return;
   await isar.writeTxn(() async {
     for (final node in defaultNodes.values) {
       if (await isar.nodes.get(node.id) == null) {
