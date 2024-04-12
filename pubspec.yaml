@@ -1,8 +1,6 @@
 name: frankencoin_wallet
 description: A Wallet for frankencoin
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -16,19 +14,13 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+3
+version: 1.0.0+5
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
 
 isar_version: &isar_version 3.1.0+1 # define the version to be used
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
@@ -42,6 +34,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   encrypt: ^5.0.3
   erc20: ^1.0.1
+  eth_sig_util: ^0.0.9
   flutter_inappwebview: ^6.0.0
   flutter_mobx: ^2.2.0+2
   flutter_secure_storage: ^9.0.0
@@ -57,7 +50,7 @@ dependencies:
   shared_preferences: ^2.2.2
   styled_text: ^8.1.0
   url_launcher: ^6.1.14
-  walletconnect_flutter_v2: ^2.2.2
+  walletconnect_flutter_v2: 2.2.1
   web3dart: ^2.7.1
 
 dev_dependencies:
@@ -71,18 +64,8 @@ dev_dependencies:
   web3dart_builders: ^0.1.0
 
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
   assets:
    - assets/images/
    - assets/images/crypto/

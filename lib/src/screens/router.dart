@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/asset/asset_details_page.dart';
@@ -16,6 +17,7 @@ import 'package:frankencoin_wallet/src/screens/settings/edit_node_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/manage_nodes_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/settings_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/show_seed_page.dart';
+import 'package:frankencoin_wallet/src/screens/settings/wallet_connect_page.dart';
 import 'package:frankencoin_wallet/src/screens/web_view/web_view_page.dart';
 import 'package:frankencoin_wallet/src/screens/welcome/welcome_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
@@ -82,6 +84,10 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
       return MaterialPageRoute<void>(
           builder: (_) => EditNodePage(getIt.get<AppStore>(), chainId: chainId,));
+
+    case Routes.settingsWalletConnect:
+      return MaterialPageRoute<void>(
+          builder: (_) => WalletConnectPage(getIt.get<WalletConnectWalletService>()));
 
     case Routes.settingsSeed:
       return MaterialPageRoute<void>(

@@ -8,6 +8,7 @@ class Routes {
   static const settings = '/settings';
   static const settingsNodes = '/settings/nodes';
   static const settingsNodesEdit = '/settings/nodes/edit';
+  static const settingsWalletConnect = '/settings/wallet_connect';
   static const settingsSeed = '/settings/seed';
   static const walletCreate = '/wallet/create';
   static const walletRestore = '/wallet/restore';

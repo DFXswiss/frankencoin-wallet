@@ -35,6 +35,8 @@ class WalletAccount {
     return EthPrivateKey.fromHex(hex.encode(addressAtIndex.privateKey!));
   }
 
+
+
   Future<String> signMessage(String message, {int addressIndex = 0}) async =>
       "0x${hex.encode(
           await _getPrivateKeyAt(0).signPersonalMessage(ascii.encode(message)))}";

@@ -5,7 +5,7 @@ class FullwidthButton extends StatelessWidget {
   final String label;
   final void Function()? onPressed;
   final Color labelColor;
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   const FullwidthButton({
     super.key,
