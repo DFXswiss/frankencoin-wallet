@@ -89,7 +89,7 @@ class CWEvmChainService {
     final bool? isApproved = await bottomSheetService.queueBottomSheet(
       widget: Web3RequestModal(
         child: Text(
-          "Sign Tx",
+          action,
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -126,10 +126,9 @@ class CWEvmChainService {
       bottomSheetService.queueBottomSheet(
         isModalDismissible: true,
         widget: BottomSheetMessageDisplayWidget(
-          message: 'Error: ${e.toString()}',
+          message: '${S.current.error}: ${e.toString()}',
         ),
       );
-      log('Failed: Error while getting credentials');
     }
   }
 
@@ -221,7 +220,7 @@ class CWEvmChainService {
       bottomSheetService.queueBottomSheet(
         isModalDismissible: true,
         widget: BottomSheetMessageDisplayWidget(
-          message: 'Error: ${e.toString()}',
+          message: '${S.current.error}: ${e.toString()}',
         ),
       );
       return;

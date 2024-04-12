@@ -46,7 +46,7 @@ abstract class WalletConnectWalletServiceBase with Store {
         isInitialized = false;
 
   @action
-  void create() { // ToDo: (Konsti) create on wallet creation
+  void create() {
     // Create the web3wallet client
     _web3Wallet = Web3Wallet(
       core: Core(projectId: secrets.walletConnectProjectId),
@@ -72,12 +72,9 @@ abstract class WalletConnectWalletServiceBase with Store {
         bottomSheetService: _bottomSheetHandler,
         wallet: _web3Wallet,
       );
-
-      log(chain.chainId.toString());
     }
 
     // Setup our listeners
-    log('Created instance of web3wallet');
     _web3Wallet.core.pairing.onPairingInvalid.subscribe(_onPairingInvalid);
     _web3Wallet.core.pairing.onPairingCreate.subscribe(_onPairingCreate);
     _web3Wallet.core.pairing.onPairingDelete.subscribe(_onPairingDelete);
@@ -89,18 +86,15 @@ abstract class WalletConnectWalletServiceBase with Store {
   }
 
   @action
-  Future<void> init() async { // ToDo: (Konsti) init on wallet creation
-    // Await the initialization of the web3wallet
-    log('Intializing web3wallet');
-    // if (!isInitialized) {
-    try {
-      await _web3Wallet.init();
-      log('Initialized');
-      isInitialized = true;
-    } catch (e) {
-      isInitialized = false;
+  Future<void> init() async {
+    if (!isInitialized) {
+      try {
+        await _web3Wallet.init();
+        isInitialized = true;
+      } catch (e) {
+        isInitialized = false;
+      }
     }
-    // }
 
     _refreshPairings();
 
@@ -112,15 +106,18 @@ abstract class WalletConnectWalletServiceBase with Store {
   }
 
   @action
-  FutureOr<void> onDispose() {
-    log('web3wallet dispose');
+  void onDispose() {
+    if (!isInitialized) return;
+
     _web3Wallet.core.pairing.onPairingInvalid.unsubscribe(_onPairingInvalid);
+    _web3Wallet.core.pairing.onPairingCreate.unsubscribe(_onPairingCreate);
+    _web3Wallet.core.pairing.onPairingDelete.unsubscribe(_onPairingDelete);
+    _web3Wallet.core.pairing.onPairingExpire.unsubscribe(_onPairingDelete);
     _web3Wallet.pairings.onSync.unsubscribe(_onPairingsSync);
     _web3Wallet.onSessionProposal.unsubscribe(_onSessionProposal);
     _web3Wallet.onSessionProposalError.unsubscribe(_onSessionProposalError);
     _web3Wallet.onSessionConnect.unsubscribe(_onSessionConnect);
-    _web3Wallet.core.pairing.onPairingDelete.unsubscribe(_onPairingDelete);
-    _web3Wallet.core.pairing.onPairingExpire.unsubscribe(_onPairingDelete);
+
     isInitialized = false;
   }
 
@@ -184,8 +181,7 @@ abstract class WalletConnectWalletServiceBase with Store {
   Future<void> pairWithUri(Uri uri) async {
     try {
       log('Pairing with URI: $uri');
-      final th = await _web3Wallet.core.pairing.pair(uri: uri);
-      // await _web3Wallet.core.pairing.activate(topic: th.topic);
+      await _web3Wallet.core.pairing.pair(uri: uri);
     } on WalletConnectError catch (e) {
       _bottomSheetHandler.queueBottomSheet(
         isModalDismissible: true,
