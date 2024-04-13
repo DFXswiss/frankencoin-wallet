@@ -14,6 +14,10 @@ String getCryptoAssetImagePath(CryptoCurrency cryptoCurrency) {
       return "assets/images/crypto/zchf.png";
     case CryptoCurrency.fps:
       return "assets/images/crypto/fps.png";
+    case CryptoCurrency.wbtc:
+      return "assets/images/crypto/wbtc.png";
+    case CryptoCurrency.lseth:
+      return "assets/images/crypto/lseth.png";
     default:
       return "assets/images/frankencoin.png";
   }

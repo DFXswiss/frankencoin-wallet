@@ -84,14 +84,29 @@ class CWEvmChainService {
       wallet.pendingRequests.getAll().firstWhere(
           (element) => element.topic == topic && element.params == parameters);
 
-  Future<bool> requestAuthorization(String action, String? text) async {
+  Future<bool> requestAuthorization(String action, String text) async {
     // Show the bottom sheet
     final bool? isApproved = await bottomSheetService.queueBottomSheet(
       widget: Web3RequestModal(
-        child: Text(
-          action,
-          // ToDo: (Konsti) Show message oder Tx
-          style: TextStyle(color: Colors.white),
+        child: Column(
+          children: [
+            Text(
+              action,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Lato',
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              text,
+              style: const TextStyle(
+                fontFamily: 'Lato',
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
     ) as bool?;
@@ -103,14 +118,14 @@ class CWEvmChainService {
     final id = _getRequest(topic, parameters);
 
     final String message = parameters[0]?.toString() ?? '';
+    final sigMessage = utf8.decode(hex.decode(message.substring(2)));
 
     final bool isApproved =
-        await requestAuthorization(S.current.sign_message, message);
+        await requestAuthorization(S.current.sign_message, sigMessage);
 
     if (!isApproved) return _reject(topic, id.id);
 
     try {
-      final sigMessage = utf8.decode(hex.decode(message.substring(2)));
       final String signature =
           await appStore.wallet!.currentAccount.signMessage(sigMessage);
 
@@ -137,13 +152,13 @@ class CWEvmChainService {
     final id = _getRequest(topic, parameters);
 
     final String message = parameters[1]?.toString() ?? '';
+    final sigMessage = utf8.decode(hex.decode(message.substring(2)));
 
     final bool isApproved =
-        await requestAuthorization(S.current.sign_message, message);
+        await requestAuthorization(S.current.sign_message, sigMessage);
     if (!isApproved) return _reject(topic, id.id);
 
     try {
-      final sigMessage = utf8.decode(hex.decode(message.substring(2)));
       final String signature =
           await appStore.wallet!.currentAccount.signMessage(sigMessage);
 
@@ -171,7 +186,7 @@ class CWEvmChainService {
 
     final paramsData = parameters[0] as Map<String, dynamic>;
 
-    final message = ""; //_convertToReadable(paramsData);
+    final message = ""; //_convertToReadable(paramsData); // ToDo: (Konsti) Show raw TX
 
     final bool isApproved =
         await requestAuthorization(S.current.sign_transaction, message);
@@ -234,7 +249,7 @@ class CWEvmChainService {
     final String? data = parameters[1] as String?;
 
     final bool isApproved =
-        await requestAuthorization(S.current.sign_message, data);
+        await requestAuthorization(S.current.sign_message, data ?? '');
 
     if (!isApproved) return _reject(topic, id.id);
 

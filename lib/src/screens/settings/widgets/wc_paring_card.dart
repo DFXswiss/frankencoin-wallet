@@ -48,9 +48,8 @@ class WCParingCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                metadata?.icons[0] != null
-                    ? Image.network(metadata!.icons[0], width: 40)
-                    : Image.asset('assets/images/frankencoin.png', width: 40),
+                if (metadata?.icons[0] != null)
+                  Image.network(metadata!.icons[0], width: 40),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
@@ -60,12 +59,13 @@ class WCParingCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          metadata?.name ?? "TODO",
+                          metadata?.name ?? "",
                           style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Lato',
-                              color: Colors.white),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Lato',
+                            color: Colors.white,
+                          ),
                         ),
                         if (metadata?.url != null)
                           Text(

@@ -4,6 +4,7 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/screens/dashboard/widgets/action_bar.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_section.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
@@ -70,34 +71,50 @@ class DashboardPageState extends State<DashboardPage> {
                       ),
                       height: 8,
                     ),
-                    /*
-                BalanceCard(
-                    balanceInfo: BalanceInfo(
-                      chainId: 0,
-                      contractAddress: "0x0",
-                      address: "0x0",
-                      balance: widget.balanceVM.zchfBalance.toString(),
-                    ),
-                    cryptoCurrency: CryptoCurrency.zchf,
-                  ),
-                  */
-                    BalanceCard(
-                      balanceInfo:
-                          widget.balanceVM.balances[CryptoCurrency.fps],
-                      cryptoCurrency: CryptoCurrency.fps,
-                      actionLabel: S.of(context).invest,
-                      action: () =>
-                          Navigator.of(context).pushNamed(Routes.pool),
-                    ),
-                    BalanceCard(
-                      balanceInfo:
-                          widget.balanceVM.balances[CryptoCurrency.eth],
-                      cryptoCurrency: CryptoCurrency.eth,
-                    ),
-                    BalanceCard(
-                      balanceInfo:
-                          widget.balanceVM.balances[CryptoCurrency.matic],
-                      cryptoCurrency: CryptoCurrency.matic,
+                    Expanded(
+                      child: Stack(
+                        alignment: AlignmentDirectional.bottomCenter,
+                        children: [
+                          SingleChildScrollView(
+                            child: Column(
+                              children: <Widget>[
+                                BalanceCard(
+                                  balanceInfo: widget
+                                      .balanceVM.balances[CryptoCurrency.fps],
+                                  cryptoCurrency: CryptoCurrency.fps,
+                                  actionLabel: S.of(context).invest,
+                                  action: () => Navigator.of(context)
+                                      .pushNamed(Routes.pool),
+                                ),
+                                BalanceCard(
+                                  balanceInfo: widget
+                                      .balanceVM.balances[CryptoCurrency.eth],
+                                  cryptoCurrency: CryptoCurrency.eth,
+                                ),
+                                BalanceCard(
+                                  balanceInfo: widget
+                                      .balanceVM.balances[CryptoCurrency.matic],
+                                  cryptoCurrency: CryptoCurrency.matic,
+                                ),
+                                BalanceCard(
+                                  balanceInfo: widget
+                                      .balanceVM.balances[CryptoCurrency.wbtc],
+                                  cryptoCurrency: CryptoCurrency.wbtc,
+                                ),
+                                BalanceCard(
+                                  balanceInfo: widget
+                                      .balanceVM.balances[CryptoCurrency.lseth],
+                                  cryptoCurrency: CryptoCurrency.lseth,
+                                ),
+                                const SizedBox(
+                                  height: 110,
+                                )
+                              ],
+                            ),
+                          ),
+                          const ActionBar()
+                        ],
+                      ),
                     ),
                   ],
                 ),
