@@ -90,6 +90,7 @@ class CWEvmChainService {
       widget: Web3RequestModal(
         child: Text(
           action,
+          // ToDo: (Konsti) Show message oder Tx
           style: TextStyle(color: Colors.white),
         ),
       ),

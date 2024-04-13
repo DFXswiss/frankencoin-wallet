@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
-import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
+import 'package:frankencoin_wallet/src/screens/settings/widgets/wc_paring_card.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
-import 'package:frankencoin_wallet/src/widgets/bottom_sheet_listener.dart';
 import 'package:frankencoin_wallet/src/widgets/primary_fullwidth_button.dart';
 import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class WalletConnectPage extends BasePage {
   WalletConnectPage(this.wcService, {super.key});
 
   @override
-  String? get title => "Wallet Connect";
+  String? get title => "WalletConnect";
 
   final WalletConnectWalletService wcService;
 
@@ -32,13 +32,10 @@ class _WalletConnectPageBody extends StatefulWidget {
 }
 
 class _WalletConnectPageBodyState extends State<_WalletConnectPageBody> {
-  final bottomSheetService = getIt.get<BottomSheetService>();
-
   @override
   Widget build(BuildContext context) {
-    return BottomSheetListener(
-      bottomSheetService: bottomSheetService,
-      child: Column(
+    return Observer(
+      builder: (_) => ListView(
         children: [
           if (DeviceInfo.instance.isMobile)
             Padding(
@@ -48,10 +45,20 @@ class _WalletConnectPageBodyState extends State<_WalletConnectPageBody> {
                 label: S.of(context).new_wallet_connect_connection,
               ),
             ),
+          ...widget.wcService.pairings
+              .where((e) => e.active)
+              .map((element) => WCParingCard(
+                    paringInfo: element,
+                    actionLabel: S.of(context).disconnect,
+                    action: () => _disconnect(element),
+                  )),
         ],
       ),
     );
   }
+
+  Future<void> _disconnect(PairingInfo paringInfo) async =>
+      await widget.wcService.disconnectSession(paringInfo.topic);
 
   Future<void> _newConnection() async {
     String uri = await showDialog(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/wc_evm_chain_service.dart';
 import 'package:frankencoin_wallet/src/entites/blockchain.dart';
@@ -27,9 +28,6 @@ abstract class WalletConnectWalletServiceBase with Store {
   @observable
   bool isInitialized;
 
-  /// The list of requests from the dapp
-  /// Potential types include, but aren't limited to:
-  /// [SessionProposalEvent], [AuthRequest]
   @observable
   ObservableList<PairingInfo> pairings;
 
@@ -122,14 +120,10 @@ abstract class WalletConnectWalletServiceBase with Store {
   }
 
   void _onPairingsSync(StoreSyncEvent? args) {
-    if (args != null) {
-      _refreshPairings();
-    }
+    if (args != null) _refreshPairings();
   }
 
-  void _onPairingDelete(PairingEvent? event) {
-    _refreshPairings();
-  }
+  void _onPairingDelete(PairingEvent? event) => _refreshPairings();
 
   @action
   void _refreshPairings() {
@@ -145,7 +139,8 @@ abstract class WalletConnectWalletServiceBase with Store {
   Future<void> _onSessionProposal(SessionProposalEvent? args) async {
     if (args != null) {
       final Widget modalWidget = Web3RequestModal(
-        child: Text("Session Poposal"),
+        child: Text("Session Poposal", style: TextStyle(color: Colors.white),),
+        // ToDo: (Konsti) More Insights
       );
       // show the bottom sheet
       final bool? isApproved = await _bottomSheetHandler.queueBottomSheet(
@@ -201,21 +196,20 @@ abstract class WalletConnectWalletServiceBase with Store {
 
   @action
   void _onSessionConnect(SessionConnect? args) {
-    print(args);
-    if (args != null) {
-      sessions.add(args.session);
-    }
+    if (args != null) sessions.add(args.session);
   }
 
   @action
   Future<void> disconnectSession(String topic) async {
     final session =
-        sessions.firstWhere((element) => element.pairingTopic == topic);
+        sessions.where((element) => element.pairingTopic == topic).firstOrNull;
 
     await _web3Wallet.core.pairing.disconnect(topic: topic);
-    await _web3Wallet.disconnectSession(
-        topic: session.topic,
-        reason: Errors.getSdkError(Errors.USER_DISCONNECTED));
+    if (session != null) {
+      await _web3Wallet.disconnectSession(
+          topic: session.topic,
+          reason: Errors.getSdkError(Errors.USER_DISCONNECTED));
+    }
   }
 
   @action

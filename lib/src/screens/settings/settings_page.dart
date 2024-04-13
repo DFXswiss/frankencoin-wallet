@@ -40,6 +40,11 @@ class SettingsPage extends BasePage {
             ),
           ),
           OptionRow(
+            name: "WalletConnect",
+            onTap: (_) =>
+                Navigator.of(context).pushNamed(Routes.settingsWalletConnect),
+          ),
+          OptionRow(
             name: S.of(context).nodes,
             onTap: (_) => Navigator.of(context).pushNamed(Routes.settingsNodes),
           ),
@@ -61,14 +66,8 @@ class SettingsPage extends BasePage {
             ),
           ),
           OptionRow(
-            name: "Wallet Connect",
-            onTap: (BuildContext context) =>
-                Navigator.of(context).pushNamed(Routes.settingsWalletConnect),
-          ),
-          OptionRow(
             name: S.of(context).show_seed,
-            onTap: (BuildContext context) =>
-                Navigator.of(context).pushNamed(Routes.settingsSeed),
+            onTap: (_) => Navigator.of(context).pushNamed(Routes.settingsSeed),
           ),
           CupertinoButton(
             onPressed: () => _deleteWallet(context),
