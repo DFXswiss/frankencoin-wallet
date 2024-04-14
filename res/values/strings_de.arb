@@ -37,6 +37,7 @@
     "restore_wallet_with_seed_qr_option": "Von SeedQR wiederherstellen",
     "restore_wallet_with_seed_qr_option_description": "Stellen Sie Ihre Wallet aus einem qültigem SeedQR wieder her, welcher normalerweise auf eine Stahlplatte graviert wurde.",
     "rpc_url": "RPC-URL",
+    "scan": "Scan",
     "save": "Speichern",
     "select_asset": "Wähle das Asset",
     "sell": "Verkaufen",

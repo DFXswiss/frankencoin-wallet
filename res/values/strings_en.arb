@@ -38,6 +38,7 @@
     "restore_wallet_with_seed_qr_option": "Restore from SeedQR",
     "restore_wallet_with_seed_qr_option_description": "Restore your wallet from a valid SeedQR, which is normally backed up on a steel plate.",
     "rpc_url": "RPC-URL",
+    "scan": "Scan",
     "save": "Save",
     "select_asset": "Select the asset",
     "sell": "Sell",

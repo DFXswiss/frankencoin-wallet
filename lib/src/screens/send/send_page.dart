@@ -22,21 +22,33 @@ import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
 class SendPage extends BasePage {
-  SendPage(this.sendVM, {super.key});
+  SendPage(this.sendVM, {super.key, this.initialAddress, this.initialAmount});
 
   @override
   String? get title => S.current.send;
 
   final SendViewModel sendVM;
+  final String? initialAddress;
+  final String? initialAmount;
 
   @override
-  Widget body(BuildContext context) => _SendPageBody(sendVM: sendVM);
+  Widget body(BuildContext context) => _SendPageBody(
+        sendVM: sendVM,
+        initialAddress: initialAddress,
+        initialAmount: initialAmount,
+      );
 }
 
 class _SendPageBody extends StatefulWidget {
   final SendViewModel sendVM;
+  final String? initialAddress;
+  final String? initialAmount;
 
-  const _SendPageBody({required this.sendVM});
+  const _SendPageBody({
+    required this.sendVM,
+    this.initialAddress,
+    this.initialAmount,
+  });
 
   @override
   State<StatefulWidget> createState() => _SendPageBodyState();
@@ -49,6 +61,10 @@ class _SendPageBodyState extends State<_SendPageBody> {
   @override
   void initState() {
     super.initState();
+    _setEffects(context);
+
+    _addressController.text = widget.initialAddress ?? "";
+    _cryptoAmountController.text = widget.initialAmount ?? "";
     widget.sendVM.syncFee();
   }
 
@@ -62,7 +78,6 @@ class _SendPageBodyState extends State<_SendPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    _setEffects(context);
 
     return Column(children: [
       Padding(
@@ -114,7 +129,8 @@ class _SendPageBodyState extends State<_SendPageBody> {
                   rawBalanceAmount, widget.sendVM.spendCurrency.decimals),
               child: Text(
                 formatFixed(
-                    rawBalanceAmount, widget.sendVM.spendCurrency.decimals, fractionalDigits: 3, trimZeros: false),
+                    rawBalanceAmount, widget.sendVM.spendCurrency.decimals,
+                    fractionalDigits: 3, trimZeros: false),
               ),
             );
           }),

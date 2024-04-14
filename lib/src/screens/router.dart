@@ -55,7 +55,8 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
       if (cryptoCurrency == CryptoCurrency.fps) {
         return MaterialPageRoute<void>(
-            builder: (_) => FPSAssetDetailsPage(getIt.get<FPSAssetViewModel>()));
+            builder: (_) =>
+                FPSAssetDetailsPage(getIt.get<FPSAssetViewModel>()));
       }
 
       return MaterialPageRoute<void>(
@@ -67,8 +68,14 @@ Route<dynamic> createRoute(RouteSettings settings) {
               ReceivePage(getIt.get<AppStore>().wallet!.currentAccount));
 
     case Routes.send:
+      final arguments = settings.arguments as List;
+
       return MaterialPageRoute<void>(
-          builder: (_) => SendPage(getIt.get<SendViewModel>()));
+          builder: (_) => SendPage(
+                getIt.get<SendViewModel>(),
+                initialAddress: arguments[0] as String?,
+                initialAmount: arguments[1] as String?,
+              ));
 
     case Routes.settings:
       return MaterialPageRoute<void>(
@@ -83,11 +90,15 @@ Route<dynamic> createRoute(RouteSettings settings) {
       final chainId = settings.arguments as int;
 
       return MaterialPageRoute<void>(
-          builder: (_) => EditNodePage(getIt.get<AppStore>(), chainId: chainId,));
+          builder: (_) => EditNodePage(
+                getIt.get<AppStore>(),
+                chainId: chainId,
+              ));
 
     case Routes.settingsWalletConnect:
       return MaterialPageRoute<void>(
-          builder: (_) => WalletConnectPage(getIt.get<WalletConnectWalletService>()));
+          builder: (_) =>
+              WalletConnectPage(getIt.get<WalletConnectWalletService>()));
 
     case Routes.settingsSeed:
       return MaterialPageRoute<void>(
