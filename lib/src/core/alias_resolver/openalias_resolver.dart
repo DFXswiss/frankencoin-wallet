@@ -10,11 +10,15 @@ class OpenAliasResolver extends AliasResolver {
     if (records == null) return null;
 
     AliasRecord? result = fetchAddressAndName(
-        formattedName: alias, ticker: ticker, txtRecords: records);
+        formattedName: alias,
+        ticker: ticker.toLowerCase(),
+        txtRecords: records);
 
     if (tickerFallback != null && result == null) {
       result = fetchAddressAndName(
-          formattedName: alias, ticker: tickerFallback, txtRecords: records);
+          formattedName: alias,
+          ticker: tickerFallback.toLowerCase(),
+          txtRecords: records);
     }
 
     return result;
@@ -51,30 +55,34 @@ class OpenAliasResolver extends AliasResolver {
         final dataList = record.split(";");
 
         address = dataList
-            .firstWhere((item) => (item.contains("recipient_address")))
-            .replaceAll("oa1:$ticker recipient_address=", "")
-            .replaceAll("(", "")
-            .replaceAll(")", "")
-            .trim();
+                .where((item) => (item.contains("recipient_address")))
+                .firstOrNull
+                ?.replaceAll("oa1:$ticker recipient_address=", "")
+                .replaceAll("(", "")
+                .replaceAll(")", "")
+                .trim() ??
+            '';
 
         final recipientName = dataList
-            .firstWhere((item) => (item.contains("recipient_name")))
-            .replaceAll("(", "")
+            .where((item) => (item.contains("recipient_name")))
+            .firstOrNull
+            ?.replaceAll("(", "")
             .replaceAll(")", "")
             .trim();
 
-        if (recipientName.isNotEmpty) {
-          name = recipientName.replaceAll("recipient_name=", "");
+        if (recipientName?.isNotEmpty == true) {
+          name = recipientName!.replaceAll("recipient_name=", "");
         }
 
         final description = dataList
-            .firstWhere((item) => (item.contains("tx_description")))
-            .replaceAll("(", "")
+            .where((item) => (item.contains("tx_description")))
+            .firstOrNull
+            ?.replaceAll("(", "")
             .replaceAll(")", "")
             .trim();
 
-        if (description.isNotEmpty) {
-          note = description.replaceAll("tx_description=", "");
+        if (description?.isNotEmpty == true) {
+          note = description!.replaceAll("tx_description=", "");
         }
 
         break;

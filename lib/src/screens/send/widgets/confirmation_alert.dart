@@ -44,8 +44,33 @@ class ConfirmationAlert extends StatelessWidget {
               ),
             ),
           ),
+          if (receiverAddress != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 5, bottom: 5),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "${S.of(context).wallet_address_receiver}:",
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Lato',
+                      ),
+                    ),
+                  ),
+                  Text(
+                    "${receiverAddress!.substring(0, 7)}...${receiverAddress!.substring(receiverAddress!.length - 10)}",
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'Lato',
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 5),
+            padding: const EdgeInsets.only(top: 5, bottom: 5),
             child: Row(
               children: [
                 Expanded(

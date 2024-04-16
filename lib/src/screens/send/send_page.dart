@@ -78,7 +78,6 @@ class _SendPageBodyState extends State<_SendPageBody> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(children: [
       Padding(
         padding:
@@ -208,7 +207,8 @@ class _SendPageBodyState extends State<_SendPageBody> {
         final estimatedFee =
             EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
                 .getValueInUnit(EtherUnit.ether);
-        final receiverAddress = widget.sendVM.address;
+        final receiverAddress =
+            widget.sendVM.resolvedAlias?.address ?? widget.sendVM.address;
         final spendCurrency = widget.sendVM.spendCurrency;
 
         showDialog<void>(

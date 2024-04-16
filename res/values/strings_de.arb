@@ -1,4 +1,5 @@
 {
+    "alias_detected": "Alias gefunden",
     "amount": "Betrag",
     "are_you_sure": "Sind Sie sicher?",
     "back": "Zurück",
@@ -20,6 +21,7 @@
     "fps_cannot_redeem_yet": "Du kannst deine FPS noch nicht einlösen, da du die Haltefrist von 90 Tagen noch nicht erreicht hast.",
     "fps_price": "FPS Preis",
     "holding_duration": "Haltedauer",
+    "invalid_receive_address": "Ungültige Emfängeraddresse",
     "invest": "Investieren",
     "language_english": "Englisch",
     "language_german": "Deutsch",
@@ -28,6 +30,7 @@
     "name": "Name",
     "new_wallet_connect_connection": "Neue Verbindung",
     "nodes": "Nodes",
+    "not_enough_token": "Sie haben nicht genug ${tokenSymbol} in diesem Wallet",
     "receive": "Empfangen",
     "restore_wallet": "Wallet wiederherstellen",
     "restore_wallet_from_seed": "Wallet mit Seed wiederherstellen",

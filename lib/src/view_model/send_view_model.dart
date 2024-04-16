@@ -1,11 +1,16 @@
 import 'dart:async';
 
 import 'package:erc20/erc20.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/alias_resolver/alias_resolver.dart';
+import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
+import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/transaction_priority.dart';
+import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -22,6 +27,25 @@ abstract class SendViewModelBase with Store {
       await updateGasPrice();
       await estimateGas();
     });
+
+    reaction((_) => address, (String address) async {
+      if (address.contains(".")) {
+        resolvedAlias =
+            await AliasResolver.resolve(address, spendCurrency.symbol, "ETH");
+        if (resolvedAlias != null) {
+          getIt.get<BottomSheetService>().queueBottomSheet(
+                isModalDismissible: true,
+                widget: BottomSheetMessageDisplayWidget(
+                    title: S.current.alias_detected,
+                    message: resolvedAlias!.name.isNotEmpty
+                        ? "${resolvedAlias!.name}: ${resolvedAlias!.address}"
+                        : resolvedAlias!.address),
+              );
+        }
+      } else {
+        resolvedAlias = null;
+      }
+    });
   }
 
   @observable
@@ -29,6 +53,9 @@ abstract class SendViewModelBase with Store {
 
   @observable
   String address = '';
+
+  @observable
+  AliasRecord? resolvedAlias;
 
   @observable
   int _gasPrice = 0;
@@ -90,12 +117,6 @@ abstract class SendViewModelBase with Store {
 
   @action
   Future<void> createTransaction() async {
-    print(
-        RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false).hasMatch(address));
-
-
-
-    // ToDo: Check for valid Address
     final cryptoAmount = parseFixed(
         rawCryptoAmount.replaceAll(",", "."), spendCurrency.decimals);
 
@@ -105,12 +126,25 @@ abstract class SendViewModelBase with Store {
     final currentAddress = currentAccount.address;
     final client = appStore.getClient(spendCurrency.chainId);
 
-    // ToDo: Balance Check
     state = CreatingExecutionState();
+
+    final receiveAddress = resolvedAlias?.address ?? address;
+
+    if (!RegExp(r'^(0x)?[0-9a-f]{40}$', caseSensitive: false)
+        .hasMatch(receiveAddress)) {
+      state = FailureState(S.current.invalid_receive_address);
+      return;
+    }
+
+    if (BigInt.parse(balanceVM.balances[spendCurrency]?.balance ?? "0") <
+        cryptoAmount) {
+      state = FailureState(S.current.not_enough_token(spendCurrency.name));
+      return;
+    }
 
     final transaction = Transaction(
       from: currentAddress,
-      to: EthereumAddress.fromHex(address),
+      to: EthereumAddress.fromHex(receiveAddress),
       maxPriorityFeePerGas: spendCurrency.chainId == 1
           ? EtherAmount.fromInt(EtherUnit.gwei, priority.tip)
           : null,
