@@ -4,7 +4,9 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/asset/widgets/info_card.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
+import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
+import 'package:frankencoin_wallet/src/widgets/primary_fullwidth_button.dart';
 import 'package:intl/intl.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -102,6 +104,10 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
               ),
             ),
           ),
+        FullwidthButton(
+          label: S.of(context).stake,
+          onPressed: () => Navigator.of(context).pushNamed(Routes.pool),
+        ),
         const Padding(padding: EdgeInsets.all(10), child: Divider()),
         Text(
           S.of(context).market_stats,

@@ -54,6 +54,7 @@
     "sign_out": "Abmelden",
     "sign_out_confirmation": "Wenn Sie sich abmelden, ohne Ihre geheime 12-Wort-Phrase zu speichern, verlieren Sie den Zugriff auf Ihre Wallet\n\nMelden Sie sich nur ab, wenn Sie Ihre geheime 12-Wort-Phrase sicher gespeichert haben.",
     "sign_transaction": "Transaktion signieren",
+    "stake": "Staken",
     "successful_transaction": "Erfolgreiche Transaktion",
     "total_supply": "Im Umlauf",
     "transaction_id": "Transaktions-ID",

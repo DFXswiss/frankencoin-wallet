@@ -55,6 +55,7 @@
     "sign_out": "Sign out",
     "sign_out_confirmation": "If you sign out without saving your secret 12-word-phrase, you'll lose access to your wallet.\n\nOnly sign out if your secret 12-word-phrase is stored securely or backed up.",
     "sign_transaction": "Sign transaction",
+    "stake": "Stake",
     "successful_transaction": "Successful transaction",
     "total_supply": "Total supply",
     "transaction_id": "Transactions-id",

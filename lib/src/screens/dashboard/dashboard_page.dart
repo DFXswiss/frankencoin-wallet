@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
+import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/action_bar.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_section.dart';
-import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/bottom_sheet_listener.dart';
 
@@ -79,12 +78,19 @@ class DashboardPageState extends State<DashboardPage> {
                             child: Column(
                               children: <Widget>[
                                 BalanceCard(
+                                  balanceInfo: BalanceInfo(
+                                    chainId: 0,
+                                    contractAddress: "",
+                                    address: "",
+                                    balance:
+                                        widget.balanceVM.zchfBalance.toString(),
+                                  ),
+                                  cryptoCurrency: CryptoCurrency.zchf,
+                                ),
+                                BalanceCard(
                                   balanceInfo: widget
                                       .balanceVM.balances[CryptoCurrency.fps],
                                   cryptoCurrency: CryptoCurrency.fps,
-                                  actionLabel: S.of(context).invest,
-                                  action: () => Navigator.of(context)
-                                      .pushNamed(Routes.pool),
                                 ),
                                 BalanceCard(
                                   balanceInfo: widget
