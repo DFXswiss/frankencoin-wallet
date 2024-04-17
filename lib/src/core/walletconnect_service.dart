@@ -3,11 +3,13 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/wc_evm_chain_service.dart';
 import 'package:frankencoin_wallet/src/entites/blockchain.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
+import 'package:frankencoin_wallet/src/widgets/wallet_connect/session_proposal_modal.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/web3request_modal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
@@ -138,9 +140,16 @@ abstract class WalletConnectWalletServiceBase with Store {
 
   Future<void> _onSessionProposal(SessionProposalEvent? args) async {
     if (args != null) {
+      final metadata = args.params.proposer.metadata;
+      final namespace = args.params.requiredNamespaces['eip155'];
       final Widget modalWidget = Web3RequestModal(
-        child: Text("Session Poposal", style: TextStyle(color: Colors.white),),
-        // ToDo: (Konsti) More Insights
+        child: SessionProposalModal(
+          icon: metadata.icons.firstOrNull,
+          metadata: metadata,
+          chains: namespace?.chains,
+          methods: namespace?.methods ?? [],
+          events: namespace?.events ?? [],
+        ),
       );
       // show the bottom sheet
       final bool? isApproved = await _bottomSheetHandler.queueBottomSheet(
