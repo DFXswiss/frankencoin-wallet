@@ -75,8 +75,9 @@ class ActionBar extends StatelessWidget {
                         ),
                       Expanded(
                         child: VerticalIconButton(
-                          onPressed: () => Navigator.of(context)
-                              .pushNamed(Routes.send, arguments: [null, null]),
+                          onPressed: () => Navigator.of(context).pushNamed(
+                              Routes.send,
+                              arguments: [null, null, null]),
                           icon: const Icon(
                             Icons.arrow_upward,
                             color: FrankencoinColors.frRed,
@@ -123,11 +124,11 @@ class ActionBar extends StatelessWidget {
       getIt.get<WalletConnectWalletService>().pairWithUri(Uri.parse(result));
     } else if (result.startsWith("0x")) {
       await Navigator.of(context)
-          .pushNamed(Routes.send, arguments: [result, null]);
+          .pushNamed(Routes.send, arguments: [result, null, null]);
     } else {
       final uri = EthereumURI.fromString(result);
       await Navigator.of(context)
-          .pushNamed(Routes.send, arguments: [uri.address, uri.amount]);
+          .pushNamed(Routes.send, arguments: [uri.address, uri.amount, null]);
     }
   }
 }

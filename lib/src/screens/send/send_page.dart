@@ -22,7 +22,8 @@ import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
 class SendPage extends BasePage {
-  SendPage(this.sendVM, {super.key, this.initialAddress, this.initialAmount});
+  SendPage(this.sendVM,
+      {super.key, this.initialAddress, this.initialAmount, this.initialAsset});
 
   @override
   String? get title => S.current.send;
@@ -30,12 +31,14 @@ class SendPage extends BasePage {
   final SendViewModel sendVM;
   final String? initialAddress;
   final String? initialAmount;
+  final CryptoCurrency? initialAsset;
 
   @override
   Widget body(BuildContext context) => _SendPageBody(
         sendVM: sendVM,
         initialAddress: initialAddress,
         initialAmount: initialAmount,
+        initialAsset: initialAsset,
       );
 }
 
@@ -43,11 +46,13 @@ class _SendPageBody extends StatefulWidget {
   final SendViewModel sendVM;
   final String? initialAddress;
   final String? initialAmount;
+  final CryptoCurrency? initialAsset;
 
   const _SendPageBody({
     required this.sendVM,
     this.initialAddress,
     this.initialAmount,
+    this.initialAsset,
   });
 
   @override
@@ -65,6 +70,7 @@ class _SendPageBodyState extends State<_SendPageBody> {
 
     _addressController.text = widget.initialAddress ?? "";
     _cryptoAmountController.text = widget.initialAmount ?? "";
+    widget.sendVM.spendCurrency = widget.initialAsset ?? CryptoCurrency.zchf;
     widget.sendVM.syncFee();
   }
 

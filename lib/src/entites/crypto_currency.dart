@@ -12,8 +12,8 @@ enum CryptoCurrency {
   const CryptoCurrency(
       this.chainId, this.address, this.symbol, this.name, this.decimals);
 
-  static CryptoCurrency getFromAddress(String address) => CryptoCurrency.values
-      .firstWhere((e) => e.address.toLowerCase() == address.toLowerCase());
+  static CryptoCurrency? getFromAddress(String address) => CryptoCurrency.values
+      .where((e) => e.address.toLowerCase() == address.toLowerCase()).firstOrNull;
 
   static const erc20Tokens = [zchf, xchf, fps, maticZCHF];
 

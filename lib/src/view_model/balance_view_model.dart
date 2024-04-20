@@ -56,7 +56,7 @@ abstract class BalanceViewModelBase with Store {
     }
 
     for (final erc20Balance in erc20Balances) {
-      balances[CryptoCurrency.getFromAddress(erc20Balance.contractAddress)] =
+      balances[CryptoCurrency.getFromAddress(erc20Balance.contractAddress)!] =
           erc20Balance;
     }
   }

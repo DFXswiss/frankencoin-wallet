@@ -75,6 +75,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
                 getIt.get<SendViewModel>(),
                 initialAddress: arguments[0] as String?,
                 initialAmount: arguments[1] as String?,
+                initialAsset: arguments[2] as CryptoCurrency?,
               ));
 
     case Routes.settings:
