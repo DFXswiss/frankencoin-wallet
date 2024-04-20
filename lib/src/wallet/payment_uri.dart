@@ -42,11 +42,12 @@ class ERC681URI extends PaymentURI {
   final int chainId;
   final CryptoCurrency? asset;
 
-  ERC681URI(
-      {required this.chainId,
-      required super.address,
-      required super.amount,
-      this.asset});
+  ERC681URI({
+    required this.chainId,
+    required super.address,
+    required super.amount,
+    this.asset,
+  });
 
   factory ERC681URI.fromString(String uriString) {
     final uri = Uri.parse(uriString);

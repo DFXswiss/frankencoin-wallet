@@ -126,9 +126,9 @@ class ActionBar extends StatelessWidget {
       await Navigator.of(context)
           .pushNamed(Routes.send, arguments: [result, null, null]);
     } else {
-      final uri = EthereumURI.fromString(result);
-      await Navigator.of(context)
-          .pushNamed(Routes.send, arguments: [uri.address, uri.amount, null]);
+      final uri = ERC681URI.fromString(result);
+      await Navigator.of(context).pushNamed(Routes.send,
+          arguments: [uri.address, uri.amount, uri.asset]);
     }
   }
 }

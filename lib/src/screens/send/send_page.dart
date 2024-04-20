@@ -126,9 +126,11 @@ class _SendPageBodyState extends State<_SendPageBody> {
           ),
           suffix: Observer(builder: (_) {
             final rawBalanceAmount = EtherAmount.inWei(widget
-                    .sendVM.balanceVM.balances[widget.sendVM.spendCurrency]!
-                    .getBalance())
+                        .sendVM.balanceVM.balances[widget.sendVM.spendCurrency]
+                        ?.getBalance() ??
+                    BigInt.zero)
                 .getInWei;
+
             return CupertinoButton(
               onPressed: () => widget.sendVM.rawCryptoAmount = formatFixed(
                   rawBalanceAmount, widget.sendVM.spendCurrency.decimals),
@@ -290,9 +292,10 @@ class _SendPageBodyState extends State<_SendPageBody> {
     if (address.startsWith("0x")) {
       _addressController.text = address;
     } else {
-      final uri = EthereumURI.fromString(address);
+      final uri = ERC681URI.fromString(address);
       _addressController.text = uri.address;
       _cryptoAmountController.text = uri.amount;
+      widget.sendVM.spendCurrency = uri.asset ?? CryptoCurrency.zchf;
     }
   }
 }
