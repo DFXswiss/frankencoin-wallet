@@ -25,7 +25,7 @@ class DFXService {
 
   WalletAccount get wallet => appStore.wallet!.currentAccount;
 
-  String get title => 'DFX Connect';
+  String get title => 'DFX.swiss';
 
   String get walletAddress => wallet.primaryAddress.address.hexEip55;
 
