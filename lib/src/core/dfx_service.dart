@@ -31,6 +31,23 @@ class DFXService {
 
   String get assetOut => 'ZCHF'; // 'ETH';
 
+  List<String> supportedAssets = [
+    'ZCHF',
+    'ETH',
+    'Polygon/MATIC',
+    'FPS',
+    'WFPS',
+    'WBTC'
+  ];
+
+  List<String> supportedBlockchains = [
+    'Ethereum',
+    'Polygon',
+    'Base',
+    'Optimism',
+    'Arbitrum'
+  ];
+
   String get blockchain => 'Ethereum';
 
   Future<String> getSignMessage() async {
@@ -134,7 +151,9 @@ class DFXService {
         'lang': 'en',
         'asset-out': assetOut,
         'blockchain': blockchain,
-        'asset-in': 'EUR',
+        'asset-in': 'CHF',
+        'blockchains': supportedBlockchains.join(','),
+        'assets': supportedAssets.join(','),
       });
 
       _isLoading = false;

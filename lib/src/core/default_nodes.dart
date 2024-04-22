@@ -12,5 +12,23 @@ final defaultNodes = {
     name: 'Polygon',
     httpsUrl: 'https://polygon-bor-rpc.publicnode.com',
     wssUrl: null,
+  ),
+  8453: Node (
+    chainId: 8453,
+    name: 'Base',
+    httpsUrl: 'https://mainnet.base.org',
+    wssUrl: null,
+  ),
+  10: Node (
+    chainId: 10,
+    name: 'Optimism',
+    httpsUrl: 'https://mainnet.optimism.io',
+    wssUrl: null,
+  ),
+  42161: Node (
+    chainId: 42161,
+    name: 'Arbitrum One',
+    httpsUrl: 'https://arb1.arbitrum.io/rpc',
+    wssUrl: null,
   )
 };

@@ -2,7 +2,10 @@ import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 
 enum Blockchain {
   ethereum(1,  "Ethereum", "ETH", CryptoCurrency.eth),
-  polygon(137, "Polygon", "MATIC", CryptoCurrency.matic);
+  polygon(137, "Polygon", "MATIC", CryptoCurrency.matic),
+  base(8453, "Base", "ETH", CryptoCurrency.baseETH),
+  optimism(10, "Optimism", "ETH", CryptoCurrency.opETH),
+  arbitrum(42161, "Arbitrum One", "ETH", CryptoCurrency.arbETH);
 
   const Blockchain(this.chainId, this.name, this.nativeSymbol, this.nativeAsset);
 
