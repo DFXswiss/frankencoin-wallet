@@ -1,4 +1,4 @@
-package dev.konsti.frankencoin_wallet
+package swiss.dfx.frankencoin_wallet
 
 import io.flutter.embedding.android.FlutterActivity
 
