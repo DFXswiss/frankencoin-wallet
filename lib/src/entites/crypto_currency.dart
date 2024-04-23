@@ -41,7 +41,16 @@ enum CryptoCurrency {
     xchf,
   ];
 
-  static const spendCurrencies = [zchf, maticZCHF, fps, wbtc, eth, matic];
+  static const spendCurrencies = [
+    zchf,
+    maticZCHF,
+    baseZCHF,
+    opZCHF,
+    arbZCHF,
+    fps,
+    eth,
+    matic,
+  ];
 
   final int chainId;
   final String address;
