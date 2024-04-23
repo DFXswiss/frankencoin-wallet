@@ -29,5 +29,11 @@ String getChainAssetImagePath(int chainId) {
       return "assets/images/crypto/eth.png";
     case Blockchain.polygon:
       return "assets/images/crypto/matic.png";
+    case Blockchain.base:
+      return "assets/images/crypto/base.png";
+    case Blockchain.optimism:
+      return "assets/images/crypto/optimism.png";
+    case Blockchain.arbitrum:
+      return "assets/images/crypto/arbitrum.png";
   }
 }

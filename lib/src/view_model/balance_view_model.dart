@@ -34,6 +34,9 @@ abstract class BalanceViewModelBase with Store {
     var balance = balances[CryptoCurrency.zchf]?.getBalance() ?? BigInt.zero;
 
     balance += balances[CryptoCurrency.maticZCHF]?.getBalance() ?? BigInt.zero;
+    balance += balances[CryptoCurrency.baseZCHF]?.getBalance() ?? BigInt.zero;
+    balance += balances[CryptoCurrency.arbZCHF]?.getBalance() ?? BigInt.zero;
+    balance += balances[CryptoCurrency.opZCHF]?.getBalance() ?? BigInt.zero;
     return balance;
   }
 
@@ -109,6 +112,7 @@ abstract class BalanceViewModelBase with Store {
         address: EthereumAddress.fromHex(erc20Token.address),
         client: appStore.getClient(erc20Token.chainId),
       );
+      print(erc20Token);
       final balance = await erc20.balanceOf(address);
 
       balances.add(BalanceInfo(

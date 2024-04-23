@@ -89,11 +89,6 @@ class DashboardPageState extends State<DashboardPage> {
                                 ),
                                 BalanceCard(
                                   balanceInfo: widget
-                                      .balanceVM.balances[CryptoCurrency.fps],
-                                  cryptoCurrency: CryptoCurrency.fps,
-                                ),
-                                BalanceCard(
-                                  balanceInfo: widget
                                       .balanceVM.balances[CryptoCurrency.eth],
                                   cryptoCurrency: CryptoCurrency.eth,
                                 ),
@@ -111,6 +106,11 @@ class DashboardPageState extends State<DashboardPage> {
                                   balanceInfo: widget
                                       .balanceVM.balances[CryptoCurrency.lseth],
                                   cryptoCurrency: CryptoCurrency.lseth,
+                                ),
+                                BalanceCard(
+                                  balanceInfo: widget
+                                      .balanceVM.balances[CryptoCurrency.fps],
+                                  cryptoCurrency: CryptoCurrency.fps,
                                 ),
                                 const SizedBox(
                                   height: 110,
