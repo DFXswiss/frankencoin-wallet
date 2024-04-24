@@ -4,6 +4,7 @@ class Routes {
   static const qrScan = '/qr';
   static const assetDetails = '/dashboard/asset';
   static const receive = '/dashboard/receive';
+  static const receiveFrankencoinPay = '/dashboard/receive/frankencoin_pay';
   static const send = '/dashboard/send';
   static const settings = '/settings';
   static const settingsNodes = '/settings/nodes';

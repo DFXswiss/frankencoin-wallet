@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRAddressWidget extends StatelessWidget {
-  const QRAddressWidget({super.key, required this.address});
+  const QRAddressWidget({super.key, required this.address, required this.subtitle});
 
   final String address;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
-    final shortenedAddress =
-        "${address.substring(0, 7)}...${address.substring(address.length - 10)}";
+
 
     return Column(
       // mainAxisAlignment: MainAxisAlignment.center,
       children: [
         QrImageView(
-          data: EthereumURI(address: address, amount: "").toString(),
+          data: address,
           // errorCorrectionLevel: errorCorrectionLevel,
           size: 200,
           eyeStyle: const QrEyeStyle(color: Colors.white),
@@ -39,7 +38,8 @@ class QRAddressWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  shortenedAddress,
+                  subtitle,
+                  // shortenedAddress,
                   style: const TextStyle(
                     fontSize: 16.0,
                     fontFamily: 'Lato',

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
@@ -8,6 +9,7 @@ import 'package:frankencoin_wallet/src/screens/asset/fps_asset_details_page.dart
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
 import 'package:frankencoin_wallet/src/screens/pool/pool_page.dart';
+import 'package:frankencoin_wallet/src/screens/receive/frankencoin_pay_receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_from_seed_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_options_page.dart';
@@ -66,6 +68,11 @@ Route<dynamic> createRoute(RouteSettings settings) {
       return MaterialPageRoute<void>(
           builder: (_) =>
               ReceivePage(getIt.get<AppStore>().wallet!.currentAccount));
+
+    case Routes.receiveFrankencoinPay:
+      return MaterialPageRoute<void>(
+          builder: (_) => FrankencoinPayReceivePage(
+              frankencoinPayService: getIt.get<FrankencoinPayService>()));
 
     case Routes.send:
       final arguments = settings.arguments as List;

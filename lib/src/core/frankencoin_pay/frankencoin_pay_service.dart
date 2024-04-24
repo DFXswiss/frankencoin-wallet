@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:frankencoin_wallet/src/core/dfx_auth_service.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
@@ -36,6 +37,12 @@ class FrankencoinPayService extends DFXAuthService {
   bool get isSetup =>
       frankencoinPayStore.getLightningAddress(walletAddress) != null;
 
+  String get lightningAddress =>
+      frankencoinPayStore.getLightningAddress(walletAddress)!;
+
+  String get lightningAddressEncoded =>
+      encodeLNURL(_lightningAddressToUrl(lightningAddress));
+
   Future<void> setupProvider([String provider = defaultProvider]) async {
     if (!isSetup) {
       final lightningAddress = await _getLightningAddress();
@@ -50,7 +57,11 @@ class FrankencoinPayService extends DFXAuthService {
   }
 
   Future<String> getLightningInvoice(String amount) async {
-    final uri = Uri.https(baseUrl, signMessagePath, {'amount': '₣$amount'});
+    final addressParts =
+        frankencoinPayStore.getLightningAddress(walletAddress)!.split("@");
+
+    final uri = Uri.https(currentProvider,
+        '/.well-known/lnurlp/${addressParts.first}/cb', {'amount': '₣$amount'});
 
     final response =
         await http.get(uri, headers: {'accept': 'application/json'});
@@ -62,5 +73,11 @@ class FrankencoinPayService extends DFXAuthService {
       throw Exception(
           'Failed to get sign message. Status: ${response.statusCode} ${response.body}');
     }
+  }
+
+  String _lightningAddressToUrl(String lightningAddress) {
+    final addressParts =
+        frankencoinPayStore.getLightningAddress(walletAddress)!.split("@");
+    return 'https://${addressParts[1]}/.well-known/lnurlp/${addressParts[0]}';
   }
 }
