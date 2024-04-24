@@ -30,13 +30,21 @@ abstract class BalanceViewModelBase with Store {
   ObservableMap<CryptoCurrency, BalanceInfo> balances = ObservableMap();
 
   @computed
-  BigInt get zchfBalance {
-    var balance = balances[CryptoCurrency.zchf]?.getBalance() ?? BigInt.zero;
+  BigInt get zchfBalanceAggregated {
+    var balance = getBalance(CryptoCurrency.zchf);
 
-    balance += balances[CryptoCurrency.maticZCHF]?.getBalance() ?? BigInt.zero;
-    balance += balances[CryptoCurrency.baseZCHF]?.getBalance() ?? BigInt.zero;
-    balance += balances[CryptoCurrency.arbZCHF]?.getBalance() ?? BigInt.zero;
-    balance += balances[CryptoCurrency.opZCHF]?.getBalance() ?? BigInt.zero;
+    balance += getBalance(CryptoCurrency.maticZCHF);
+    balance += getBalance(CryptoCurrency.baseZCHF);
+    balance += getBalance(CryptoCurrency.arbZCHF);
+    balance += getBalance(CryptoCurrency.opZCHF);
+    return balance;
+  }
+
+  @computed
+  BigInt get fpsBalanceAggregated {
+    var balance = getBalance(CryptoCurrency.fps);
+    balance += getBalance(CryptoCurrency.wfps);
+    balance += getBalance(CryptoCurrency.maticWFPS);
     return balance;
   }
 
@@ -156,4 +164,7 @@ abstract class BalanceViewModelBase with Store {
       balance: balance,
     );
   }
+
+  BigInt getBalance(CryptoCurrency currency) =>
+      balances[currency]?.getBalance() ?? BigInt.zero;
 }

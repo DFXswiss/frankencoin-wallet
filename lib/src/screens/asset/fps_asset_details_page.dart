@@ -8,7 +8,6 @@ import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.da
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
-import 'package:frankencoin_wallet/src/widgets/primary_fullwidth_button.dart';
 import 'package:intl/intl.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -69,7 +68,7 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
                 padding: const EdgeInsets.only(left: 10),
                 child: Observer(
                   builder: (_) => Text(
-                    "${formatFixed(widget.assetVM.aggregatedFPSBalance, 18)} FPS",
+                    "${formatFixed(widget.assetVM.balanceVM.fpsBalanceAggregated, 18)} FPS",
                     style: const TextStyle(
                       fontSize: 25,
                       fontFamily: 'Lato',
@@ -107,16 +106,17 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
                 ),
               ),
             ),
-          if (widget.assetVM.fpsBalance != BigInt.zero)
-            Padding(
-              padding: EdgeInsets.zero,
-              child: BalanceCard(
-                balanceInfo:
-                    widget.assetVM.balanceVM.balances[CryptoCurrency.fps],
-                cryptoCurrency: CryptoCurrency.fps,
-                backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
-              ),
+          Padding(
+            padding: EdgeInsets.zero,
+            child: BalanceCard(
+              balanceInfo:
+                  widget.assetVM.balanceVM.balances[CryptoCurrency.fps],
+              cryptoCurrency: CryptoCurrency.fps,
+              backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+              actionLabel: S.of(context).trade,
+              action: () => Navigator.of(context).pushNamed(Routes.pool),
             ),
+          ),
           if (widget.assetVM.wfpsBalance != BigInt.zero)
             Padding(
               padding: EdgeInsets.zero,
@@ -136,10 +136,6 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
                   cryptoCurrency: CryptoCurrency.maticWFPS,
                   backgroundColor: const Color.fromRGBO(5, 8, 23, 1)),
             ),
-          FullwidthButton(
-            label: S.of(context).trade,
-            onPressed: () => Navigator.of(context).pushNamed(Routes.pool),
-          ),
           const Padding(padding: EdgeInsets.all(10), child: Divider()),
           Text(
             S.of(context).market_stats,

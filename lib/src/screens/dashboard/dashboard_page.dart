@@ -53,7 +53,7 @@ class DashboardPageState extends State<DashboardPage> {
                 builder: (_) => Column(
                   children: [
                     BalanceSection(
-                      balance: widget.balanceVM.zchfBalance,
+                      balance: widget.balanceVM.zchfBalanceAggregated,
                       cryptoCurrency: CryptoCurrency.zchf,
                     ),
                     Container(
@@ -83,7 +83,7 @@ class DashboardPageState extends State<DashboardPage> {
                                     contractAddress: "",
                                     address: "",
                                     balance:
-                                        widget.balanceVM.zchfBalance.toString(),
+                                        widget.balanceVM.zchfBalanceAggregated.toString(),
                                   ),
                                   cryptoCurrency: CryptoCurrency.zchf,
                                 ),
@@ -108,8 +108,13 @@ class DashboardPageState extends State<DashboardPage> {
                                   cryptoCurrency: CryptoCurrency.lseth,
                                 ),
                                 BalanceCard(
-                                  balanceInfo: widget
-                                      .balanceVM.balances[CryptoCurrency.fps],
+                                  balanceInfo: BalanceInfo(
+                                    chainId: 0,
+                                    contractAddress: "",
+                                    address: "",
+                                    balance:
+                                    widget.balanceVM.fpsBalanceAggregated.toString(),
+                                  ),
                                   cryptoCurrency: CryptoCurrency.fps,
                                 ),
                                 const SizedBox(
