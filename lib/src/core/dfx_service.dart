@@ -11,13 +11,14 @@ import 'package:url_launcher/url_launcher.dart';
 class DFXService extends DFXAuthService {
   final AppStore appStore;
 
-  static const _baseUrl = 'api.dfx.swiss';
-
-  DFXService(this.appStore): super(_baseUrl);
+  DFXService(this.appStore);
 
   bool _isLoading = false;
 
   String get title => 'DFX.swiss';
+
+  @override
+  String get baseUrl => 'api.dfx.swiss';
 
   @override
   WalletAccount get wallet => appStore.wallet!.currentAccount;

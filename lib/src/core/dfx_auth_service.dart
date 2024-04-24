@@ -6,19 +6,19 @@ import 'package:http/http.dart' as http;
 abstract class DFXAuthService {
   static const walletName = 'FrankencoinWallet';
 
-  final String baseUrl;
   final String signMessagePath = '/v1/auth/signMessage';
   final String authPath = '/v1/auth';
+
+  String get baseUrl;
 
   WalletAccount get wallet;
 
   String get walletAddress;
 
-  DFXAuthService(this.baseUrl);
-
   Future<String> getSignMessage() async {
     final uri = Uri.https(baseUrl, signMessagePath, {'address': walletAddress});
 
+    print(uri);
     final response =
         await http.get(uri, headers: {'accept': 'application/json'});
 
@@ -33,14 +33,20 @@ abstract class DFXAuthService {
 
   Future<String> getSignature(String message) => wallet.signMessage(message);
 
-  Future<Map<String, dynamic>> getAuthResponse() async {
+  Future<Map<String, dynamic>> getAuthResponse(
+      [bool sendWalletName = true]) async {
     final signMessage = await getSignature(await getSignMessage());
 
-    final requestBody = jsonEncode({
-      'wallet': walletName,
-      'address': walletAddress,
-      'signature': signMessage,
-    });
+    final requestBody = jsonEncode(sendWalletName
+        ? {
+            'wallet': walletName,
+            'address': walletAddress,
+            'signature': signMessage,
+          }
+        : {
+            'address': walletAddress,
+            'signature': signMessage,
+          });
 
     final uri = Uri.https(baseUrl, authPath);
     final response = await http.post(
