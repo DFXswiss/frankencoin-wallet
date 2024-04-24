@@ -24,7 +24,7 @@ class PoolPage extends BasePage {
   PoolPage(this.balanceVM, this.equityVM, {super.key});
 
   @override
-  String? get title => S.current.stake;
+  String? get title => S.current.trade;
 
   @override
   Widget body(BuildContext context) => _PoolPageBody(balanceVM, equityVM);

@@ -4,15 +4,22 @@ import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 String getCryptoAssetImagePath(CryptoCurrency cryptoCurrency) {
   switch (cryptoCurrency) {
     case CryptoCurrency.eth:
+    case CryptoCurrency.opETH:
+    case CryptoCurrency.arbETH:
       return "assets/images/crypto/eth.png";
     case CryptoCurrency.matic:
       return "assets/images/crypto/matic.png";
     case CryptoCurrency.xchf:
       return "assets/images/crypto/xchf.png";
-    case CryptoCurrency.maticZCHF:
     case CryptoCurrency.zchf:
+    case CryptoCurrency.maticZCHF:
+    case CryptoCurrency.baseZCHF:
+    case CryptoCurrency.opZCHF:
+    case CryptoCurrency.arbZCHF:
       return "assets/images/crypto/zchf.png";
     case CryptoCurrency.fps:
+    case CryptoCurrency.wfps:
+    case CryptoCurrency.maticWFPS:
       return "assets/images/crypto/fps.png";
     case CryptoCurrency.wbtc:
       return "assets/images/crypto/wbtc.png";

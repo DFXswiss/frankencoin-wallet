@@ -13,6 +13,7 @@ class BalanceCard extends StatelessWidget {
   final BalanceInfo? balanceInfo;
   final String? actionLabel;
   final void Function()? action;
+  final Color backgroundColor;
 
   const BalanceCard({
     super.key,
@@ -20,6 +21,7 @@ class BalanceCard extends StatelessWidget {
     required this.cryptoCurrency,
     this.actionLabel,
     this.action,
+    this.backgroundColor = const Color.fromRGBO(15, 23, 42, 1),
   });
 
   String get leadingImagePath => getCryptoAssetImagePath(cryptoCurrency);
@@ -33,7 +35,7 @@ class BalanceCard extends StatelessWidget {
         margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color.fromRGBO(15, 23, 42, 1.0),
+          color: backgroundColor,
         ),
         padding: const EdgeInsets.all(15),
         child: Column(
