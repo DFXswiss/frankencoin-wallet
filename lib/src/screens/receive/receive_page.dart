@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/dfx_service.dart';
+import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/widgets/qr_address_widget.dart';
 import 'package:frankencoin_wallet/src/screens/restore/widgets/option_card.dart';
@@ -29,6 +31,23 @@ class ReceivePage extends BasePage {
               QRAddressWidget(
                 address: EthereumURI(address: address, amount: '').toString(),
                 subtitle: shortenedAddress,
+              ),
+              OptionCard(
+                title: S.of(context).deposit_with_bank_transfer,
+                description:
+                    S.of(context).deposit_with_bank_transfer_description,
+                leadingIcon: Icons.money,
+                action: () => getIt
+                    .get<DFXService>()
+                    .launchProvider(context, true, "bank"),
+              ),
+              OptionCard(
+                title: S.of(context).deposit_with_card,
+                description: S.of(context).deposit_with_card_description,
+                leadingIcon: Icons.credit_card,
+                action: () => getIt
+                    .get<DFXService>()
+                    .launchProvider(context, true, "card"),
               ),
               if (_appStore.settingsStore.enableExperimentalFeatures)
                 OptionCard(

@@ -129,7 +129,6 @@ abstract class BalanceViewModelBase with Store {
         address: EthereumAddress.fromHex(erc20Token.address),
         client: appStore.getClient(erc20Token.chainId),
       );
-      print(erc20Token);
       final balance = await erc20.balanceOf(address);
 
       balances.add(BalanceInfo(

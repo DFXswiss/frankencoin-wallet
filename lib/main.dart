@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/default_nodes.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
@@ -64,7 +65,7 @@ class FankencoinApp extends StatelessWidget {
       return MaterialApp(
         title: 'Frankencoin Wallet',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: FrankencoinColors.frRed),
           useMaterial3: true,
         ),
         supportedLocales: S.delegate.supportedLocales,

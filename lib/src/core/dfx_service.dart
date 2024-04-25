@@ -27,7 +27,9 @@ class DFXService extends DFXAuthService {
   String get walletAddress => wallet.primaryAddress.address.hexEip55;
 
   String get assetIn => 'CHF';
+
   String get assetOut => 'ZCHF';
+
   String get langCode => appStore.settingsStore.language.code;
 
   List<String> supportedAssets = [
@@ -49,7 +51,8 @@ class DFXService extends DFXAuthService {
 
   String get blockchain => 'Ethereum';
 
-  Future<void> launchProvider(BuildContext context, bool? isBuyAction) async {
+  Future<void> launchProvider(BuildContext context, bool? isBuyAction,
+      [String? paymentMethod]) async {
     if (_isLoading) return;
 
     _isLoading = true;
@@ -68,6 +71,7 @@ class DFXService extends DFXAuthService {
         'asset-in': assetIn,
         'blockchains': supportedBlockchains.join(','),
         'assets': supportedAssets.join(','),
+        if (paymentMethod != null) 'payment-method': paymentMethod
       });
 
       _isLoading = false;
