@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
@@ -74,6 +75,7 @@ class _FrankencoinPayReceivePageBodyState
   }
 
   bool _effectsInstalled = false;
+  CancelableOperation? _completer;
 
   void _setEffects(BuildContext context) {
     if (_effectsInstalled) return;
@@ -83,6 +85,8 @@ class _FrankencoinPayReceivePageBodyState
 
       final amount = _cryptoAmountController.text;
 
+      await _completer?.cancel();
+
       if (amount.isEmpty) {
         setState(() {
           _isLoading = false;
@@ -91,12 +95,15 @@ class _FrankencoinPayReceivePageBodyState
         return;
       }
 
-      final newQRVal =
-          await widget.frankencoinPayService.getLightningInvoice(amount);
-      setState(() {
+      _completer = CancelableOperation.fromFuture(
+        widget.frankencoinPayService.getLightningInvoice(amount),
+        onCancel: () {},
+      );
+
+      _completer?.then((qrVal) => setState(() {
         _isLoading = false;
-        _qrValue = newQRVal;
-      });
+        _qrValue = qrVal;
+      }));
     });
 
     _effectsInstalled = true;
