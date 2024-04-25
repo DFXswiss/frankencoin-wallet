@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
-import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/action_bar.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
@@ -78,18 +77,13 @@ class DashboardPageState extends State<DashboardPage> {
                             child: Column(
                               children: <Widget>[
                                 BalanceCard(
-                                  balanceInfo: BalanceInfo(
-                                    chainId: 0,
-                                    contractAddress: "",
-                                    address: "",
-                                    balance:
-                                        widget.balanceVM.zchfBalanceAggregated.toString(),
-                                  ),
+                                  balance:
+                                      widget.balanceVM.zchfBalanceAggregated,
                                   cryptoCurrency: CryptoCurrency.zchf,
                                 ),
                                 BalanceCard(
-                                  balanceInfo: widget
-                                      .balanceVM.balances[CryptoCurrency.eth],
+                                  balance: widget.balanceVM
+                                      .getAggregatedBalance(CryptoCurrency.eth),
                                   cryptoCurrency: CryptoCurrency.eth,
                                 ),
                                 BalanceCard(
@@ -108,13 +102,8 @@ class DashboardPageState extends State<DashboardPage> {
                                   cryptoCurrency: CryptoCurrency.lseth,
                                 ),
                                 BalanceCard(
-                                  balanceInfo: BalanceInfo(
-                                    chainId: 0,
-                                    contractAddress: "",
-                                    address: "",
-                                    balance:
-                                    widget.balanceVM.fpsBalanceAggregated.toString(),
-                                  ),
+                                  balance:
+                                      widget.balanceVM.fpsBalanceAggregated,
                                   cryptoCurrency: CryptoCurrency.fps,
                                 ),
                                 const SizedBox(

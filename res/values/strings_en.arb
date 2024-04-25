@@ -4,6 +4,8 @@
     "are_you_sure": "Are you sure?",
     "back": "Back",
     "balance": "Balance",
+    "balance_total": "Total balance",
+    "blockchains": "Blockchains",
     "buy": "Buy",
     "danger_zone": "Danger Zone",
     "dfx_unavailable": "DFX unavailable",

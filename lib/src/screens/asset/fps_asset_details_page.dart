@@ -106,35 +106,27 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
                 ),
               ),
             ),
-          Padding(
-            padding: EdgeInsets.zero,
-            child: BalanceCard(
+          BalanceCard(
               balanceInfo:
                   widget.assetVM.balanceVM.balances[CryptoCurrency.fps],
               cryptoCurrency: CryptoCurrency.fps,
               backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
               actionLabel: S.of(context).trade,
               action: () => Navigator.of(context).pushNamed(Routes.pool),
+              navigateToDetails: false,
             ),
-          ),
+          // ToDo: (Konsti) Make dynamic using childCurrencies
           if (widget.assetVM.wfpsBalance != BigInt.zero)
-            Padding(
-              padding: EdgeInsets.zero,
-              child: BalanceCard(
-                balanceInfo:
-                    widget.assetVM.balanceVM.balances[CryptoCurrency.wfps],
+            BalanceCard(
+                balance: widget.assetVM.wfpsBalance,
                 cryptoCurrency: CryptoCurrency.wfps,
                 backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
               ),
-            ),
           if (widget.assetVM.maticWFPSBalance != BigInt.zero)
-            Padding(
-              padding: EdgeInsets.zero,
-              child: BalanceCard(
-                  balanceInfo: widget
-                      .assetVM.balanceVM.balances[CryptoCurrency.maticWFPS],
-                  cryptoCurrency: CryptoCurrency.maticWFPS,
-                  backgroundColor: const Color.fromRGBO(5, 8, 23, 1)),
+            BalanceCard(
+              balance: widget.assetVM.maticWFPSBalance,
+              cryptoCurrency: CryptoCurrency.maticWFPS,
+              backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
             ),
           const Padding(padding: EdgeInsets.all(10), child: Divider()),
           Text(

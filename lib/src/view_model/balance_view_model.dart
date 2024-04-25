@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:erc20/erc20.dart';
 import 'package:frankencoin_wallet/src/core/fiat_conversion_service.dart';
+import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/entites/blockchain.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
-import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/entites/fiat_conversion_rate.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/fast_hash.dart';
@@ -45,6 +45,15 @@ abstract class BalanceViewModelBase with Store {
     var balance = getBalance(CryptoCurrency.fps);
     balance += getBalance(CryptoCurrency.wfps);
     balance += getBalance(CryptoCurrency.maticWFPS);
+    return balance;
+  }
+
+  @computed
+  BigInt get ethBalanceAggregated {
+    var balance = getBalance(CryptoCurrency.eth);
+    balance += getBalance(CryptoCurrency.baseETH);
+    balance += getBalance(CryptoCurrency.opETH);
+    balance += getBalance(CryptoCurrency.arbETH);
     return balance;
   }
 
@@ -167,4 +176,17 @@ abstract class BalanceViewModelBase with Store {
 
   BigInt getBalance(CryptoCurrency currency) =>
       balances[currency]?.getBalance() ?? BigInt.zero;
+
+  BigInt getAggregatedBalance(CryptoCurrency parentCurrency) {
+    switch (parentCurrency) {
+      case CryptoCurrency.eth:
+        return ethBalanceAggregated;
+      case CryptoCurrency.zchf:
+        return zchfBalanceAggregated;
+      case CryptoCurrency.fps:
+        return fpsBalanceAggregated;
+      default:
+        return getBalance(parentCurrency);
+    }
+  }
 }
