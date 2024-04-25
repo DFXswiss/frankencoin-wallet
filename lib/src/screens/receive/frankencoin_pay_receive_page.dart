@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
@@ -11,7 +12,7 @@ class FrankencoinPayReceivePage extends BasePage {
   FrankencoinPayReceivePage({super.key, required this.frankencoinPayService});
 
   @override
-  String get title => "Frankencoin Pay";
+  String get title => S.current.frankencoin_pay;
 
   @override
   Widget body(BuildContext context) =>
@@ -50,9 +51,7 @@ class _FrankencoinPayReceivePageBodyState
             width: double.infinity,
           ),
           _isLoading
-              ? const CupertinoActivityIndicator(
-                  color: FrankencoinColors.frRed,
-                )
+              ? const CupertinoActivityIndicator(color: FrankencoinColors.frRed)
               : QRAddressWidget(
                   address: _qrValue,
                   subtitle: widget.frankencoinPayService.lightningAddress,
@@ -63,7 +62,7 @@ class _FrankencoinPayReceivePageBodyState
               controller: _cryptoAmountController,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: false),
-              placeholder: "Amount",
+              placeholder: S.of(context).amount,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r"[0-9]")),
               ],
@@ -80,10 +79,10 @@ class _FrankencoinPayReceivePageBodyState
     if (_effectsInstalled) return;
 
     _cryptoAmountController.addListener(() async {
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() => _isLoading = true);
+
       final amount = _cryptoAmountController.text;
+
       if (amount.isEmpty) {
         setState(() {
           _isLoading = false;

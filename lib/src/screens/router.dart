@@ -67,8 +67,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
     case Routes.receive:
       return MaterialPageRoute<void>(
-          builder: (_) =>
-              ReceivePage(getIt.get<AppStore>().wallet!.currentAccount));
+          builder: (_) => ReceivePage(getIt.get<AppStore>()));
 
     case Routes.receiveFrankencoinPay:
       return MaterialPageRoute<void>(

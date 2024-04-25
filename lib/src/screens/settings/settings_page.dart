@@ -69,6 +69,16 @@ class SettingsPage extends BasePage {
             name: S.of(context).show_seed,
             onTap: (_) => Navigator.of(context).pushNamed(Routes.settingsSeed),
           ),
+          Observer(
+            builder: (_) => OptionRow(
+              name: S.of(context).experimental_features,
+              suffix: settingsStore.enableExperimentalFeatures
+                  ? S.of(context).enabled
+                  : S.of(context).disabled,
+              onTap: (_) => settingsStore.enableExperimentalFeatures =
+                  !settingsStore.enableExperimentalFeatures,
+            ),
+          ),
           CupertinoButton(
             onPressed: () => _deleteWallet(context),
             child: Text(

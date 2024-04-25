@@ -11,18 +11,23 @@ part 'settings_store.g.dart';
 class SettingsStore = SettingsStoreBase with _$SettingsStore;
 
 abstract class SettingsStoreBase with Store {
-  SettingsStoreBase(
-    this._sharedPreferences,
-    this._isar, {
-    required Language initialLanguage,
-  }) {
+  SettingsStoreBase(this._sharedPreferences, this._isar,
+      {required Language initialLanguage,
+      required bool initialEnableExperimentalFeatures}) {
     language = initialLanguage;
+    enableExperimentalFeatures = initialEnableExperimentalFeatures;
     nodes = _isar.nodes.where().findAllSync();
 
     reaction(
         (_) => language,
         (Language language) => _sharedPreferences.setString(
             PreferencesKey.currentLanguageCode, language.code));
+
+    reaction(
+        (_) => enableExperimentalFeatures,
+        (bool enableExperimentalFeatures) => _sharedPreferences.setBool(
+            PreferencesKey.enableExperimentalFeatures,
+            enableExperimentalFeatures));
   }
 
   static SettingsStore load(SharedPreferences sharedPreferences, Isar isar) {
@@ -30,10 +35,15 @@ abstract class SettingsStoreBase with Store {
         sharedPreferences.getString(PreferencesKey.currentLanguageCode) ??
             "de");
 
+    final initialEnableExperimentalFeatures =
+        sharedPreferences.getBool(PreferencesKey.enableExperimentalFeatures) ??
+            false;
+
     return SettingsStore(
       sharedPreferences,
       isar,
       initialLanguage: initialLanguage,
+      initialEnableExperimentalFeatures: initialEnableExperimentalFeatures,
     );
   }
 
@@ -46,7 +56,11 @@ abstract class SettingsStoreBase with Store {
   @observable
   late List<Node> nodes;
 
-  Node getNode(int chainId) => _isar.nodes.getSync(chainId) ?? defaultNodes[chainId]!;
+  @observable
+  late bool enableExperimentalFeatures;
+
+  Node getNode(int chainId) =>
+      _isar.nodes.getSync(chainId) ?? defaultNodes[chainId]!;
 
   @action
   Future<void> updateNode(Node node) async {
