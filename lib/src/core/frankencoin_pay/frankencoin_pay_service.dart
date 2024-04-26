@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:frankencoin_wallet/src/core/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
@@ -48,6 +49,7 @@ class FrankencoinPayService extends DFXAuthService {
       final lightningAddress = await _getLightningAddress();
       await frankencoinPayStore.setLightningAddress(
           walletAddress, lightningAddress);
+      log('Set up Frankencoin Pay with $provider and got $lightningAddress');
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
@@ -52,7 +53,13 @@ class _FrankencoinPayReceivePageBodyState
             width: double.infinity,
           ),
           _isLoading
-              ? const CupertinoActivityIndicator(color: FrankencoinColors.frRed)
+              ? const SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: Center(
+                      child: CupertinoActivityIndicator(
+                          color: FrankencoinColors.frRed)),
+                )
               : QRAddressWidget(
                   address: _qrValue,
                   subtitle: widget.frankencoinPayService.lightningAddress,
@@ -62,11 +69,14 @@ class _FrankencoinPayReceivePageBodyState
             child: CupertinoTextField(
               controller: _cryptoAmountController,
               keyboardType:
-                  const TextInputType.numberWithOptions(decimal: false),
+                  const TextInputType.numberWithOptions(decimal: true),
               placeholder: S.of(context).amount,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r"[0-9]")),
+                FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}$")),
               ],
+              prefix: const Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Icon(Icons.currency_franc)),
             ),
           )
         ],
@@ -101,9 +111,9 @@ class _FrankencoinPayReceivePageBodyState
       );
 
       _completer?.then((qrVal) => setState(() {
-        _isLoading = false;
-        _qrValue = qrVal;
-      }));
+            _isLoading = false;
+            _qrValue = qrVal;
+          }));
     });
 
     _effectsInstalled = true;
