@@ -33,20 +33,20 @@ class DFXService extends DFXAuthService {
   String get langCode => appStore.settingsStore.language.code;
 
   List<String> supportedAssets = [
-    'ZCHF',
-    'ETH',
+    'Ethereum/ZCHF',
+    'Polygon/ZCHF',
+    'Base/ZCHF',
+    'Optimism/ZCHF',
+    'Optimism/ZCHF',
+    'Ethereum/ETH',
+    'Base/ETH',
+    'Optimism/ETH',
+    'Optimism/ETH',
     'Polygon/MATIC',
-    'FPS',
-    'WFPS',
-    'WBTC'
-  ];
-
-  List<String> supportedBlockchains = [
-    'Ethereum',
-    'Polygon',
-    'Base',
-    'Optimism',
-    'Arbitrum',
+    'Ethereum/FPS',
+    'Ethereum/WFPS',
+    'Polygon/WFPS',
+    'Ethereum/WBTC'
   ];
 
   String get blockchain => 'Ethereum';
@@ -69,7 +69,6 @@ class DFXService extends DFXAuthService {
         'asset-out': assetOut,
         'blockchain': blockchain,
         'asset-in': assetIn,
-        'blockchains': supportedBlockchains.join(','),
         'assets': supportedAssets.join(','),
         if (paymentMethod != null) 'payment-method': paymentMethod
       });
