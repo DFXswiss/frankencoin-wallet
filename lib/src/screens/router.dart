@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
+import 'package:frankencoin_wallet/src/entites/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/screens/address_book/add_contact_page.dart';
+import 'package:frankencoin_wallet/src/screens/address_book/address_book_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/fps_asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
@@ -24,6 +27,7 @@ import 'package:frankencoin_wallet/src/screens/web_view/web_view_page.dart';
 import 'package:frankencoin_wallet/src/screens/welcome/welcome_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
+import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
@@ -122,6 +126,17 @@ Route<dynamic> createRoute(RouteSettings settings) {
       final title = args.first as String;
       final url = args[1] as Uri;
       return CupertinoPageRoute<void>(builder: (_) => WebViewPage(title, url));
+
+    case Routes.addressBook:
+      final isSelector = settings.arguments as bool?;
+
+      return MaterialPageRoute<AddressBookEntry?>(
+          builder: (_) => AddressBookPage(getIt.get<AddressBookViewModel>(),
+              isSelector: isSelector ?? false));
+
+    case Routes.addressBookAdd:
+      return MaterialPageRoute<void>(
+          builder: (_) => AddContactPage(getIt.get<AddressBookViewModel>()));
 
     default:
       return MaterialPageRoute<void>(

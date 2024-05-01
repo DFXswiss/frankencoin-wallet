@@ -1,4 +1,6 @@
 class Routes {
+  static const addressBook = '/address_book';
+  static const addressBookAdd = '/address_book/add';
   static const dashboard = '/dashboard';
   static const pool = '/pool';
   static const qrScan = '/qr';

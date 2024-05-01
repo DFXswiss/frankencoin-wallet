@@ -5,6 +5,7 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/default_nodes.dart';
 import 'package:frankencoin_wallet/src/di.dart';
+import 'package:frankencoin_wallet/src/entites/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entites/balance_info.dart';
 import 'package:frankencoin_wallet/src/entites/node.dart';
 import 'package:frankencoin_wallet/src/screens/router.dart';
@@ -20,7 +21,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final dir = await getApplicationSupportDirectory();
-  final isar = await Isar.open([BalanceInfoSchema, NodeSchema],
+  final isar = await Isar.open(
+      [AddressBookEntrySchema, BalanceInfoSchema, NodeSchema],
       directory: dir.path, inspector: false);
   final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -57,8 +59,6 @@ class FankencoinApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-
     return Observer(builder: (_) {
       final language = getIt.get<SettingsStore>().language;
 

@@ -1,4 +1,6 @@
 {
+    "add_contact": "Kontakt hinzufügen",
+    "address": "Addresse",
     "alias_detected": "Alias gefunden",
     "amount": "Betrag",
     "are_you_sure": "Sind Sie sicher?",
@@ -12,6 +14,7 @@
     "connection_request": "Verbindungsanfrage",
     "confirm": "Bestätigen",
     "confirm_sending": "Senden bestätigen",
+    "contacts": "Kontakte",
     "copy_seed": "Seed kopieren",
     "create_wallet": "Wallet erstellen",
     "danger_zone": "Gefahrenzone",
@@ -35,6 +38,7 @@
     "frankencoin_pay": "Frankencoin Pay",
     "frankencoin_pay_description": "Lass dich in ZCHF über FrankencoinPay gebührenfrei und unkompliziert bezahlen.",
     "holding_duration": "FPS-Haltedauer",
+    "invalid_address": "Ungültige Addresse",
     "invalid_receive_address": "Ungültige Emfängeraddresse",
     "language_english": "Englisch",
     "language_german": "Deutsch",

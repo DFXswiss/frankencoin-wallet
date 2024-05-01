@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
+import 'package:frankencoin_wallet/src/entites/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entites/blockchain.dart';
 import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
+import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/currency_picker.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
@@ -94,21 +96,25 @@ class _SendPageBodyState extends State<_SendPageBody> {
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.deny(RegExp(r" ")),
           ],
-          suffix: Padding(
-              padding: const EdgeInsets.only(top: 2, bottom: 2),
+          suffix: SizedBox(
+            height: 55,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2, bottom: 2, right: 10),
               child: Row(
                 children: [
-                  IconButton(
-                    onPressed: _pasteText,
-                    icon: const Icon(Icons.paste),
-                  ),
                   if (DeviceInfo.instance.isMobile)
                     IconButton(
                       onPressed: () => _presentQRScanner(context),
                       icon: const Icon(Icons.qr_code),
                     ),
+                  IconButton(
+                    onPressed: _openAddressBook,
+                    icon: const Icon(CupertinoIcons.book),
+                  ),
                 ],
-              )),
+              ),
+            ),
+          ),
         ),
       ),
       Padding(
@@ -255,12 +261,11 @@ class _SendPageBodyState extends State<_SendPageBody> {
     _effectsInstalled = true;
   }
 
-  Future<void> _pasteText() async {
-    final value = await Clipboard.getData('text/plain');
+  Future<void> _openAddressBook() async {
+    final address = await Navigator.of(context)
+        .pushNamed(Routes.addressBook, arguments: true) as AddressBookEntry?;
 
-    if (value?.text?.isNotEmpty ?? false) {
-      _addressController.text = value!.text!;
-    }
+    if (address != null) _addressController.text = address.address;
   }
 
   void _presentPicker(BuildContext context) {

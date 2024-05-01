@@ -1,4 +1,6 @@
 {
+    "add_contact": "Add contact",
+    "address": "Address",
     "alias_detected": "Alias detected",
     "amount": "Amount",
     "are_you_sure": "Are you sure?",
@@ -15,6 +17,7 @@
     "confirm": "Confirm",
     "create_wallet": "Create Wallet",
     "confirm_sending": "Confirm sending",
+    "contacts": "Contacts",
     "copy_seed": "Copy seed",
     "days": "days",
     "deposit_with_bank_transfer": "Deposit CHF with bank transfer",
@@ -35,6 +38,7 @@
     "frankencoin_pay": "Frankencoin Pay",
     "frankencoin_pay_description": "Be paid in ZCHF via FrankencoinPay. Free of charge and uncomplicated.",
     "holding_duration": "FPS-Holding Duration",
+    "invalid_address": "Invalid address",
     "invalid_receive_address": "Invalid receiver-address",
     "language_english": "English",
     "language_german": "German",

@@ -45,6 +45,7 @@ dependencies:
   isar: *isar_version
   isar_flutter_libs: *isar_version # contains Isar Core
   intl: ^0.18.0
+  jazzicon: ^1.1.0
   mobx: ^2.3.0+1
   path_provider: ^2.1.0
   qr_code_scanner: ^1.0.1
