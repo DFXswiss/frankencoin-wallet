@@ -73,44 +73,50 @@ class DashboardPageState extends State<DashboardPage> {
                       child: Stack(
                         alignment: AlignmentDirectional.bottomCenter,
                         children: [
-                          SingleChildScrollView(
-                            child: Column(
-                              children: <Widget>[
-                                BalanceCard(
-                                  balance:
-                                      widget.balanceVM.zchfBalanceAggregated,
-                                  cryptoCurrency: CryptoCurrency.zchf,
+                          CustomScrollView(
+                            slivers: [
+                              SliverFillRemaining(
+                                hasScrollBody: false,
+                                child: Column(
+                                  children: <Widget>[
+                                    BalanceCard(
+                                      balance: widget
+                                          .balanceVM.zchfBalanceAggregated,
+                                      cryptoCurrency: CryptoCurrency.zchf,
+                                    ),
+                                    BalanceCard(
+                                      balance: widget.balanceVM
+                                          .getAggregatedBalance(
+                                              CryptoCurrency.eth),
+                                      cryptoCurrency: CryptoCurrency.eth,
+                                    ),
+                                    BalanceCard(
+                                      balanceInfo: widget.balanceVM
+                                          .balances[CryptoCurrency.matic],
+                                      cryptoCurrency: CryptoCurrency.matic,
+                                    ),
+                                    BalanceCard(
+                                      balanceInfo: widget.balanceVM
+                                          .balances[CryptoCurrency.wbtc],
+                                      cryptoCurrency: CryptoCurrency.wbtc,
+                                    ),
+                                    BalanceCard(
+                                      balanceInfo: widget.balanceVM
+                                          .balances[CryptoCurrency.lseth],
+                                      cryptoCurrency: CryptoCurrency.lseth,
+                                    ),
+                                    BalanceCard(
+                                      balance:
+                                          widget.balanceVM.fpsBalanceAggregated,
+                                      cryptoCurrency: CryptoCurrency.fps,
+                                    ),
+                                    const SizedBox(
+                                      height: 110,
+                                    )
+                                  ],
                                 ),
-                                BalanceCard(
-                                  balance: widget.balanceVM
-                                      .getAggregatedBalance(CryptoCurrency.eth),
-                                  cryptoCurrency: CryptoCurrency.eth,
-                                ),
-                                BalanceCard(
-                                  balanceInfo: widget
-                                      .balanceVM.balances[CryptoCurrency.matic],
-                                  cryptoCurrency: CryptoCurrency.matic,
-                                ),
-                                BalanceCard(
-                                  balanceInfo: widget
-                                      .balanceVM.balances[CryptoCurrency.wbtc],
-                                  cryptoCurrency: CryptoCurrency.wbtc,
-                                ),
-                                BalanceCard(
-                                  balanceInfo: widget
-                                      .balanceVM.balances[CryptoCurrency.lseth],
-                                  cryptoCurrency: CryptoCurrency.lseth,
-                                ),
-                                BalanceCard(
-                                  balance:
-                                      widget.balanceVM.fpsBalanceAggregated,
-                                  cryptoCurrency: CryptoCurrency.fps,
-                                ),
-                                const SizedBox(
-                                  height: 110,
-                                )
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           const ActionBar()
                         ],
