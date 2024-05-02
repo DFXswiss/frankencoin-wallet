@@ -37,17 +37,34 @@ class DFXService extends DFXAuthService {
     'Polygon/ZCHF',
     'Base/ZCHF',
     'Optimism/ZCHF',
-    'Optimism/ZCHF',
+    'Arbitrum/ZCHF',
     'Ethereum/ETH',
     'Base/ETH',
     'Optimism/ETH',
-    'Optimism/ETH',
+    'Arbitrum/ETH',
     'Polygon/MATIC',
     'Ethereum/FPS',
     'Ethereum/WFPS',
     'Polygon/WFPS',
     'Ethereum/WBTC'
   ];
+
+  // List<String> supportedAssets = [
+  //   'ZCHF',
+  //   'ETH',
+  //   'Polygon/MATIC',
+  //   'FPS',
+  //   'WFPS',
+  //   'WBTC'
+  // ];
+  //
+  // List<String> supportedBlockchains = [
+  //   'Ethereum',
+  //   'Polygon',
+  //   'Base',
+  //   'Optimism',
+  //   'Arbitrum',
+  // ];
 
   String get blockchain => 'Ethereum';
 
@@ -69,6 +86,7 @@ class DFXService extends DFXAuthService {
         'asset-out': assetOut,
         'blockchain': blockchain,
         'asset-in': assetIn,
+        // 'blockchains': supportedBlockchains.join(','),
         'assets': supportedAssets.join(','),
         if (paymentMethod != null) 'payment-method': paymentMethod
       });
