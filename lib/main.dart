@@ -18,22 +18,40 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  final dir = await getApplicationSupportDirectory();
-  final isar = await Isar.open(
-      [AddressBookEntrySchema, BalanceInfoSchema, NodeSchema],
-      directory: dir.path, inspector: false);
-  final sharedPreferences = await SharedPreferences.getInstance();
+    final dir = await getApplicationSupportDirectory();
+    final isar = await Isar.open(
+        [AddressBookEntrySchema, BalanceInfoSchema, NodeSchema],
+        directory: dir.path, inspector: false);
+    final sharedPreferences = await SharedPreferences.getInstance();
 
-  await setup(sharedPreferences, isar);
-  setupDependencyInjection(isar: isar, sharedPreferences: sharedPreferences);
+    await setup(sharedPreferences, isar);
+    setupDependencyInjection(isar: isar, sharedPreferences: sharedPreferences);
 
-  final walletCreated = getIt.get<WalletViewModel>().isCreated;
+    final walletCreated = getIt.get<WalletViewModel>().isCreated;
 
-  if (walletCreated) await loadCurrentWallet();
+    if (walletCreated) await loadCurrentWallet();
 
-  runApp(FankencoinApp(walletCreated: walletCreated));
+    runApp(FankencoinApp(walletCreated: walletCreated));
+  } catch (e) {
+    runApp(
+      MaterialApp(
+        debugShowCheckedModeBanner: true,
+        home: Scaffold(
+          body: Container(
+            margin:
+                const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
+            child: Text(
+              'Error:\n${e.toString()}',
+              style: const TextStyle(fontSize: 22),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 Future<void> setup(SharedPreferences sharedPreferences, Isar isar) async {
