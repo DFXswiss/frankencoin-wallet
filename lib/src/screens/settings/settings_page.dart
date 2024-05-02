@@ -40,14 +40,14 @@ class SettingsPage extends BasePage {
             ),
           ),
           OptionRow(
-            name: S.of(context).contacts,
-            onTap: (_) =>
-                Navigator.of(context).pushNamed(Routes.addressBook),
-          ),
-          OptionRow(
             name: "WalletConnect",
             onTap: (_) =>
                 Navigator.of(context).pushNamed(Routes.settingsWalletConnect),
+          ),
+          OptionRow(
+            name: S.of(context).contacts,
+            onTap: (_) =>
+                Navigator.of(context).pushNamed(Routes.addressBook),
           ),
           OptionRow(
             name: S.of(context).nodes,

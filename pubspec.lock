@@ -653,6 +653,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0+1"
+  jazzicon:
+    dependency: "direct main"
+    description:
+      name: jazzicon
+      sha256: c9aea664bef9164fc9a5bec4ad94c87e6bdb3556dcd9c97eb6ddca64b93ff009
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   js:
     dependency: transitive
     description:
