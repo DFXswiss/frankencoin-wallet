@@ -5,7 +5,7 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
-import 'package:frankencoin_wallet/src/entites/address_book_entry.dart';
+import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';

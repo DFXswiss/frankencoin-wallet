@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:erc20/erc20.dart';
 import 'package:frankencoin_wallet/src/core/fiat_conversion_service.dart';
-import 'package:frankencoin_wallet/src/entites/balance_info.dart';
-import 'package:frankencoin_wallet/src/entites/blockchain.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
-import 'package:frankencoin_wallet/src/entites/fiat_conversion_rate.dart';
+import 'package:frankencoin_wallet/src/entities/balance_info.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/fiat_conversion_rate.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/fast_hash.dart';
 import 'package:isar/isar.dart';

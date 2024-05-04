@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
-import 'package:frankencoin_wallet/src/entites/address_book_entry.dart';
-import 'package:frankencoin_wallet/src/entites/blockchain.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
@@ -16,6 +16,7 @@ import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
+import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
@@ -272,12 +273,14 @@ class _SendPageBodyState extends State<_SendPageBody> {
     showDialog<void>(
       context: context,
       builder: (_) => Observer(
-        builder: (_) => CurrencyPicker(
-          availableCurrencies: CryptoCurrency.spendCurrencies,
-          selectedCurrency: widget.sendVM.spendCurrency,
-          onSelect: (CryptoCurrency cryptoCurrency) {
-            widget.sendVM.spendCurrency = cryptoCurrency;
-          },
+        builder: (_) => AlertBackground(
+          child: CurrencyPicker(
+            availableCurrencies: CryptoCurrency.spendCurrencies,
+            selectedCurrency: widget.sendVM.spendCurrency,
+            onSelect: (CryptoCurrency cryptoCurrency) {
+              widget.sendVM.spendCurrency = cryptoCurrency;
+            },
+          ),
         ),
       ),
     );

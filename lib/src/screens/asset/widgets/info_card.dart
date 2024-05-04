@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/core/asset_logo.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 
 class InfoCard extends StatelessWidget {
   final String label;

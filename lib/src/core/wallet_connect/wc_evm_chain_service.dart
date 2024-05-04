@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/wc_ethereum_transaction_model.dart';
-import 'package:frankencoin_wallet/src/entites/blockchain.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/web3request_modal.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 
 void main() {

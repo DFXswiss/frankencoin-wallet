@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
-import 'package:frankencoin_wallet/src/entites/node.dart';
+import 'package:frankencoin_wallet/src/entities/node.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 

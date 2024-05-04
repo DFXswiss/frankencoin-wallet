@@ -1,5 +1,5 @@
-import 'package:frankencoin_wallet/src/entites/blockchain.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 
 String getCryptoAssetImagePath(CryptoCurrency cryptoCurrency) {
   switch (cryptoCurrency) {

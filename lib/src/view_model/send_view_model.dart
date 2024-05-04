@@ -5,7 +5,7 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/alias_resolver/alias_resolver.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';

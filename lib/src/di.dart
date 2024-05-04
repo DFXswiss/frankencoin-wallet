@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frankencoin_wallet/src/core/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
+import 'package:frankencoin_wallet/src/core/swap_service.dart';
 import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/stores/address_book_store.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
@@ -32,6 +33,7 @@ void setupDependencyInjection(
   getIt.registerSingleton(FrankencoinPayStore(sharedPreferences));
   getIt.registerSingleton(AddressBookStore(getIt.get<Isar>()));
   getIt.registerSingleton(DFXService(getIt.get<AppStore>()));
+  getIt.registerSingleton(SwapService(getIt.get<AppStore>()));
 
   getIt.registerSingleton(WalletConnectWalletService(
       getIt.get<BottomSheetService>(), getIt.get<AppStore>()));
@@ -44,8 +46,10 @@ void setupDependencyInjection(
       WalletViewModel(getIt.get<AppStore>(), getIt.get<SharedPreferences>()));
   getIt.registerFactory<SendViewModel>(() =>
       SendViewModel(getIt.get<BalanceViewModel>(), getIt.get<AppStore>()));
-  getIt.registerFactory<EquityViewModel>(
-      () => EquityViewModel(getIt.get<AppStore>(), getIt.get<SendViewModel>()));
+  getIt.registerFactory<EquityViewModel>(() => EquityViewModel(
+      getIt.get<AppStore>(),
+      getIt.get<SendViewModel>(),
+      getIt.get<SwapService>()));
   getIt.registerFactory<FPSAssetViewModel>(() =>
       FPSAssetViewModel(getIt.get<AppStore>(), getIt.get<BalanceViewModel>()));
   getIt.registerFactory<AddressBookViewModel>(

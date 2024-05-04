@@ -1,7 +1,7 @@
 import 'package:frankencoin_wallet/src/core/default_nodes.dart';
-import 'package:frankencoin_wallet/src/entites/language.dart';
-import 'package:frankencoin_wallet/src/entites/node.dart';
-import 'package:frankencoin_wallet/src/entites/preferences_key.dart';
+import 'package:frankencoin_wallet/src/entities/language.dart';
+import 'package:frankencoin_wallet/src/entities/node.dart';
+import 'package:frankencoin_wallet/src/entities/preferences_key.dart';
 import 'package:isar/isar.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';

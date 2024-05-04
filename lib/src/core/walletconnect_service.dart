@@ -3,10 +3,9 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/wc_evm_chain_service.dart';
-import 'package:frankencoin_wallet/src/entites/blockchain.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/session_proposal_modal.dart';

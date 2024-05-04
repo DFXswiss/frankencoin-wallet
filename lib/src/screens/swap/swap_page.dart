@@ -4,48 +4,43 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/asset_logo.dart';
-import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
-import 'package:frankencoin_wallet/src/di.dart';
-import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
-import 'package:frankencoin_wallet/src/screens/send/widgets/currency_picker.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
-import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
-import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
-import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
+import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
-class PoolPage extends BasePage {
+class SwapPage extends BasePage {
   final BalanceViewModel balanceVM;
   final EquityViewModel equityVM;
 
-  PoolPage(this.balanceVM, this.equityVM, {super.key});
+  SwapPage(this.balanceVM, this.equityVM, {super.key});
 
   @override
   String? get title => S.current.trade;
 
   @override
-  Widget body(BuildContext context) => _PoolPageBody(balanceVM, equityVM);
+  Widget body(BuildContext context) => _SwapPageBody(balanceVM, equityVM);
 }
 
-class _PoolPageBody extends StatefulWidget {
+class _SwapPageBody extends StatefulWidget {
   final BalanceViewModel balanceVM;
   final EquityViewModel equityVM;
-  final BottomSheetService bottomSheetService = getIt.get<BottomSheetService>();
 
-  _PoolPageBody(this.balanceVM, this.equityVM);
+  const _SwapPageBody(this.balanceVM, this.equityVM);
 
   @override
-  State<StatefulWidget> createState() => _PoolPageBodyState();
+  State<StatefulWidget> createState() => _SwapPageBodyState();
 }
 
-class _PoolPageBodyState extends State<_PoolPageBody> {
+class _SwapPageBodyState extends State<_SwapPageBody> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _receiveController = TextEditingController();
 
@@ -69,19 +64,14 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
       children: [
         Padding(
           padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
+              const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
           child: CupertinoTextField(
             prefix: Padding(
               padding: const EdgeInsets.all(5),
-              child: InkWell(
-                enableFeedback: false,
-                onTap: () => _presentPicker(context, true),
-                child: Observer(
-                  builder: (_) =>
-                      Image.asset(
-                        getCryptoAssetImagePath(widget.equityVM.sendCurrency),
-                        width: 42,
-                      ),
+              child: Observer(
+                builder: (_) => Image.asset(
+                  getCryptoAssetImagePath(widget.equityVM.sendCurrency),
+                  width: 42,
                 ),
               ),
             ),
@@ -89,19 +79,16 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             controller: _amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             suffix: Observer(builder: (_) {
-              final rawBalanceAmount = EtherAmount
-                  .inWei(widget
+              final rawBalanceAmount = EtherAmount.inWei(widget
                   .balanceVM.balances[widget.equityVM.sendCurrency]!
                   .getBalance())
                   .getInWei;
               return CupertinoButton(
-                onPressed: () =>
-                _amountController.text = formatFixed(
+                onPressed: () => _amountController.text = formatFixed(
                     rawBalanceAmount, widget.equityVM.sendCurrency.decimals),
                 child: Text(
                   formatFixed(
-                      rawBalanceAmount, widget.equityVM.sendCurrency.decimals,
-                      fractionalDigits: 3, trimZeros: false),
+                      rawBalanceAmount, widget.equityVM.sendCurrency.decimals, fractionalDigits: 3, trimZeros: false),
                 ),
               );
             }),
@@ -109,7 +96,7 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
         ),
         IconButton(
             onPressed: () {
-              widget.equityVM.switchCurrencies();
+              widget.equityVM.sendCurrency = widget.equityVM.receiveCurrency;
               _amountController.text = "";
             },
             iconSize: 25,
@@ -119,58 +106,48 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             )),
         Padding(
           padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
+              const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
           child: CupertinoTextField(
-            readOnly: true,
             prefix: Padding(
               padding: const EdgeInsets.all(5),
-              child: InkWell(
-                enableFeedback: false,
-                onTap: () => _presentPicker(context, false),
-                child: Observer(
-                  builder: (_) =>
-                      Image.asset(
-                        getCryptoAssetImagePath(
-                            widget.equityVM.receiveCurrency),
-                        width: 42,
-                      ),
+              child: Observer(
+                builder: (_) => Image.asset(
+                  getCryptoAssetImagePath(widget.equityVM.receiveCurrency),
+                  width: 42,
                 ),
               ),
             ),
             placeholder: "0.0000",
             controller: _receiveController,
+            enabled: false,
           ),
         ),
         Observer(
-          builder: (_) =>
-              Padding(
-                padding: const EdgeInsets.only(left: 26, right: 26),
-                child: EstimatedTxFee(
-                  estimatedFee: EtherAmount.inWei(
+          builder: (_) => Padding(
+            padding: const EdgeInsets.only(left: 26, right: 26),
+            child: EstimatedTxFee(
+              estimatedFee: EtherAmount.inWei(
                       BigInt.from(widget.equityVM.sendVM.estimatedFee))
-                      .getValueInUnit(EtherUnit.ether),
-                  nativeSymbol: "ETH",
-                ),
-              ),
+                  .getValueInUnit(EtherUnit.ether),
+              nativeSymbol: "ETH",
+            ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10),
           child: Observer(
-            builder: (_) =>
-                CupertinoButton(
-                  onPressed: widget.equityVM.isReadyToCreate
-                      ? widget.equityVM.createTradeTransaction
-                      : null,
-                  color: FrankencoinColors.frRed,
-                  child: widget.equityVM.state is InitialExecutionState
-                      ? Text(
-                    S
-                        .of(context)
-                        .send,
-                    style: const TextStyle(fontSize: 16),
-                  )
-                      : const CupertinoActivityIndicator(),
-                ),
+            builder: (_) => CupertinoButton(
+              onPressed: widget.equityVM.isReadyToCreate
+                  ? widget.equityVM.createTradeTransaction
+                  : null,
+              color: FrankencoinColors.frRed,
+              child: widget.equityVM.state is InitialExecutionState
+                  ? Text(
+                      S.of(context).send,
+                      style: const TextStyle(fontSize: 16),
+                    )
+                  : const CupertinoActivityIndicator(),
+            ),
           ),
         ),
       ],
@@ -213,20 +190,18 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
         final amount = EtherAmount.inWei(widget.equityVM.investAmount)
             .getValueInUnit(EtherUnit.ether);
         final estimatedFee =
-        EtherAmount.inWei(BigInt.from(widget.equityVM.sendVM.estimatedFee))
-            .getValueInUnit(EtherUnit.ether);
+            EtherAmount.inWei(BigInt.from(widget.equityVM.sendVM.estimatedFee))
+                .getValueInUnit(EtherUnit.ether);
 
         showDialog<void>(
           context: context,
-          builder: (BuildContext context) =>
-              ConfirmationAlert(
-                amount: amount.toString(),
-                estimatedFee: estimatedFee.toString(),
-                spendCurrency: widget.equityVM.sendCurrency,
-                onConfirm: () => widget.equityVM.commitTransaction(),
-                onDecline: () =>
-                widget.equityVM.state = InitialExecutionState(),
-              ),
+          builder: (BuildContext context) => ConfirmationAlert(
+            amount: amount.toString(),
+            estimatedFee: estimatedFee.toString(),
+            spendCurrency: widget.equityVM.sendCurrency,
+            onConfirm: () => widget.equityVM.commitTransaction(),
+            onDecline: () => widget.equityVM.state = InitialExecutionState(),
+          ),
         );
       }
 
@@ -235,11 +210,10 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
 
         showDialog<void>(
           context: context,
-          builder: (_) =>
-              SuccessfulTxDialog(
-                txId: txId,
-                onConfirm: () {},
-              ),
+          builder: (_) => SuccessfulTxDialog(
+            txId: txId,
+            onConfirm: () {},
+          ),
         );
       }
 
@@ -251,33 +225,5 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
       }
     });
     _effectsInstalled = true;
-  }
-
-  Future<void> _presentPicker(BuildContext context, bool isSend) async {
-    final selected = await widget.bottomSheetService.queueBottomSheet(
-      isModalDismissible: true,
-      widget: SingleChildScrollView(
-        child: CurrencyPicker(
-          availableCurrencies: widget.equityVM.swapService.swappableAssets,
-          selectedCurrency: isSend
-              ? widget.equityVM.sendCurrency
-              : widget.equityVM.receiveCurrency,
-          onSelect: null,
-          textColor: Colors.white,
-        ),
-      ),
-    ) as CryptoCurrency?;
-
-
-    if (selected != null) {
-      if ((!isSend ? widget.equityVM.sendCurrency : widget.equityVM
-          .receiveCurrency) == selected) {
-        widget.equityVM.switchCurrencies();
-      } else if (isSend) {
-        widget.equityVM.sendCurrency = selected;
-      } else {
-        widget.equityVM.receiveCurrency = selected;
-      }
-    }
   }
 }
