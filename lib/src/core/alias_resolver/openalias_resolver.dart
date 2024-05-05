@@ -26,8 +26,9 @@ class OpenAliasResolver extends AliasResolver {
 
   Future<List<RRecord>?> lookupOpenAliasRecord(String name) async {
     try {
-      final txtRecord =
-          await DnsUtils.lookupRecord(name, RRecordType.TXT, dnssec: true);
+      final txtRecord = await DnsUtils.lookupRecord(
+          name.replaceAll("@", "."), RRecordType.TXT,
+          dnssec: true);
 
       return txtRecord;
     } catch (e) {
