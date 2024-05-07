@@ -262,12 +262,10 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
           selectedCurrency: isSend
               ? widget.equityVM.sendCurrency
               : widget.equityVM.receiveCurrency,
-          onSelect: null,
           textColor: Colors.white,
         ),
       ),
     ) as CryptoCurrency?;
-
 
     if (selected != null) {
       if ((!isSend ? widget.equityVM.sendCurrency : widget.equityVM

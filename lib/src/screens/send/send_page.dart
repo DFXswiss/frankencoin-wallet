@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
+import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
@@ -16,7 +17,6 @@ import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
-import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
@@ -25,13 +25,14 @@ import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
 class SendPage extends BasePage {
-  SendPage(this.sendVM,
+  SendPage(this.sendVM, this.bottomSheetService,
       {super.key, this.initialAddress, this.initialAmount, this.initialAsset});
 
   @override
   String? get title => S.current.send;
 
   final SendViewModel sendVM;
+  final BottomSheetService bottomSheetService;
   final String? initialAddress;
   final String? initialAmount;
   final CryptoCurrency? initialAsset;
@@ -39,6 +40,7 @@ class SendPage extends BasePage {
   @override
   Widget body(BuildContext context) => _SendPageBody(
         sendVM: sendVM,
+        bottomSheetService: bottomSheetService,
         initialAddress: initialAddress,
         initialAmount: initialAmount,
         initialAsset: initialAsset,
@@ -50,9 +52,11 @@ class _SendPageBody extends StatefulWidget {
   final String? initialAddress;
   final String? initialAmount;
   final CryptoCurrency? initialAsset;
+  final BottomSheetService bottomSheetService;
 
   const _SendPageBody({
     required this.sendVM,
+    required this.bottomSheetService,
     this.initialAddress,
     this.initialAmount,
     this.initialAsset,
@@ -269,21 +273,26 @@ class _SendPageBodyState extends State<_SendPageBody> {
     if (address != null) _addressController.text = address.address;
   }
 
-  void _presentPicker(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (_) => Observer(
-        builder: (_) => AlertBackground(
-          child: CurrencyPicker(
-            availableCurrencies: CryptoCurrency.spendCurrencies,
-            selectedCurrency: widget.sendVM.spendCurrency,
-            onSelect: (CryptoCurrency cryptoCurrency) {
-              widget.sendVM.spendCurrency = cryptoCurrency;
-            },
-          ),
+  Future<void> _presentPicker(BuildContext context) async {
+    final selected = await widget.bottomSheetService.queueBottomSheet(
+      isModalDismissible: true,
+      widget: Expanded(
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: CurrencyPicker(
+                availableCurrencies: CryptoCurrency.spendCurrencies,
+                selectedCurrency: widget.sendVM.spendCurrency,
+                textColor: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
-    );
+    ) as CryptoCurrency?;
+
+    if (selected != null) widget.sendVM.spendCurrency = selected;
   }
 
   Future<void> _presentQRScanner(BuildContext context) async {

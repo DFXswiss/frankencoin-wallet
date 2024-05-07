@@ -13,7 +13,7 @@ class CurrencyPicker extends StatelessWidget {
     super.key,
     required this.availableCurrencies,
     required this.selectedCurrency,
-    required this.onSelect,
+    this.onSelect,
     this.textColor,
   });
 
