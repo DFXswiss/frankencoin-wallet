@@ -15,9 +15,12 @@ class SwapService {
 
   final List<CryptoCurrency> swappableAssets = [
     CryptoCurrency.zchf,
+    CryptoCurrency.maticZCHF,
+    CryptoCurrency.baseZCHF,
+    CryptoCurrency.opZCHF,
+    CryptoCurrency.arbZCHF,
     CryptoCurrency.fps,
     CryptoCurrency.wfps,
-    CryptoCurrency.baseETH,
   ];
 
   /// Get the correct initialized [SwapRoute] for the selected pair
@@ -29,7 +32,6 @@ class SwapService {
             route.receiveCurrency == receiveCurrency)
         .firstOrNull;
 
-    print(result);
     if (result == null) {
       return DFX_SwapRoute(spendCurrency, receiveCurrency, dfxSwapService);
     }

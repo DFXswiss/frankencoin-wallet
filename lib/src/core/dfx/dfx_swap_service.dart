@@ -55,7 +55,6 @@ class DFXSwapService extends DFXAuthService {
     );
 
     if (response.statusCode == 200) {
-      print(jsonDecode(response.body));
       return DFXSwapPaymentInfosData.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Status: ${response.statusCode} ${response.body}');
