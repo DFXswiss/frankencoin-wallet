@@ -13,6 +13,17 @@ class SwapService {
     }
   }
 
+  static String getSwapProviderImage(SwapRouteProvider provider) {
+    switch (provider) {
+      case SwapRouteProvider.fpsContract:
+        return "assets/images/frankencoin_wallet.png";
+      case SwapRouteProvider.wfpsContract:
+        return "assets/images/frankencoin_wallet.png";
+      case SwapRouteProvider.dfx:
+        return "assets/images/dfx_logo_small.png";
+    }
+  }
+
   final List<CryptoCurrency> swappableAssets = [
     CryptoCurrency.zchf,
     CryptoCurrency.maticZCHF,

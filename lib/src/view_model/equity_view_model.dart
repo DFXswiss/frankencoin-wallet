@@ -17,7 +17,12 @@ abstract class EquityViewModelBase with Store {
   final SendViewModel sendVM;
   final SwapService swapService;
 
-  EquityViewModelBase(this.appStore, this.sendVM, this.swapService);
+  EquityViewModelBase(this.appStore, this.sendVM, this.swapService) {
+    reaction((_) => sendCurrency,
+        (_) => swapRoute = swapService.getRoute(sendCurrency, receiveCurrency));
+    reaction((_) => receiveCurrency,
+        (_) => swapRoute = swapService.getRoute(sendCurrency, receiveCurrency));
+  }
 
   @observable
   BigInt investAmount = BigInt.zero;
@@ -53,8 +58,6 @@ abstract class EquityViewModelBase with Store {
 
     sendCurrency = receiveCurrency;
     receiveCurrency = newReceiveCurrency;
-
-    swapRoute = swapService.getRoute(sendCurrency, receiveCurrency);
   }
 
   Future<String> Function()? _sendTransaction;

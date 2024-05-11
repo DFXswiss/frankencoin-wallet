@@ -8,7 +8,8 @@ import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:web3dart/web3dart.dart';
 
 enum SwapRouteProvider {
-  contract,
+  fpsContract,
+  wfpsContract,
   dfx;
 }
 
@@ -44,7 +45,7 @@ class ZCHF_FPS_SwapRoute extends SwapRoute {
       : super(
           CryptoCurrency.zchf,
           CryptoCurrency.fps,
-          SwapRouteProvider.contract,
+          SwapRouteProvider.fpsContract,
         );
 
   @override
@@ -71,7 +72,7 @@ class FPS_ZCHF_SwapRoute extends SwapRoute {
       : super(
           CryptoCurrency.fps,
           CryptoCurrency.zchf,
-          SwapRouteProvider.contract,
+          SwapRouteProvider.fpsContract,
         );
 
   @override
@@ -105,7 +106,7 @@ class FPS_WFPS_SwapRoute extends SwapRoute {
       : super(
           CryptoCurrency.fps,
           CryptoCurrency.wfps,
-          SwapRouteProvider.contract,
+          SwapRouteProvider.wfpsContract,
         );
 
   @override
@@ -133,7 +134,7 @@ class WFPS_FPS_SwapRoute extends SwapRoute {
       : super(
           CryptoCurrency.wfps,
           CryptoCurrency.fps,
-          SwapRouteProvider.contract,
+          SwapRouteProvider.wfpsContract,
         );
 
   @override

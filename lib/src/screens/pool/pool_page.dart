@@ -19,6 +19,7 @@ import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
+import 'package:frankencoin_wallet/src/widgets/swap_route_infos.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -147,6 +148,14 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
               nativeSymbol: Blockchain.getFromChainId(
                       widget.equityVM.sendCurrency.chainId)
                   .nativeSymbol,
+            ),
+          ),
+        ),
+        Observer(
+          builder: (_) => Padding(
+            padding: const EdgeInsets.only(left: 26, right: 26),
+            child: SwapRouteInfos(
+              swapRoute: widget.equityVM.swapRoute,
             ),
           ),
         ),
