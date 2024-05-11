@@ -26,6 +26,9 @@ abstract class AppStoreBase with Store {
   @observable
   Wallet? wallet;
 
+  @observable
+  String? dfxAuthToken;
+
   @action
   Future<void> changeCurrentWallet(wallet) async {}
 

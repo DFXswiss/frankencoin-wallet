@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/swap_routes.dart';
 import 'package:frankencoin_wallet/src/core/swap_service.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
@@ -31,6 +32,9 @@ abstract class EquityViewModelBase with Store {
   CryptoCurrency receiveCurrency = CryptoCurrency.fps;
 
   @observable
+  SwapRoute swapRoute = ZCHF_FPS_SwapRoute();
+
+  @observable
   ExecutionState state = InitialExecutionState();
 
   @computed
@@ -49,6 +53,8 @@ abstract class EquityViewModelBase with Store {
 
     sendCurrency = receiveCurrency;
     receiveCurrency = newReceiveCurrency;
+
+    swapRoute = swapService.getRoute(sendCurrency, receiveCurrency);
   }
 
   Future<String> Function()? _sendTransaction;
@@ -57,8 +63,7 @@ abstract class EquityViewModelBase with Store {
     state = CreatingExecutionState();
 
     final currentAccount = appStore.wallet!.currentAccount.primaryAddress;
-
-    final route = swapService.getRoute(sendCurrency, receiveCurrency);
+    final route = swapRoute;
 
     final canSwap =
         await route.isAvailable(investAmount, currentAccount.address);

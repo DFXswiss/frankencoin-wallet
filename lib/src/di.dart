@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_swap_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/swap_service.dart';
@@ -33,7 +34,9 @@ void setupDependencyInjection(
   getIt.registerSingleton(FrankencoinPayStore(sharedPreferences));
   getIt.registerSingleton(AddressBookStore(getIt.get<Isar>()));
   getIt.registerSingleton(DFXService(getIt.get<AppStore>()));
-  getIt.registerSingleton(SwapService(getIt.get<AppStore>()));
+  getIt.registerSingleton(DFXSwapService(getIt.get<AppStore>()));
+  getIt.registerSingleton(
+      SwapService(getIt.get<AppStore>(), getIt.get<DFXSwapService>()));
 
   getIt.registerSingleton(WalletConnectWalletService(
       getIt.get<BottomSheetService>(), getIt.get<AppStore>()));

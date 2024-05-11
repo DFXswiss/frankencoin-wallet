@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/dfx_auth_service.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
-import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DFXService extends DFXAuthService {
-  final AppStore appStore;
-
-  DFXService(this.appStore);
+  DFXService(super.appStore);
 
   bool _isLoading = false;
 
@@ -79,6 +76,8 @@ class DFXService extends DFXAuthService {
       final actionType = isBuyAction == true ? '/buy' : '/sell';
 
       final accessToken = await getAuthToken();
+
+      print(accessToken);
 
       final uri = Uri.https('services.dfx.swiss', actionType, {
         'session': accessToken,

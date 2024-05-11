@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,6 +9,9 @@ abstract class DFXAuthService {
 
   final String signMessagePath = '/v1/auth/signMessage';
   final String authPath = '/v1/auth';
+  final AppStore appStore;
+
+  DFXAuthService(this.appStore);
 
   String get baseUrl;
 
@@ -70,7 +74,10 @@ abstract class DFXAuthService {
   }
 
   Future<String> getAuthToken() async {
-    final response = await getAuthResponse();
-    return response['accessToken'] as String;
+    if (appStore.dfxAuthToken == null) {
+      final response = await getAuthResponse();
+      appStore.dfxAuthToken = response['accessToken'] as String;
+    }
+    return appStore.dfxAuthToken!;
   }
 }

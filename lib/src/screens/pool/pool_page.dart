@@ -6,6 +6,7 @@ import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/asset_logo.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
@@ -69,7 +70,7 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
       children: [
         Padding(
           padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
+              const EdgeInsets.only(left: 26, right: 26, top: 26, bottom: 10),
           child: CupertinoTextField(
             prefix: Padding(
               padding: const EdgeInsets.all(5),
@@ -77,11 +78,10 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
                 enableFeedback: false,
                 onTap: () => _presentPicker(context, true),
                 child: Observer(
-                  builder: (_) =>
-                      Image.asset(
-                        getCryptoAssetImagePath(widget.equityVM.sendCurrency),
-                        width: 42,
-                      ),
+                  builder: (_) => Image.asset(
+                    getCryptoAssetImagePath(widget.equityVM.sendCurrency),
+                    width: 42,
+                  ),
                 ),
               ),
             ),
@@ -89,14 +89,12 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             controller: _amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             suffix: Observer(builder: (_) {
-              final rawBalanceAmount = EtherAmount
-                  .inWei(widget
-                  .balanceVM.balances[widget.equityVM.sendCurrency]!
-                  .getBalance())
+              final rawBalanceAmount = EtherAmount.inWei(widget
+                      .balanceVM.balances[widget.equityVM.sendCurrency]!
+                      .getBalance())
                   .getInWei;
               return CupertinoButton(
-                onPressed: () =>
-                _amountController.text = formatFixed(
+                onPressed: () => _amountController.text = formatFixed(
                     rawBalanceAmount, widget.equityVM.sendCurrency.decimals),
                 child: Text(
                   formatFixed(
@@ -119,7 +117,7 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
             )),
         Padding(
           padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
+              const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
           child: CupertinoTextField(
             readOnly: true,
             prefix: Padding(
@@ -128,12 +126,10 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
                 enableFeedback: false,
                 onTap: () => _presentPicker(context, false),
                 child: Observer(
-                  builder: (_) =>
-                      Image.asset(
-                        getCryptoAssetImagePath(
-                            widget.equityVM.receiveCurrency),
-                        width: 42,
-                      ),
+                  builder: (_) => Image.asset(
+                    getCryptoAssetImagePath(widget.equityVM.receiveCurrency),
+                    width: 42,
+                  ),
                 ),
               ),
             ),
@@ -142,35 +138,33 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
           ),
         ),
         Observer(
-          builder: (_) =>
-              Padding(
-                padding: const EdgeInsets.only(left: 26, right: 26),
-                child: EstimatedTxFee(
-                  estimatedFee: EtherAmount.inWei(
+          builder: (_) => Padding(
+            padding: const EdgeInsets.only(left: 26, right: 26),
+            child: EstimatedTxFee(
+              estimatedFee: EtherAmount.inWei(
                       BigInt.from(widget.equityVM.sendVM.estimatedFee))
-                      .getValueInUnit(EtherUnit.ether),
-                  nativeSymbol: "ETH",
-                ),
-              ),
+                  .getValueInUnit(EtherUnit.ether),
+              nativeSymbol: Blockchain.getFromChainId(
+                      widget.equityVM.sendCurrency.chainId)
+                  .nativeSymbol,
+            ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10),
           child: Observer(
-            builder: (_) =>
-                CupertinoButton(
-                  onPressed: widget.equityVM.isReadyToCreate
-                      ? widget.equityVM.createTradeTransaction
-                      : null,
-                  color: FrankencoinColors.frRed,
-                  child: widget.equityVM.state is InitialExecutionState
-                      ? Text(
-                    S
-                        .of(context)
-                        .send,
-                    style: const TextStyle(fontSize: 16),
-                  )
-                      : const CupertinoActivityIndicator(),
-                ),
+            builder: (_) => CupertinoButton(
+              onPressed: widget.equityVM.isReadyToCreate
+                  ? widget.equityVM.createTradeTransaction
+                  : null,
+              color: FrankencoinColors.frRed,
+              child: widget.equityVM.state is InitialExecutionState
+                  ? Text(
+                      S.of(context).send,
+                      style: const TextStyle(fontSize: 16),
+                    )
+                  : const CupertinoActivityIndicator(),
+            ),
           ),
         ),
       ],
@@ -213,20 +207,18 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
         final amount = EtherAmount.inWei(widget.equityVM.investAmount)
             .getValueInUnit(EtherUnit.ether);
         final estimatedFee =
-        EtherAmount.inWei(BigInt.from(widget.equityVM.sendVM.estimatedFee))
-            .getValueInUnit(EtherUnit.ether);
+            EtherAmount.inWei(BigInt.from(widget.equityVM.sendVM.estimatedFee))
+                .getValueInUnit(EtherUnit.ether);
 
         showDialog<void>(
           context: context,
-          builder: (BuildContext context) =>
-              ConfirmationAlert(
-                amount: amount.toString(),
-                estimatedFee: estimatedFee.toString(),
-                spendCurrency: widget.equityVM.sendCurrency,
-                onConfirm: () => widget.equityVM.commitTransaction(),
-                onDecline: () =>
-                widget.equityVM.state = InitialExecutionState(),
-              ),
+          builder: (BuildContext context) => ConfirmationAlert(
+            amount: amount.toString(),
+            estimatedFee: estimatedFee.toString(),
+            spendCurrency: widget.equityVM.sendCurrency,
+            onConfirm: () => widget.equityVM.commitTransaction(),
+            onDecline: () => widget.equityVM.state = InitialExecutionState(),
+          ),
         );
       }
 
@@ -235,11 +227,10 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
 
         showDialog<void>(
           context: context,
-          builder: (_) =>
-              SuccessfulTxDialog(
-                txId: txId,
-                onConfirm: () {},
-              ),
+          builder: (_) => SuccessfulTxDialog(
+            txId: txId,
+            onConfirm: () {},
+          ),
         );
       }
 
@@ -268,8 +259,10 @@ class _PoolPageBodyState extends State<_PoolPageBody> {
     ) as CryptoCurrency?;
 
     if (selected != null) {
-      if ((!isSend ? widget.equityVM.sendCurrency : widget.equityVM
-          .receiveCurrency) == selected) {
+      if ((!isSend
+              ? widget.equityVM.sendCurrency
+              : widget.equityVM.receiveCurrency) ==
+          selected) {
         widget.equityVM.switchCurrencies();
       } else if (isSend) {
         widget.equityVM.sendCurrency = selected;
