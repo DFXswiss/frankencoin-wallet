@@ -112,7 +112,7 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
               cryptoCurrency: CryptoCurrency.fps,
               backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
               actionLabel: S.of(context).trade,
-              action: () => Navigator.of(context).pushNamed(Routes.pool),
+              action: () => Navigator.of(context).pushNamed(Routes.swap),
               navigateToDetails: false,
             ),
           // ToDo: (Konsti) Make dynamic using childCurrencies

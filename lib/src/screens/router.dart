@@ -30,9 +30,9 @@ import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
-import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 
 Route<dynamic> createRoute(RouteSettings settings) {
@@ -118,10 +118,10 @@ Route<dynamic> createRoute(RouteSettings settings) {
       return MaterialPageRoute<void>(
           builder: (_) => ShowSeedPage(getIt.get<AppStore>()));
 
-    case Routes.pool:
+    case Routes.swap:
       return MaterialPageRoute<void>(
-          builder: (_) => SwapPage(
-              getIt.get<BalanceViewModel>(), getIt.get<SwapViewModel>()));
+          builder: (_) => SwapPage(getIt.get<BalanceViewModel>(),
+              getIt.get<SwapViewModel>(), getIt.get<BottomSheetService>()));
 
     case Routes.webView:
       final args = settings.arguments as List;

@@ -2,7 +2,7 @@ class Routes {
   static const addressBook = '/address_book';
   static const addressBookAdd = '/address_book/add';
   static const dashboard = '/dashboard';
-  static const pool = '/pool';
+  static const swap = '/dashboard/swap';
   static const qrScan = '/qr';
   static const assetDetails = '/dashboard/asset';
   static const receive = '/dashboard/receive';
