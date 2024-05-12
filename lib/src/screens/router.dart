@@ -12,7 +12,6 @@ import 'package:frankencoin_wallet/src/screens/asset/asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/fps_asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
-import 'package:frankencoin_wallet/src/screens/pool/pool_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/frankencoin_pay_receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_from_seed_page.dart';
@@ -24,13 +23,14 @@ import 'package:frankencoin_wallet/src/screens/settings/manage_nodes_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/settings_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/show_seed_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/wallet_connect_page.dart';
+import 'package:frankencoin_wallet/src/screens/swap/swap_page.dart';
 import 'package:frankencoin_wallet/src/screens/web_view/web_view_page.dart';
 import 'package:frankencoin_wallet/src/screens/welcome/welcome_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
-import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
@@ -120,8 +120,8 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
     case Routes.pool:
       return MaterialPageRoute<void>(
-          builder: (_) => PoolPage(
-              getIt.get<BalanceViewModel>(), getIt.get<EquityViewModel>()));
+          builder: (_) => SwapPage(
+              getIt.get<BalanceViewModel>(), getIt.get<SwapViewModel>()));
 
     case Routes.webView:
       final args = settings.arguments as List;

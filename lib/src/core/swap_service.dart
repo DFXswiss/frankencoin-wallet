@@ -24,6 +24,17 @@ class SwapService {
     }
   }
 
+  static String getSwapProviderName(SwapRouteProvider provider) {
+    switch (provider) {
+      case SwapRouteProvider.fpsContract:
+        return "FPS Smart Contract";
+      case SwapRouteProvider.wfpsContract:
+        return "WFPS Smart Contract";
+      case SwapRouteProvider.dfx:
+        return "DFX Swap";
+    }
+  }
+
   final List<CryptoCurrency> swappableAssets = [
     CryptoCurrency.zchf,
     CryptoCurrency.maticZCHF,
@@ -44,7 +55,8 @@ class SwapService {
         .firstOrNull;
 
     if (result == null) {
-      return DFX_SwapRoute(spendCurrency, receiveCurrency, dfxSwapService);
+      return DFX_SwapRoute(spendCurrency, receiveCurrency, dfxSwapService)
+        ..init(appStore);
     }
 
     return result;

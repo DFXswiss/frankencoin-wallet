@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/contracts/Equity.g.dart';
+import 'package:frankencoin_wallet/src/core/swap_routes.dart';
+import 'package:frankencoin_wallet/src/core/swap_service.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:mobx/mobx.dart';
-import 'package:web3dart/credentials.dart';
 
 part 'swap_view_model.g.dart';
 
@@ -13,13 +15,16 @@ class SwapViewModel = SwapViewModelBase with _$SwapViewModel;
 abstract class SwapViewModelBase with Store {
   final AppStore appStore;
   final SendViewModel sendVM;
-  final Equity _equity;
+  final SwapService swapService;
 
-  SwapViewModelBase(this.appStore, this.sendVM)
-      : _equity = Equity(
-          address: EthereumAddress.fromHex(CryptoCurrency.fps.address),
-          client: appStore.getClient(CryptoCurrency.fps.chainId),
-        );
+  SwapViewModelBase(this.appStore, this.sendVM, this.swapService) {
+    reaction((_) => sendCurrency,
+        (_) => swapRoute = swapService.getRoute(sendCurrency, receiveCurrency));
+    reaction((_) => receiveCurrency,
+        (_) => swapRoute = swapService.getRoute(sendCurrency, receiveCurrency));
+
+    reaction((_) => investAmount, (_) => updateExpectedReturn());
+  }
 
   @observable
   BigInt investAmount = BigInt.zero;
@@ -30,10 +35,11 @@ abstract class SwapViewModelBase with Store {
   @observable
   CryptoCurrency sendCurrency = CryptoCurrency.zchf;
 
-  @computed
-  CryptoCurrency get reverseCurrency => sendCurrency == CryptoCurrency.zchf
-      ? CryptoCurrency.fps
-      : CryptoCurrency.zchf;
+  @observable
+  CryptoCurrency receiveCurrency = CryptoCurrency.fps;
+
+  @observable
+  SwapRoute swapRoute = ZCHF_FPS_SwapRoute();
 
   @observable
   ExecutionState state = InitialExecutionState();
@@ -43,19 +49,18 @@ abstract class SwapViewModelBase with Store {
       state is InitialExecutionState && investAmount > BigInt.zero;
 
   @action
-  Future<void> updateExpectedReturn() async {
-    if (sendCurrency == CryptoCurrency.zchf) {
-      expectedReturn = await estimateShares(investAmount);
-    } else if (sendCurrency == CryptoCurrency.fps) {
-      expectedReturn = await estimateProceeds(investAmount);
-    }
+  Future<void> updateExpectedReturn() async =>
+      expectedReturn = await swapService
+          .getRoute(sendCurrency, receiveCurrency)
+          .estimateReturn(investAmount);
+
+  @action
+  void switchCurrencies() {
+    final newReceiveCurrency = sendCurrency;
+
+    sendCurrency = receiveCurrency;
+    receiveCurrency = newReceiveCurrency;
   }
-
-  Future<BigInt> estimateProceeds(BigInt shares) =>
-      _equity.calculateProceeds((shares: shares));
-
-  Future<BigInt> estimateShares(BigInt investment) =>
-      _equity.calculateShares((investment: investment));
 
   Future<String> Function()? _sendTransaction;
 
@@ -63,26 +68,20 @@ abstract class SwapViewModelBase with Store {
     state = CreatingExecutionState();
 
     final currentAccount = appStore.wallet!.currentAccount.primaryAddress;
+    final route = swapRoute;
 
-    if (sendCurrency == CryptoCurrency.zchf) {
-      _sendTransaction = () async => await _equity.invest(
-          (amount: investAmount, expectedShares: expectedReturn),
-          credentials: currentAccount);
-    } else if (sendCurrency == CryptoCurrency.fps) {
-      final canRedeem =
-          await _equity.canRedeem((owner: currentAccount.address));
+    final canSwap =
+        await route.isAvailable(investAmount, currentAccount.address);
 
-      if (!canRedeem) {
-        state = FailureState(S.current.fps_cannot_redeem_yet);
-        return;
-      }
-
-      _sendTransaction = () async => await _equity.redeemExpected((
-            target: currentAccount.address,
-            shares: investAmount,
-            expectedProceeds: expectedReturn
-          ), credentials: currentAccount);
+    if (!canSwap) {
+      state = FailureState(sendCurrency == CryptoCurrency.fps
+          ? S.current.fps_cannot_redeem_yet
+          : S.current.dfx_unavailable);
+      return;
     }
+
+    _sendTransaction = () async =>
+        await route.routeAction(investAmount, expectedReturn, currentAccount);
 
     state = AwaitingConfirmationExecutionState();
   }
@@ -95,7 +94,7 @@ abstract class SwapViewModelBase with Store {
       final txId = await _sendTransaction!.call();
       state = ExecutedSuccessfullyState(payload: txId);
     } catch (e) {
-      print("Failed ${e.toString()}");
+      log("Failed ${e.toString()}");
       state = FailureState(e.toString());
     }
   }

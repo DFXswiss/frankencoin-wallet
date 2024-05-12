@@ -11,6 +11,28 @@ enum SwapRouteProvider {
   fpsContract,
   wfpsContract,
   dfx;
+
+  String get icon {
+    switch (this) {
+      case fpsContract:
+        return "assets/images/frankencoin_wallet.png";
+      case wfpsContract:
+        return "assets/images/frankencoin_wallet.png";
+      case dfx:
+        return "assets/images/dfx_logo_small.png";
+    }
+  }
+
+  String get name {
+    switch (this) {
+      case fpsContract:
+        return "FPS Smart Contract";
+      case wfpsContract:
+        return "WFPS Smart Contract";
+      case dfx:
+        return "DFX Swap";
+    }
+  }
 }
 
 abstract class SwapRoute {
