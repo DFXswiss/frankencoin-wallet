@@ -29,7 +29,7 @@ class DFXService extends DFXAuthService {
 
   String get langCode => appStore.settingsStore.language.code;
 
-  List<String> supportedAssets = [
+  static List<String> supportedAssets = [
     'Ethereum/ZCHF',
     'Polygon/ZCHF',
     'Base/ZCHF',

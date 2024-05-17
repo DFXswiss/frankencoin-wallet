@@ -217,3 +217,7 @@ class FailureState extends InitialExecutionState {
 
   final String error;
 }
+
+class DFXFailureState extends FailureState {
+  DFXFailureState(super.error);
+}

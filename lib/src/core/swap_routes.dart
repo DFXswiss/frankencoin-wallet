@@ -210,10 +210,14 @@ class DFX_SwapRoute extends SwapRoute {
   }
 
   @override
+  Future<bool> isAvailable(BigInt amount, EthereumAddress address) =>
+      dfxSwapService.getIsAvailable(sendCurrency, receiveCurrency, amount);
+
+  @override
   Future<String> routeAction(
       BigInt amount, BigInt expectedReturn, Credentials credentials) async {
-    final depositAddress =
-        await dfxSwapService.getDepositAddress(sendCurrency, receiveCurrency);
+    final depositAddress = await dfxSwapService.getDepositAddress(
+        sendCurrency, receiveCurrency, amount);
     return _sendContract.transfer(
         EthereumAddress.fromHex(depositAddress), amount,
         credentials: credentials);
