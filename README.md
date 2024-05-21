@@ -22,7 +22,7 @@ the Ethereum blockchain.
 Flutter includes the Dart SDK, so you don't need to install Dart separately if you have Flutter installed. If Flutter is not yet installed, follow the instructions for your operating system from the [official Flutter installation guide](https://docs.flutter.dev/get-started/install)
 - If you're using iOS and Mac, install bundler and ruby dependencies
 ```bash
-gem install bundler && bundle install
+cd ios/ && gem install bundler && bundle install && cd -
 ```
 - Generate translation files
 ```bash
