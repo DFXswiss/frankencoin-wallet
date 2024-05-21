@@ -123,39 +123,12 @@ class FPS_ZCHF_SwapRoute extends SwapRoute {
 
 class FPS_WFPS_SwapRoute extends SwapRoute {
   late final FPSWrapper _fpsWrapperContract;
+  late final Equity _fpsContract;
 
   FPS_WFPS_SwapRoute()
       : super(
           CryptoCurrency.fps,
           CryptoCurrency.wfps,
-          SwapRouteProvider.wfpsContract,
-        );
-
-  @override
-  void init(AppStore appStore) => _fpsWrapperContract = FPSWrapper(
-        address: EthereumAddress.fromHex(CryptoCurrency.wfps.address),
-        client: appStore.getClient(CryptoCurrency.wfps.chainId),
-      );
-
-  @override
-  Future<BigInt> estimateReturn(BigInt amount) async => amount;
-
-  @override
-  Future<String> routeAction(
-          BigInt amount, BigInt expectedReturn, Credentials credentials) =>
-      _fpsWrapperContract.depositFor(
-          (account: credentials.address, amount: amount),
-          credentials: credentials);
-}
-
-class WFPS_FPS_SwapRoute extends SwapRoute {
-  late final FPSWrapper _fpsWrapperContract;
-  late final Equity _fpsContract;
-
-  WFPS_FPS_SwapRoute()
-      : super(
-          CryptoCurrency.wfps,
-          CryptoCurrency.fps,
           SwapRouteProvider.wfpsContract,
         );
 
@@ -180,10 +153,39 @@ class WFPS_FPS_SwapRoute extends SwapRoute {
     await _fpsContract.approve(
         (spender: _fpsWrapperContract.self.address, value: amount),
         credentials: credentials);
-    return _fpsWrapperContract.withdrawTo(
+    return _fpsWrapperContract.depositFor(
         (account: credentials.address, amount: amount),
         credentials: credentials);
   }
+}
+
+class WFPS_FPS_SwapRoute extends SwapRoute {
+  late final FPSWrapper _fpsWrapperContract;
+
+  WFPS_FPS_SwapRoute()
+      : super(
+          CryptoCurrency.wfps,
+          CryptoCurrency.fps,
+          SwapRouteProvider.wfpsContract,
+        );
+
+  @override
+  void init(AppStore appStore) {
+    _fpsWrapperContract = FPSWrapper(
+      address: EthereumAddress.fromHex(CryptoCurrency.wfps.address),
+      client: appStore.getClient(CryptoCurrency.wfps.chainId),
+    );
+  }
+
+  @override
+  Future<BigInt> estimateReturn(BigInt amount) async => amount;
+
+  @override
+  Future<String> routeAction(
+          BigInt amount, BigInt expectedReturn, Credentials credentials) =>
+      _fpsWrapperContract.withdrawTo(
+          (account: credentials.address, amount: amount),
+          credentials: credentials);
 }
 
 class DFX_SwapRoute extends SwapRoute {
