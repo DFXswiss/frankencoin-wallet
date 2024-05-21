@@ -114,7 +114,9 @@ class _SwapPageBodyState extends State<_SwapPageBody> {
             height: 50,
             child: Observer(
               builder: (_) => widget.equityVM.isLoadingEstimate
-                  ? const CupertinoActivityIndicator()
+                  ? const CupertinoActivityIndicator(
+                      color: FrankencoinColors.frRed,
+                    )
                   : IconButton(
                       onPressed: () {
                         widget.equityVM.switchCurrencies();

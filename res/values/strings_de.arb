@@ -78,6 +78,8 @@
     "successful_transaction": "Erfolgreiche Transaktion",
     "swap": "Swap",
     "swap_provider": "Swap-Anbieter",
+    "swap_provided_by": "Dieser Swap wird über ${providerName} ausgeführt",
+    "swap_route_title": "Swap Route Info",
     "total_supply": "Im Umlauf",
     "trade": "Handeln",
     "transaction_id": "Transaktions-ID",

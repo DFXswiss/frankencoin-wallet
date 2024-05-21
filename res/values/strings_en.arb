@@ -79,6 +79,8 @@
     "successful_transaction": "Successful transaction",
     "swap": "Swap",
     "swap_provider": "Swap-Provider",
+    "swap_provided_by": "This Swap is provided by ${providerName}",
+    "swap_route_title": "Swap Route Info",
     "total_supply": "Total supply",
     "trade": "Trade",
     "transaction_id": "Transactions-id",
