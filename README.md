@@ -16,6 +16,41 @@ the Ethereum blockchain.
 - Easy to Use: User-friendly interface for sending, receiving, and managing ZCHF tokens.
 - Transparency: Leverages the transparency of the Ethereum blockchain for all transactions.
 
+## Install
+
+- Ensure Flutter SDK is installed:
+Flutter includes the Dart SDK, so you don't need to install Dart separately if you have Flutter installed. If Flutter is not yet installed, follow the instructions for your operating system from the [official Flutter installation guide](https://docs.flutter.dev/get-started/install)
+- If you're using iOS and Mac, install bundler and ruby dependencies
+```bash
+gem install bundler && bundle install
+```
+- Generate translation files
+```bash
+dart tool/generate_localization.dart
+```
+- Run Build Runner
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+- Copy empty secrets
+```bash
+echo "const walletConnectProjectId = \"\";" > lib/secrets.g.dart
+```
+
+- Open simulator to be detected by flutter
+```bash
+open -a Simulator
+```
+
+- Get Flutter dependencies:
+```bash
+flutter pub get
+```
+- Run the Flutter app:
+```bash
+flutter run
+```
+
 ## Contributing
 
 We welcome contributions from the community! If you find a bug or have a new feature suggestion, please create an issue

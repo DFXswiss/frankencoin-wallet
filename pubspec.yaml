@@ -19,7 +19,7 @@ version: 1.0.1+9
 environment:
   sdk: '>=3.2.0 <4.0.0'
 
-isar_version: &isar_version 3.1.0+1 # define the version to be used
+isar_version: 3.1.0+1 # define the version to be used
 
 dependencies:
   flutter:
@@ -42,9 +42,9 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   get_it: ^7.6.7
   http: ^1.1.0
-  isar: *isar_version
-  isar_flutter_libs: *isar_version # contains Isar Core
-  intl: ^0.18.0
+  isar: 3.1.0+1
+  isar_flutter_libs: 3.1.0+1 # contains Isar Core
+  intl: ^0.19.0
   jazzicon: ^1.1.0
   mobx: ^2.3.0+1
   path_provider: ^2.1.0
@@ -53,16 +53,17 @@ dependencies:
   shared_preferences: ^2.2.2
   styled_text: ^8.1.0
   url_launcher: ^6.1.14
-  walletconnect_flutter_v2: 2.2.1
+  walletconnect_flutter_v2: ^2.2.3
   web3dart: ^2.7.1
+  yaml_edit: ^2.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: any
   flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^3.0.1
-  isar_generator: *isar_version
+  flutter_lints: ^4.0.0
+  isar_generator: 3.1.0+1
   mobx_codegen: ^2.6.0+1
   web3dart_builders: ^0.1.0
 
