@@ -168,7 +168,7 @@ abstract class SendViewModelBase with Store {
         );
 
         _sendTransaction = () => erc20.transfer(
-              EthereumAddress.fromHex(address),
+              EthereumAddress.fromHex(receiveAddress),
               cryptoAmount,
               credentials: currentAccount,
               transaction: transaction,
