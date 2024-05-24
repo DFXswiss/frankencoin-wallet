@@ -2,7 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_swap_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
-import 'package:frankencoin_wallet/src/core/swap_service.dart';
+import 'package:frankencoin_wallet/src/core/swap/swap_service.dart';
 import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/stores/address_book_store.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';

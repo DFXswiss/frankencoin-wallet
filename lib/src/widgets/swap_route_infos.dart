@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
-import 'package:frankencoin_wallet/src/core/swap_routes.dart';
+import 'package:frankencoin_wallet/src/core/swap/swap_routes/swap_route.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 
 class SwapRouteInfos extends StatelessWidget {
