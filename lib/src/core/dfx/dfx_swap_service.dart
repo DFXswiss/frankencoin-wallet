@@ -6,7 +6,6 @@ import 'package:frankencoin_wallet/src/core/dfx/dfx_asset_ids.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/models/dfx_swap_payment_infos_data.dart';
 import 'package:frankencoin_wallet/src/core/dfx_service.dart';
-import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
@@ -107,7 +106,7 @@ class DFXSwapService extends DFXAuthService {
       CryptoCurrency receiveCurrency,
       BigInt amount) async {
     try {
-      final blockchain = Blockchain.getFromChainId(spendCurrency.chainId).name;
+      final blockchain = spendCurrency.blockchain.name;
 
       final accessToken = await getAuthToken();
 

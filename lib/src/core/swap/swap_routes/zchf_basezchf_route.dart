@@ -9,16 +9,19 @@ import 'package:web3dart/credentials.dart';
 
 class ZCHF_baseZCHF_SwapRoute extends SwapRoute {
   final _bridgeAddress =
-  EthereumAddress.fromHex("0x3154Cf16ccdb4C6d922629664174b904d80F2C35");
+      EthereumAddress.fromHex("0x3154Cf16ccdb4C6d922629664174b904d80F2C35");
   late final ERC20 _zchfContract;
   late final L1StandardBridge _bridge;
 
+  @override
+  bool get requireApprove => true;
+
   ZCHF_baseZCHF_SwapRoute()
       : super(
-    CryptoCurrency.zchf,
-    CryptoCurrency.baseZCHF,
-    SwapRouteProvider.baseBridge,
-  );
+          CryptoCurrency.zchf,
+          CryptoCurrency.baseZCHF,
+          SwapRouteProvider.baseBridge,
+        );
 
   @override
   void init(AppStore appStore) {
@@ -37,23 +40,32 @@ class ZCHF_baseZCHF_SwapRoute extends SwapRoute {
 
   @override
   Future<String> routeAction(
-      BigInt amount, BigInt expectedReturn, Credentials credentials) async {
-    await _zchfContract.approve(
-      _bridgeAddress,
-      amount,
-      transaction: getNewTransaction(credentials, _zchfContract.self.address),
-      credentials: credentials,
-    );
-    return _bridge.depositERC20(
-      (
-      l1Token: EthereumAddress.fromHex(sendCurrency.address),
-      l2Token: EthereumAddress.fromHex(receiveCurrency.address),
-      amount: amount,
-      extraData: Uint8List(0),
-      minGasLimit: BigInt.from(200000)
-      ),
-      transaction: getNewTransaction(credentials, _bridgeAddress),
-      credentials: credentials,
-    );
+          BigInt amount, BigInt expectedReturn, Credentials credentials) =>
+      _bridge.depositERC20(
+        (
+          l1Token: EthereumAddress.fromHex(sendCurrency.address),
+          l2Token: EthereumAddress.fromHex(receiveCurrency.address),
+          amount: amount,
+          extraData: Uint8List(0),
+          minGasLimit: BigInt.from(200000)
+        ),
+        transaction: getNewTransaction(credentials, _bridgeAddress),
+        credentials: credentials,
+      );
+
+  @override
+  Future<String> approve(BigInt amount, Credentials credentials) =>
+      _zchfContract.approve(
+        _bridgeAddress,
+        amount,
+        transaction: getNewTransaction(credentials, _zchfContract.self.address),
+        credentials: credentials,
+      );
+
+  @override
+  Future<bool> isApproved(BigInt amount, Credentials credentials) async {
+    final allowance =
+        await _zchfContract.allowance(credentials.address, _bridgeAddress);
+    return allowance.compareTo(amount) >= 0;
   }
 }

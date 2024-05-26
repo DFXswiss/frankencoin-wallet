@@ -6,7 +6,6 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
-import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
@@ -164,9 +163,7 @@ class _SendPageBodyState extends State<_SendPageBody> {
             estimatedFee:
                 EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
                     .getValueInUnit(EtherUnit.ether),
-            nativeSymbol:
-                Blockchain.getFromChainId(widget.sendVM.spendCurrency.chainId)
-                    .nativeSymbol,
+            nativeSymbol: widget.sendVM.spendCurrency.blockchain.nativeSymbol,
           ),
         ),
       ),

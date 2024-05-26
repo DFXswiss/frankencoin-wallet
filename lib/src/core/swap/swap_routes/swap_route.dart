@@ -50,6 +50,8 @@ abstract class SwapRoute {
   final CryptoCurrency receiveCurrency;
   final SwapRouteProvider provider;
 
+  bool get requireApprove => false;
+
   static List<SwapRoute> allRoutes = [
     ZCHF_baseZCHF_SwapRoute(),
     ZCHF_opZCHF_SwapRoute(),
@@ -62,6 +64,12 @@ abstract class SwapRoute {
   const SwapRoute(this.sendCurrency, this.receiveCurrency, this.provider);
 
   void init(AppStore appStore);
+
+  Future<String> approve(BigInt amount, Credentials credentials) =>
+      throw UnimplementedError();
+
+  Future<bool> isApproved(BigInt amount, Credentials credentials) =>
+      throw UnimplementedError();
 
   Future<String> routeAction(
       BigInt amount, BigInt expectedReturn, Credentials credentials);

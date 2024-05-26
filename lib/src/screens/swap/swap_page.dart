@@ -6,7 +6,6 @@ import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/asset_logo.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/dfx_route.dart';
-import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
@@ -159,9 +158,8 @@ class _SwapPageBodyState extends State<_SwapPageBody> {
                 estimatedFee: EtherAmount.inWei(
                         BigInt.from(widget.equityVM.sendVM.estimatedFee))
                     .getValueInUnit(EtherUnit.ether),
-                nativeSymbol: Blockchain.getFromChainId(
-                        widget.equityVM.sendCurrency.chainId)
-                    .nativeSymbol,
+                nativeSymbol:
+                    widget.equityVM.sendCurrency.blockchain.nativeSymbol,
               ),
             ),
           ),
@@ -183,7 +181,9 @@ class _SwapPageBodyState extends State<_SwapPageBody> {
                     ? widget.equityVM.createTradeTransaction
                     : null,
                 color: FrankencoinColors.frRed,
-                child: widget.equityVM.state is InitialExecutionState
+                child: widget.equityVM.state is InitialExecutionState ||
+                        widget.equityVM.state is ExecutedSuccessfullyState ||
+                        widget.equityVM.state is FailureState
                     ? Text(
                         S.of(context).send,
                         style: const TextStyle(fontSize: 16),

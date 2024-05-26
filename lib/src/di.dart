@@ -52,7 +52,9 @@ void setupDependencyInjection(
   getIt.registerFactory<SwapViewModel>(() => SwapViewModel(
       getIt.get<AppStore>(),
       getIt.get<SendViewModel>(),
-      getIt.get<SwapService>()));
+      getIt.get<SwapService>(),
+      getIt.get<BottomSheetService>(),
+  ));
   getIt.registerFactory<FPSAssetViewModel>(() =>
       FPSAssetViewModel(getIt.get<AppStore>(), getIt.get<BalanceViewModel>()));
   getIt.registerFactory<AddressBookViewModel>(
