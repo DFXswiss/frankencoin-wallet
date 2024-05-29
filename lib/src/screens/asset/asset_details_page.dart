@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/asset_logo.dart';
@@ -40,15 +41,19 @@ class AssetDetailsPage extends BasePage {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    formatFixed(balanceVM.getAggregatedBalance(cryptoCurrency),
-                        cryptoCurrency.decimals,
-                        fractionalDigits: 6, trimZeros: false),
-                    style: const TextStyle(
-                      fontSize: 35,
-                      fontFamily: 'Lato',
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
+                  child: Observer(
+                    builder: (_) => Text(
+                      formatFixed(
+                          balanceVM.getAggregatedBalance(cryptoCurrency),
+                          cryptoCurrency.decimals,
+                          fractionalDigits: 6,
+                          trimZeros: false),
+                      style: const TextStyle(
+                        fontSize: 35,
+                        fontFamily: 'Lato',
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
@@ -80,19 +85,23 @@ class AssetDetailsPage extends BasePage {
                 ),
               ),
             ),
-            BalanceCard(
-              balanceInfo: balanceVM.balances[cryptoCurrency],
-              cryptoCurrency: cryptoCurrency,
-              backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
-              showBlockchainIcon: true,
-              navigateToDetails: false,
-            ),
-            ...cryptoCurrency.childCryptoCurrencies.map(
-              (cryptoCurrency) => BalanceCard(
+            Observer(
+              builder: (_) => BalanceCard(
                 balanceInfo: balanceVM.balances[cryptoCurrency],
                 cryptoCurrency: cryptoCurrency,
                 backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
                 showBlockchainIcon: true,
+                navigateToDetails: false,
+              ),
+            ),
+            ...cryptoCurrency.childCryptoCurrencies.map(
+              (cryptoCurrency) => Observer(
+                builder: (_) => BalanceCard(
+                  balanceInfo: balanceVM.balances[cryptoCurrency],
+                  cryptoCurrency: cryptoCurrency,
+                  backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+                  showBlockchainIcon: true,
+                ),
               ),
             ),
           ],

@@ -62,8 +62,8 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
       if (cryptoCurrency == CryptoCurrency.fps) {
         return MaterialPageRoute<void>(
-            builder: (_) =>
-                FPSAssetDetailsPage(getIt.get<FPSAssetViewModel>()));
+            builder: (_) => FPSAssetDetailsPage(
+                getIt.get<FPSAssetViewModel>(), getIt.get<BalanceViewModel>()));
       }
 
       return MaterialPageRoute<void>(
@@ -111,8 +111,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
     case Routes.settingsWalletConnect:
       return MaterialPageRoute<void>(
-          builder: (_) =>
-              WalletConnectPage(getIt.get<WalletConnectService>()));
+          builder: (_) => WalletConnectPage(getIt.get<WalletConnectService>()));
 
     case Routes.settingsSeed:
       return MaterialPageRoute<void>(

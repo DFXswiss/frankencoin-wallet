@@ -1,11 +1,12 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:frankencoin_wallet/src/core/dfx/dfx_swap_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_swap_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/stores/address_book_store.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
+import 'package:frankencoin_wallet/src/stores/balance_store.dart';
 import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
@@ -30,10 +31,14 @@ void setupDependencyInjection(
   getIt.registerSingleton(SettingsStoreBase.load(sharedPreferences, isar));
 
   getIt.registerSingleton<BottomSheetService>(BottomSheetServiceImpl());
+
   getIt.registerSingleton(
       AppStore(getIt.get<SettingsStore>(), getIt.get<BottomSheetService>()));
   getIt.registerSingleton(FrankencoinPayStore(sharedPreferences));
   getIt.registerSingleton(AddressBookStore(getIt.get<Isar>()));
+  getIt.registerSingleton(
+      BalanceStore(getIt.get<AppStore>(), getIt.get<Isar>()));
+
   getIt.registerSingleton(DFXService(getIt.get<AppStore>()));
   getIt.registerSingleton(DFXSwapService(getIt.get<AppStore>()));
   getIt.registerSingleton(
@@ -44,7 +49,7 @@ void setupDependencyInjection(
       getIt.get<AppStore>(), getIt.get<FrankencoinPayStore>()));
 
   getIt.registerFactory<BalanceViewModel>(
-      () => BalanceViewModel(getIt.get<Isar>(), getIt.get<AppStore>()));
+      () => BalanceViewModel(getIt.get<BalanceStore>()));
   getIt.registerFactory<WalletViewModel>(() =>
       WalletViewModel(getIt.get<AppStore>(), getIt.get<SharedPreferences>()));
   getIt.registerFactory<SendViewModel>(() =>
@@ -55,7 +60,7 @@ void setupDependencyInjection(
         getIt.get<SwapService>(),
       ));
   getIt.registerFactory<FPSAssetViewModel>(() =>
-      FPSAssetViewModel(getIt.get<AppStore>(), getIt.get<BalanceViewModel>()));
+      FPSAssetViewModel(getIt.get<AppStore>(), getIt.get<BalanceStore>()));
   getIt.registerFactory<AddressBookViewModel>(
       () => AddressBookViewModel(getIt.get<AddressBookStore>()));
 }

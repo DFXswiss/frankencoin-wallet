@@ -22,25 +22,11 @@ class DashboardPageState extends State<DashboardPage> {
   final bottomSheetService = getIt.get<BottomSheetService>();
 
   @override
-  void initState() {
-    super.initState();
-    widget.balanceVM.startSyncBalances();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.balanceVM.stopSyncBalances();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(15, 23, 42, 1),
-      body: WillPopScope(
-        // PopScope(
-        // canPop: false,
-        onWillPop: () async => false,
+      body: PopScope(
+        canPop: false,
         child: BottomSheetListener(
           bottomSheetService: bottomSheetService,
           child: SafeArea(
