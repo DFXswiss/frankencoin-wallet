@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
-import 'package:frankencoin_wallet/src/core/dfx_service.dart';
-import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
+import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
@@ -121,7 +121,7 @@ class ActionBar extends StatelessWidget {
     );
 
     if (result.toLowerCase().startsWith("wc:")) {
-      getIt.get<WalletConnectWalletService>().pairWithUri(Uri.parse(result));
+      getIt.get<WalletConnectService>().pairWithUri(Uri.parse(result));
     } else if (result.startsWith("0x")) {
       await Navigator.of(context)
           .pushNamed(Routes.send, arguments: [result, null, null]);

@@ -4,7 +4,7 @@ import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
-import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
+import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DFXService extends DFXAuthService {
@@ -77,8 +77,6 @@ class DFXService extends DFXAuthService {
 
       final accessToken = await getAuthToken();
 
-      print(accessToken);
-
       final uri = Uri.https('services.dfx.swiss', actionType, {
         'session': accessToken,
         'lang': langCode,
@@ -104,13 +102,10 @@ class DFXService extends DFXAuthService {
     } catch (e) {
       _isLoading = false;
 
-      await showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return ErrorDialog(
-            errorMessage: '${S.of(context).dfx_unavailable}: $e',
-          );
-        },
+      appStore.bottomSheetService.queueBottomSheet(
+        isModalDismissible: true,
+        widget: BottomSheetMessageDisplayWidget(
+            message: '${S.current.dfx_unavailable}: ${e.toString()}'),
       );
     }
   }

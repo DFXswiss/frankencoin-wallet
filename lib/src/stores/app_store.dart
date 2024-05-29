@@ -1,4 +1,6 @@
-import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
+import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
+import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet.dart';
@@ -11,17 +13,21 @@ part 'app_store.g.dart';
 class AppStore = AppStoreBase with _$AppStore;
 
 abstract class AppStoreBase with Store {
-  AppStoreBase(this.settingsStore) {
+  AppStoreBase(this.settingsStore, this.bottomSheetService) {
     reaction((_) => wallet, (wallet) async {
       if (wallet != null) {
-        getIt.get<WalletConnectWalletService>().onDispose();
-        getIt.get<WalletConnectWalletService>().create();
-        await getIt.get<WalletConnectWalletService>().init();
+        final walletConnectService = getIt.get<WalletConnectService>()
+          ..onDispose()
+          ..create();
+        await walletConnectService.init();
+
+        await getIt.get<FrankencoinPayService>().setupProvider();
       }
     });
   }
 
   final SettingsStore settingsStore;
+  final BottomSheetService bottomSheetService;
 
   @observable
   Wallet? wallet;

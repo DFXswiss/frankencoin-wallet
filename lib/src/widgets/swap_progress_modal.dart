@@ -53,8 +53,6 @@ class _SwapProgressModalState extends State<SwapProgressModal> {
     setState(() => _status = _SwapProgress.executing);
     final txId = await widget.confirmSwap.call();
     Navigator.of(context).pop(txId);
-    // await Future.delayed(Duration(seconds: 2));
-    // Navigator.of(context).pop("0x0");
   }
 
   Future<void> _next() async {

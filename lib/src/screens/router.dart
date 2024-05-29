@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
-import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
+import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
@@ -112,7 +112,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
     case Routes.settingsWalletConnect:
       return MaterialPageRoute<void>(
           builder: (_) =>
-              WalletConnectPage(getIt.get<WalletConnectWalletService>()));
+              WalletConnectPage(getIt.get<WalletConnectService>()));
 
     case Routes.settingsSeed:
       return MaterialPageRoute<void>(

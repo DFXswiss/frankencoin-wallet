@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/dfx_route.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/fps_routes.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/swap_route.dart';
@@ -24,10 +23,8 @@ abstract class SwapViewModelBase with Store {
   final SendViewModel sendVM;
   final SwapService swapService;
 
-  final BottomSheetService bottomSheetService;
-
   SwapViewModelBase(
-      this.appStore, this.sendVM, this.swapService, this.bottomSheetService) {
+      this.appStore, this.sendVM, this.swapService) {
     reaction((_) => sendCurrency,
         (_) => swapRoute = swapService.getRoute(sendCurrency, receiveCurrency));
     reaction((_) => receiveCurrency,
@@ -120,7 +117,7 @@ abstract class SwapViewModelBase with Store {
       final isApproved = await route.isApproved(investAmount, currentAccount);
 
       // Show Swap BottomSheet
-      final txId = await bottomSheetService.queueBottomSheet(
+      final txId = await appStore.bottomSheetService.queueBottomSheet(
         widget: SwapProgressModal(
           approveSwap: () async =>
               await route.approve(investAmount, currentAccount),
