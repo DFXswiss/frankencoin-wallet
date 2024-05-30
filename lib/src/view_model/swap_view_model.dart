@@ -23,12 +23,15 @@ abstract class SwapViewModelBase with Store {
   final SendViewModel sendVM;
   final SwapService swapService;
 
-  SwapViewModelBase(
-      this.appStore, this.sendVM, this.swapService) {
-    reaction((_) => sendCurrency,
-        (_) => swapRoute = swapService.getRoute(sendCurrency, receiveCurrency));
-    reaction((_) => receiveCurrency,
-        (_) => swapRoute = swapService.getRoute(sendCurrency, receiveCurrency));
+  SwapViewModelBase(this.appStore, this.sendVM, this.swapService) {
+    reaction((_) => sendCurrency, (_) {
+      swapRoute = swapService.getRoute(sendCurrency, receiveCurrency);
+      updateExpectedReturn();
+    });
+    reaction((_) => receiveCurrency, (_) {
+      swapRoute = swapService.getRoute(sendCurrency, receiveCurrency);
+      updateExpectedReturn();
+    });
 
     reaction((_) => investAmount, (_) => updateExpectedReturn());
   }
@@ -124,8 +127,10 @@ abstract class SwapViewModelBase with Store {
           isApproved: isApproved,
           confirmSwap: () async =>
               route.routeAction(investAmount, expectedReturn, currentAccount),
-          investAmount: "${formatFixed(investAmount, sendCurrency.decimals)} ${sendCurrency.symbol}",
-          estimatedProceeds: "${formatFixed(expectedReturn, receiveCurrency.decimals)} ${receiveCurrency.symbol}",
+          investAmount:
+              "${formatFixed(investAmount, sendCurrency.decimals)} ${sendCurrency.symbol}",
+          estimatedProceeds:
+              "${formatFixed(expectedReturn, receiveCurrency.decimals)} ${receiveCurrency.symbol}",
           sourceChain: sendCurrency.blockchain,
           targetChain: receiveCurrency.blockchain,
         ),
