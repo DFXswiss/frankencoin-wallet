@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
+import 'package:frankencoin_wallet/src/widgets/handlebars.dart';
 
 class BottomSheetListener extends StatefulWidget {
   final BottomSheetService bottomSheetService;
@@ -42,11 +43,20 @@ class BottomSheetListenerState extends State<BottomSheetListener> {
         builder: (context) {
           return Container(
             decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 18, 18, 19),
+              color: Color.fromRGBO(17, 24, 39, 1),
               borderRadius: BorderRadius.all(Radius.circular(16)),
             ),
-            padding: const EdgeInsets.all(16),
-            child: item.widget,
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, bottom: 16),
+                  child: Handlebars.horizontal(context),
+                ),
+                item.widget
+              ],
+            ),
           );
         },
       );

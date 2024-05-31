@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
-import 'package:frankencoin_wallet/src/entites/blockchain.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 
 class ConfirmationAlert extends StatelessWidget {
@@ -123,7 +122,7 @@ class ConfirmationAlert extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  " ${Blockchain.getFromChainId(spendCurrency.chainId).nativeSymbol}",
+                  " ${spendCurrency.blockchain.nativeSymbol}",
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,

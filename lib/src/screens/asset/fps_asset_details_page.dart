@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/asset/widgets/info_card.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
+import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:web3dart/web3dart.dart';
 
 class FPSAssetDetailsPage extends BasePage {
-  FPSAssetDetailsPage(this.assetVM, {super.key});
+  FPSAssetDetailsPage(this.assetVM, this.balanceVM, {super.key});
 
   final FPSAssetViewModel assetVM;
+  final BalanceViewModelBase balanceVM;
 
   @override
   String get title => CryptoCurrency.fps.name;
 
   @override
-  Widget body(BuildContext context) => _FPSAssetDetailsPageBody(assetVM);
+  Widget body(BuildContext context) =>
+      _FPSAssetDetailsPageBody(assetVM, balanceVM);
 }
 
 class _FPSAssetDetailsPageBody extends StatefulWidget {
   final FPSAssetViewModel assetVM;
+  final BalanceViewModelBase balanceVM;
 
-  const _FPSAssetDetailsPageBody(this.assetVM);
+  const _FPSAssetDetailsPageBody(this.assetVM, this.balanceVM);
 
   @override
   State<StatefulWidget> createState() => _FPSAssetDetailsPageBodyState();
@@ -68,7 +72,7 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
                 padding: const EdgeInsets.only(left: 10),
                 child: Observer(
                   builder: (_) => Text(
-                    "${formatFixed(widget.assetVM.balanceVM.fpsBalanceAggregated, 18)} FPS",
+                    "${formatFixed(widget.balanceVM.fpsBalanceAggregated, 18)} FPS",
                     style: const TextStyle(
                       fontSize: 25,
                       fontFamily: 'Lato',
@@ -107,21 +111,20 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
               ),
             ),
           BalanceCard(
-              balanceInfo:
-                  widget.assetVM.balanceVM.balances[CryptoCurrency.fps],
-              cryptoCurrency: CryptoCurrency.fps,
-              backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
-              actionLabel: S.of(context).trade,
-              action: () => Navigator.of(context).pushNamed(Routes.pool),
-              navigateToDetails: false,
-            ),
+            balanceInfo: widget.balanceVM.balances[CryptoCurrency.fps],
+            cryptoCurrency: CryptoCurrency.fps,
+            backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+            actionLabel: S.of(context).trade,
+            action: () => Navigator.of(context).pushNamed(Routes.swap),
+            navigateToDetails: false,
+          ),
           // ToDo: (Konsti) Make dynamic using childCurrencies
           if (widget.assetVM.wfpsBalance != BigInt.zero)
             BalanceCard(
-                balance: widget.assetVM.wfpsBalance,
-                cryptoCurrency: CryptoCurrency.wfps,
-                backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
-              ),
+              balance: widget.assetVM.wfpsBalance,
+              cryptoCurrency: CryptoCurrency.wfps,
+              backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+            ),
           if (widget.assetVM.maticWFPSBalance != BigInt.zero)
             BalanceCard(
               balance: widget.assetVM.maticWFPSBalance,

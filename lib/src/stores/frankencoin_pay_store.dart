@@ -1,4 +1,4 @@
-import 'package:frankencoin_wallet/src/entites/preferences_key.dart';
+import 'package:frankencoin_wallet/src/entities/preferences_key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FrankencoinPayStore {

@@ -5,9 +5,8 @@ import 'package:convert/convert.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/wc_ethereum_transaction_model.dart';
-import 'package:frankencoin_wallet/src/entites/blockchain.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/web3request_modal.dart';
@@ -16,7 +15,6 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 class CWEvmChainService {
   final Blockchain blockchain;
   final AppStore appStore;
-  final BottomSheetService bottomSheetService;
   final Web3Wallet wallet;
 
   static const namespace = 'eip155';
@@ -30,7 +28,6 @@ class CWEvmChainService {
   CWEvmChainService({
     required this.blockchain,
     required this.appStore,
-    required this.bottomSheetService,
     required this.wallet,
     Web3Client? web3Client,
   }) {
@@ -86,7 +83,7 @@ class CWEvmChainService {
 
   Future<bool> requestAuthorization(String action, String text) async {
     // Show the bottom sheet
-    final bool? isApproved = await bottomSheetService.queueBottomSheet(
+    final bool? isApproved = await appStore.bottomSheetService.queueBottomSheet(
       widget: Web3RequestModal(
         child: Column(
           children: [
@@ -139,7 +136,7 @@ class CWEvmChainService {
       );
     } catch (e) {
       log(e.toString());
-      bottomSheetService.queueBottomSheet(
+      appStore.bottomSheetService.queueBottomSheet(
         isModalDismissible: true,
         widget: BottomSheetMessageDisplayWidget(
           message: '${S.current.error}: ${e.toString()}',
@@ -172,7 +169,7 @@ class CWEvmChainService {
       );
     } catch (e) {
       log('error: ${e.toString()}');
-      bottomSheetService.queueBottomSheet(
+      appStore.bottomSheetService.queueBottomSheet(
         isModalDismissible: true,
         widget: BottomSheetMessageDisplayWidget(
             message: '${S.current.error}: ${e.toString()}'),
@@ -233,7 +230,7 @@ class CWEvmChainService {
       );
     } catch (e) {
       log('An error has occurred while signing transaction: ${e.toString()}');
-      bottomSheetService.queueBottomSheet(
+      appStore.bottomSheetService.queueBottomSheet(
         isModalDismissible: true,
         widget: BottomSheetMessageDisplayWidget(
           message: '${S.current.error}: ${e.toString()}',

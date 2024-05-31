@@ -1,3 +1,5 @@
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
+
 enum CryptoCurrency {
   eth(1, "0x0", "ETH", "Ethereum", 18),
   zchf(1, "0xB58E61C3098d85632Df34EecfB899A1Ed80921cB", "ZCHF", "Frankencoin",
@@ -71,4 +73,6 @@ enum CryptoCurrency {
   List<CryptoCurrency> get childCryptoCurrencies => CryptoCurrency.values
       .where((e) => e.parentCryptoCurrency == this)
       .toList();
+
+  Blockchain get blockchain => Blockchain.getFromChainId(chainId);
 }

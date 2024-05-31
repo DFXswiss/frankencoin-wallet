@@ -1,4 +1,4 @@
-import 'package:frankencoin_wallet/src/entites/address_book_entry.dart';
+import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
 import 'package:isar/isar.dart';
 import 'package:mobx/mobx.dart';
 

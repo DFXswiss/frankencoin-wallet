@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/dfx_auth_service.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
-import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
-import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
+import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DFXService extends DFXAuthService {
-  final AppStore appStore;
-
-  DFXService(this.appStore);
+  DFXService(super.appStore);
 
   bool _isLoading = false;
 
@@ -32,7 +29,7 @@ class DFXService extends DFXAuthService {
 
   String get langCode => appStore.settingsStore.language.code;
 
-  List<String> supportedAssets = [
+  static List<String> supportedAssets = [
     'Ethereum/ZCHF',
     'Polygon/ZCHF',
     'Base/ZCHF',
@@ -105,13 +102,10 @@ class DFXService extends DFXAuthService {
     } catch (e) {
       _isLoading = false;
 
-      await showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return ErrorDialog(
-            errorMessage: '${S.of(context).dfx_unavailable}: $e',
-          );
-        },
+      appStore.bottomSheetService.queueBottomSheet(
+        isModalDismissible: true,
+        widget: BottomSheetMessageDisplayWidget(
+            message: '${S.current.dfx_unavailable}: ${e.toString()}'),
       );
     }
   }

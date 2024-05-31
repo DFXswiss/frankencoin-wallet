@@ -1,4 +1,4 @@
-import 'package:frankencoin_wallet/src/entites/node.dart';
+import 'package:frankencoin_wallet/src/entities/node.dart';
 
 final defaultNodes = {
   1: Node(

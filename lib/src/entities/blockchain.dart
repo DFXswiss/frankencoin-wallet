@@ -1,4 +1,4 @@
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 
 enum Blockchain {
   ethereum(1,  "Ethereum", "ETH", CryptoCurrency.eth),

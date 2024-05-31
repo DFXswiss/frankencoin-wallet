@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
-import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
+import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
-import 'package:frankencoin_wallet/src/entites/address_book_entry.dart';
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/address_book/add_contact_page.dart';
 import 'package:frankencoin_wallet/src/screens/address_book/address_book_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/fps_asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
-import 'package:frankencoin_wallet/src/screens/pool/pool_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/frankencoin_pay_receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_from_seed_page.dart';
@@ -23,15 +23,16 @@ import 'package:frankencoin_wallet/src/screens/settings/manage_nodes_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/settings_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/show_seed_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/wallet_connect_page.dart';
+import 'package:frankencoin_wallet/src/screens/swap/swap_page.dart';
 import 'package:frankencoin_wallet/src/screens/web_view/web_view_page.dart';
 import 'package:frankencoin_wallet/src/screens/welcome/welcome_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
-import 'package:frankencoin_wallet/src/view_model/equity_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 
 Route<dynamic> createRoute(RouteSettings settings) {
@@ -61,8 +62,8 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
       if (cryptoCurrency == CryptoCurrency.fps) {
         return MaterialPageRoute<void>(
-            builder: (_) =>
-                FPSAssetDetailsPage(getIt.get<FPSAssetViewModel>()));
+            builder: (_) => FPSAssetDetailsPage(
+                getIt.get<FPSAssetViewModel>(), getIt.get<BalanceViewModel>()));
       }
 
       return MaterialPageRoute<void>(
@@ -84,6 +85,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
       return MaterialPageRoute<void>(
           builder: (_) => SendPage(
                 getIt.get<SendViewModel>(),
+                getIt.get<BottomSheetService>(),
                 initialAddress: arguments[0] as String?,
                 initialAmount: arguments[1] as String?,
                 initialAsset: arguments[2] as CryptoCurrency?,
@@ -109,17 +111,16 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
     case Routes.settingsWalletConnect:
       return MaterialPageRoute<void>(
-          builder: (_) =>
-              WalletConnectPage(getIt.get<WalletConnectWalletService>()));
+          builder: (_) => WalletConnectPage(getIt.get<WalletConnectService>()));
 
     case Routes.settingsSeed:
       return MaterialPageRoute<void>(
           builder: (_) => ShowSeedPage(getIt.get<AppStore>()));
 
-    case Routes.pool:
+    case Routes.swap:
       return MaterialPageRoute<void>(
-          builder: (_) => PoolPage(
-              getIt.get<BalanceViewModel>(), getIt.get<EquityViewModel>()));
+          builder: (_) => SwapPage(getIt.get<BalanceViewModel>(),
+              getIt.get<SwapViewModel>(), getIt.get<BottomSheetService>()));
 
     case Routes.webView:
       final args = settings.arguments as List;

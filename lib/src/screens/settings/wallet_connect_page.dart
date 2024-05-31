@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/walletconnect_service.dart';
+import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/widgets/wc_paring_card.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
@@ -15,7 +15,7 @@ class WalletConnectPage extends BasePage {
   @override
   String? get title => "WalletConnect";
 
-  final WalletConnectWalletService wcService;
+  final WalletConnectService wcService;
 
   @override
   Widget body(BuildContext context) =>
@@ -23,7 +23,7 @@ class WalletConnectPage extends BasePage {
 }
 
 class _WalletConnectPageBody extends StatefulWidget {
-  final WalletConnectWalletService wcService;
+  final WalletConnectService wcService;
 
   const _WalletConnectPageBody({required this.wcService});
 

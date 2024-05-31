@@ -3,10 +3,9 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
+import 'package:frankencoin_wallet/secrets.g.dart' as secrets;
 import 'package:frankencoin_wallet/src/core/wallet_connect/wc_evm_chain_service.dart';
-import 'package:frankencoin_wallet/src/entites/blockchain.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/session_proposal_modal.dart';
@@ -14,16 +13,13 @@ import 'package:frankencoin_wallet/src/widgets/wallet_connect/web3request_modal.
 import 'package:mobx/mobx.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
-import 'package:frankencoin_wallet/secrets.g.dart' as secrets;
-
 part 'walletconnect_service.g.dart';
 
-class WalletConnectWalletService = WalletConnectWalletServiceBase
-    with _$WalletConnectWalletService;
+class WalletConnectService = WalletConnectServiceBase
+    with _$WalletConnectService;
 
-abstract class WalletConnectWalletServiceBase with Store {
+abstract class WalletConnectServiceBase with Store {
   final AppStore appStore;
-  final BottomSheetService _bottomSheetHandler;
 
   late Web3Wallet _web3Wallet;
 
@@ -39,7 +35,7 @@ abstract class WalletConnectWalletServiceBase with Store {
   @observable
   ObservableList<StoredCacao> auth;
 
-  WalletConnectWalletServiceBase(this._bottomSheetHandler, this.appStore)
+  WalletConnectServiceBase(this.appStore)
       : pairings = ObservableList<PairingInfo>(),
         sessions = ObservableList<SessionData>(),
         auth = ObservableList<StoredCacao>(),
@@ -69,7 +65,6 @@ abstract class WalletConnectWalletServiceBase with Store {
       CWEvmChainService(
         blockchain: chain,
         appStore: appStore,
-        bottomSheetService: _bottomSheetHandler,
         wallet: _web3Wallet,
       );
     }
@@ -152,7 +147,8 @@ abstract class WalletConnectWalletServiceBase with Store {
         ),
       );
       // show the bottom sheet
-      final bool? isApproved = await _bottomSheetHandler.queueBottomSheet(
+      final bool? isApproved =
+          await appStore.bottomSheetService.queueBottomSheet(
         widget: modalWidget,
       ) as bool?;
 
@@ -175,7 +171,7 @@ abstract class WalletConnectWalletServiceBase with Store {
   @action
   void _onPairingInvalid(PairingInvalidEvent? args) {
     log('Pairing Invalid Event: $args');
-    _bottomSheetHandler.queueBottomSheet(
+    appStore.bottomSheetService.queueBottomSheet(
       isModalDismissible: true,
       widget: BottomSheetMessageDisplayWidget(message: 'Invalid Paring: $args'),
     );
@@ -187,12 +183,12 @@ abstract class WalletConnectWalletServiceBase with Store {
       log('Pairing with URI: $uri');
       await _web3Wallet.core.pairing.pair(uri: uri);
     } on WalletConnectError catch (e) {
-      _bottomSheetHandler.queueBottomSheet(
+      appStore.bottomSheetService.queueBottomSheet(
         isModalDismissible: true,
         widget: BottomSheetMessageDisplayWidget(message: e.message),
       );
     } catch (e) {
-      _bottomSheetHandler.queueBottomSheet(
+      appStore.bottomSheetService.queueBottomSheet(
         isModalDismissible: true,
         widget: BottomSheetMessageDisplayWidget(message: e.toString()),
       );

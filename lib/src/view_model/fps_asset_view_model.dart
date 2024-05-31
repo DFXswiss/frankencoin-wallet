@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:frankencoin_wallet/src/entites/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
-import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
+import 'package:frankencoin_wallet/src/stores/balance_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -14,10 +14,10 @@ class FPSAssetViewModel = FPSAssetViewModelBase with _$FPSAssetViewModel;
 
 abstract class FPSAssetViewModelBase with Store {
   final AppStore appStore;
-  final BalanceViewModel balanceVM;
+  final BalanceStore _balanceStore;
   final Equity _equity;
 
-  FPSAssetViewModelBase(this.appStore, this.balanceVM)
+  FPSAssetViewModelBase(this.appStore, this._balanceStore)
       : _equity = Equity(
           address: EthereumAddress.fromHex(CryptoCurrency.fps.address),
           client: appStore.getClient(CryptoCurrency.fps.chainId),
@@ -36,13 +36,14 @@ abstract class FPSAssetViewModelBase with Store {
   int get holdingPeriod => (fpsHoldingSince.toInt() / 86400).floor();
 
   @computed
-  BigInt get fpsBalance => balanceVM.getBalance(CryptoCurrency.fps);
+  BigInt get fpsBalance => _balanceStore.getBalance(CryptoCurrency.fps);
 
   @computed
-  BigInt get wfpsBalance => balanceVM.getBalance(CryptoCurrency.wfps);
+  BigInt get wfpsBalance => _balanceStore.getBalance(CryptoCurrency.wfps);
 
   @computed
-  BigInt get maticWFPSBalance => balanceVM.getBalance(CryptoCurrency.maticWFPS);
+  BigInt get maticWFPSBalance =>
+      _balanceStore.getBalance(CryptoCurrency.maticWFPS);
 
   @computed
   double get marketCap =>
@@ -76,15 +77,11 @@ abstract class FPSAssetViewModelBase with Store {
   Timer? _updateBalancesTimer;
 
   Future<void> startSync() async {
-    await balanceVM.startSyncBalances();
     await updateAll();
 
     _updateBalancesTimer = Timer.periodic(
         const Duration(seconds: 30), (timer) async => await updateAll());
   }
 
-  void stopSync() {
-    balanceVM.stopSyncBalances();
-    _updateBalancesTimer?.cancel();
-  }
+  void stopSync() => _updateBalancesTimer?.cancel();
 }

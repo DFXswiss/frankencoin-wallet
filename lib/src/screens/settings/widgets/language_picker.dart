@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/entites/language.dart';
+import 'package:frankencoin_wallet/src/entities/language.dart';
 import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 
 class LanguagePicker extends StatelessWidget {

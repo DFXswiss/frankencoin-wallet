@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:frankencoin_wallet/src/core/dfx_auth_service.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
-import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 import 'package:http/http.dart' as http;
@@ -11,16 +10,15 @@ import 'package:http/http.dart' as http;
 class FrankencoinPayService extends DFXAuthService {
   static const String defaultProvider = 'lightning.space';
 
-  final AppStore appStore;
   final FrankencoinPayStore frankencoinPayStore;
 
-  FrankencoinPayService(this.appStore, this.frankencoinPayStore);
+  FrankencoinPayService(super.appStore, this.frankencoinPayStore);
 
   @override
   String get baseUrl => currentProvider;
 
   @override
-  final String signMessagePath = '/v1/auth/sign-message';
+  String get signMessagePath => '/v1/auth/sign-message';
 
   @override
   WalletAccount get wallet => appStore.wallet!.currentAccount;
