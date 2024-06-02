@@ -9,8 +9,6 @@ String getCryptoAssetImagePath(CryptoCurrency cryptoCurrency) {
       return "assets/images/crypto/eth.png";
     case CryptoCurrency.matic:
       return "assets/images/crypto/matic.png";
-    case CryptoCurrency.xchf:
-      return "assets/images/crypto/xchf.png";
     case CryptoCurrency.zchf:
     case CryptoCurrency.maticZCHF:
     case CryptoCurrency.baseZCHF:
@@ -21,10 +19,6 @@ String getCryptoAssetImagePath(CryptoCurrency cryptoCurrency) {
     case CryptoCurrency.wfps:
     case CryptoCurrency.maticWFPS:
       return "assets/images/crypto/fps.png";
-    case CryptoCurrency.wbtc:
-      return "assets/images/crypto/wbtc.png";
-    case CryptoCurrency.lseth:
-      return "assets/images/crypto/lseth.png";
     default:
       return "assets/images/frankencoin.png";
   }

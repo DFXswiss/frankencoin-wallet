@@ -13,12 +13,13 @@ abstract class BalanceViewModelBase with Store {
   BalanceViewModelBase(this._balanceStore);
 
   @computed
-  ObservableMap<CryptoCurrency, BalanceInfo> get balances =>
-      _balanceStore.balances;
+  ObservableMap<String, BalanceInfo> get balances => _balanceStore.balances;
 
   @computed
   BigInt get zchfBalanceAggregated {
-    var balance = _balanceStore.getBalance(CryptoCurrency.zchf);
+    var balance =
+        _balanceStore.balances[CryptoCurrency.zchf.balanceId]?.getBalance() ??
+            BigInt.zero;
 
     balance += _balanceStore.getBalance(CryptoCurrency.maticZCHF);
     balance += _balanceStore.getBalance(CryptoCurrency.baseZCHF);
@@ -29,7 +30,10 @@ abstract class BalanceViewModelBase with Store {
 
   @computed
   BigInt get fpsBalanceAggregated {
-    var balance = _balanceStore.getBalance(CryptoCurrency.fps);
+    var balance =
+        _balanceStore.balances[CryptoCurrency.fps.balanceId]?.getBalance() ??
+            BigInt.zero;
+
     balance += _balanceStore.getBalance(CryptoCurrency.wfps);
     balance += _balanceStore.getBalance(CryptoCurrency.maticWFPS);
     return balance;
@@ -37,7 +41,10 @@ abstract class BalanceViewModelBase with Store {
 
   @computed
   BigInt get ethBalanceAggregated {
-    var balance = _balanceStore.getBalance(CryptoCurrency.eth);
+    var balance =
+        _balanceStore.balances[CryptoCurrency.eth.balanceId]?.getBalance() ??
+            BigInt.zero;
+
     balance += _balanceStore.getBalance(CryptoCurrency.baseETH);
     balance += _balanceStore.getBalance(CryptoCurrency.opETH);
     balance += _balanceStore.getBalance(CryptoCurrency.arbETH);

@@ -8,12 +8,6 @@ enum CryptoCurrency {
       "Frankencoin Pool Share", 18),
   wfps(1, "0x5052D3Cc819f53116641e89b96Ff4cD1EE80B182", "WFPS",
       "Wrapped Frankencoin Pool Share", 18, fps),
-  xchf(1, "0xB4272071eCAdd69d933AdcD19cA99fe80664fc08", "XCHF", "CryptoFranc",
-      18),
-  lseth(1, "0x8c1BEd5b9a0928467c9B1341Da1D7BD5e10b6549", "LsETH",
-      "Liquid Staked ETH", 18),
-  wbtc(1, "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599", "WBTC", "Wrapped BTC",
-      8),
   matic(137, "0x0", "MATIC", "Polygon", 18),
   maticZCHF(137, "0x02567e4b14b25549331fCEe2B56c647A8bAB16FD", "ZCHF",
       "Frankencoin (Polygon)", 18, zchf),
@@ -46,8 +40,6 @@ enum CryptoCurrency {
     opZCHF,
     baseZCHF,
     arbZCHF,
-    wbtc,
-    xchf,
   ];
 
   static const spendCurrencies = [
@@ -75,4 +67,6 @@ enum CryptoCurrency {
       .toList();
 
   Blockchain get blockchain => Blockchain.getFromChainId(chainId);
+
+  String get balanceId => "$chainId:$address";
 }

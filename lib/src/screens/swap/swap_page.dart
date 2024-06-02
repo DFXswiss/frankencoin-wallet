@@ -93,10 +93,9 @@ class _SwapPageBodyState extends State<_SwapPageBody> {
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               suffix: Observer(builder: (_) {
-                final rawBalanceAmount = EtherAmount.inWei(widget
-                        .balanceVM.balances[widget.equityVM.sendCurrency]!
-                        .getBalance())
-                    .getInWei;
+                final rawBalanceAmount = widget
+                    .balanceVM.balances[widget.equityVM.sendCurrency.balanceId]!
+                    .getBalance();
                 return CupertinoButton(
                   onPressed: () => _amountController.text = formatFixed(
                       rawBalanceAmount, widget.equityVM.sendCurrency.decimals),

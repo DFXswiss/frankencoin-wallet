@@ -12,6 +12,7 @@ import 'package:frankencoin_wallet/src/screens/asset/asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/fps_asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
+import 'package:frankencoin_wallet/src/screens/dashboard/more_assets_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/frankencoin_pay_receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_from_seed_page.dart';
@@ -27,6 +28,7 @@ import 'package:frankencoin_wallet/src/screens/swap/swap_page.dart';
 import 'package:frankencoin_wallet/src/screens/web_view/web_view_page.dart';
 import 'package:frankencoin_wallet/src/screens/welcome/welcome_page.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
+import 'package:frankencoin_wallet/src/stores/custom_erc20_token_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
@@ -69,6 +71,11 @@ Route<dynamic> createRoute(RouteSettings settings) {
       return MaterialPageRoute<void>(
           builder: (_) =>
               AssetDetailsPage(cryptoCurrency, getIt.get<BalanceViewModel>()));
+
+    case Routes.moreAssets:
+      return MaterialPageRoute<void>(
+          builder: (_) => MoreAssetsPage(getIt.get<BalanceViewModel>(),
+              getIt.get<CustomErc20TokenStore>()));
 
     case Routes.receive:
       return MaterialPageRoute<void>(

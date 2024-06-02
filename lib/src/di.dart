@@ -7,6 +7,7 @@ import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service
 import 'package:frankencoin_wallet/src/stores/address_book_store.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/balance_store.dart';
+import 'package:frankencoin_wallet/src/stores/custom_erc20_token_store.dart';
 import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
@@ -36,8 +37,9 @@ void setupDependencyInjection(
       AppStore(getIt.get<SettingsStore>(), getIt.get<BottomSheetService>()));
   getIt.registerSingleton(FrankencoinPayStore(sharedPreferences));
   getIt.registerSingleton(AddressBookStore(getIt.get<Isar>()));
-  getIt.registerSingleton(
-      BalanceStore(getIt.get<AppStore>(), getIt.get<Isar>()));
+  getIt.registerSingleton(CustomErc20TokenStore(getIt.get<Isar>()));
+  getIt.registerSingleton(BalanceStore(getIt.get<AppStore>(),
+      getIt.get<CustomErc20TokenStore>(), getIt.get<Isar>()));
 
   getIt.registerSingleton(DFXService(getIt.get<AppStore>()));
   getIt.registerSingleton(DFXSwapService(getIt.get<AppStore>()));
@@ -53,7 +55,7 @@ void setupDependencyInjection(
   getIt.registerFactory<WalletViewModel>(() =>
       WalletViewModel(getIt.get<AppStore>(), getIt.get<SharedPreferences>()));
   getIt.registerFactory<SendViewModel>(() =>
-      SendViewModel(getIt.get<BalanceViewModel>(), getIt.get<AppStore>()));
+      SendViewModel(getIt.get<BalanceStore>(), getIt.get<AppStore>()));
   getIt.registerFactory<SwapViewModel>(() => SwapViewModel(
         getIt.get<AppStore>(),
         getIt.get<SendViewModel>(),

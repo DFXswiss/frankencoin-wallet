@@ -7,8 +7,8 @@ import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
+import 'package:frankencoin_wallet/src/stores/balance_store.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
-import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/transaction_priority.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:mobx/mobx.dart';
@@ -19,10 +19,10 @@ part 'send_view_model.g.dart';
 class SendViewModel = SendViewModelBase with _$SendViewModel;
 
 abstract class SendViewModelBase with Store {
-  final BalanceViewModel balanceVM;
   final AppStore appStore;
+  final BalanceStore balanceStore;
 
-  SendViewModelBase(this.balanceVM, this.appStore) {
+  SendViewModelBase(this.balanceStore, this.appStore) {
     reaction((_) => spendCurrency, (_) async {
       await updateGasPrice();
       await estimateGas();
@@ -136,8 +136,7 @@ abstract class SendViewModelBase with Store {
       return;
     }
 
-    if (BigInt.parse(balanceVM.balances[spendCurrency]?.balance ?? "0") <
-        cryptoAmount) {
+    if (balanceStore.getBalance(spendCurrency) < cryptoAmount) {
       state = FailureState(S.current.not_enough_token(spendCurrency.name));
       return;
     }

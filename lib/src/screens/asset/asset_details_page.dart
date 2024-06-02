@@ -87,7 +87,7 @@ class AssetDetailsPage extends BasePage {
             ),
             Observer(
               builder: (_) => BalanceCard(
-                balanceInfo: balanceVM.balances[cryptoCurrency],
+                balanceInfo: balanceVM.balances[cryptoCurrency.balanceId],
                 cryptoCurrency: cryptoCurrency,
                 backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
                 showBlockchainIcon: true,
@@ -97,7 +97,7 @@ class AssetDetailsPage extends BasePage {
             ...cryptoCurrency.childCryptoCurrencies.map(
               (cryptoCurrency) => Observer(
                 builder: (_) => BalanceCard(
-                  balanceInfo: balanceVM.balances[cryptoCurrency],
+                  balanceInfo: balanceVM.balances[cryptoCurrency.balanceId],
                   cryptoCurrency: cryptoCurrency,
                   backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
                   showBlockchainIcon: true,

@@ -36,14 +36,20 @@ abstract class FPSAssetViewModelBase with Store {
   int get holdingPeriod => (fpsHoldingSince.toInt() / 86400).floor();
 
   @computed
-  BigInt get fpsBalance => _balanceStore.getBalance(CryptoCurrency.fps);
+  BigInt get fpsBalance =>
+      _balanceStore.balances[CryptoCurrency.fps.balanceId]?.getBalance() ??
+      BigInt.zero;
 
   @computed
-  BigInt get wfpsBalance => _balanceStore.getBalance(CryptoCurrency.wfps);
+  BigInt get wfpsBalance =>
+      _balanceStore.balances[CryptoCurrency.wfps.balanceId]?.getBalance() ??
+      BigInt.zero;
 
   @computed
   BigInt get maticWFPSBalance =>
-      _balanceStore.getBalance(CryptoCurrency.maticWFPS);
+      _balanceStore.balances[CryptoCurrency.maticWFPS.balanceId]
+          ?.getBalance() ??
+      BigInt.zero;
 
   @computed
   double get marketCap =>

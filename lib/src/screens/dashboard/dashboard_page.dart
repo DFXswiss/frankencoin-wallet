@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/action_bar.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_section.dart';
+import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/bottom_sheet_listener.dart';
+import 'package:frankencoin_wallet/src/widgets/primary_fullwidth_button.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage(this.balanceVM, {super.key});
@@ -77,24 +80,19 @@ class DashboardPageState extends State<DashboardPage> {
                                       cryptoCurrency: CryptoCurrency.eth,
                                     ),
                                     BalanceCard(
-                                      balanceInfo: widget.balanceVM
-                                          .balances[CryptoCurrency.matic],
+                                      balanceInfo: widget.balanceVM.balances[
+                                          CryptoCurrency.matic.balanceId],
                                       cryptoCurrency: CryptoCurrency.matic,
-                                    ),
-                                    BalanceCard(
-                                      balanceInfo: widget.balanceVM
-                                          .balances[CryptoCurrency.wbtc],
-                                      cryptoCurrency: CryptoCurrency.wbtc,
-                                    ),
-                                    BalanceCard(
-                                      balanceInfo: widget.balanceVM
-                                          .balances[CryptoCurrency.lseth],
-                                      cryptoCurrency: CryptoCurrency.lseth,
                                     ),
                                     BalanceCard(
                                       balance:
                                           widget.balanceVM.fpsBalanceAggregated,
                                       cryptoCurrency: CryptoCurrency.fps,
+                                    ),
+                                    FullwidthButton(
+                                      label: S.of(context).more_assets,
+                                      onPressed: () => Navigator.of(context)
+                                          .pushNamed(Routes.moreAssets),
                                     ),
                                     const SizedBox(
                                       height: 110,

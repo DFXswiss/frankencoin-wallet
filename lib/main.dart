@@ -3,10 +3,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
+import 'package:frankencoin_wallet/src/core/default_custom_erc20_tokens.dart';
 import 'package:frankencoin_wallet/src/core/default_nodes.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entities/balance_info.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/entities/node.dart';
 import 'package:frankencoin_wallet/src/screens/router.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
@@ -22,9 +24,12 @@ Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     final dir = await getApplicationSupportDirectory();
-    final isar = await Isar.open(
-        [AddressBookEntrySchema, BalanceInfoSchema, NodeSchema],
-        directory: dir.path, inspector: false);
+    final isar = await Isar.open([
+      AddressBookEntrySchema,
+      BalanceInfoSchema,
+      CustomErc20TokenSchema,
+      NodeSchema,
+    ], directory: dir.path, inspector: false);
     final sharedPreferences = await SharedPreferences.getInstance();
 
     await setup(sharedPreferences, isar);
@@ -61,6 +66,12 @@ Future<void> setup(SharedPreferences sharedPreferences, Isar isar) async {
     for (final node in defaultNodes.values) {
       if (await isar.nodes.get(node.id) == null) {
         await isar.nodes.put(node);
+      }
+    }
+
+    for (final token in defaultCustomErc20Tokens) {
+      if (await isar.customErc20Tokens.get(token.id) == null) {
+        await isar.customErc20Tokens.put(token);
       }
     }
   });

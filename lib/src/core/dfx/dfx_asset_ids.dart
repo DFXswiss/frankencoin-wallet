@@ -14,6 +14,6 @@ final dfxAssetIds = <CryptoCurrency, int>{
   CryptoCurrency.opETH: 139,
   CryptoCurrency.arbETH: 140,
   CryptoCurrency.matic: 242,
-  CryptoCurrency.xchf: 233,
-  CryptoCurrency.wbtc: 142
+  // CryptoCurrency.xchf: 233,
+  // CryptoCurrency.wbtc: 142
 };

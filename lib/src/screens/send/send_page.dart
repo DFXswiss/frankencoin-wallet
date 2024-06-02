@@ -135,11 +135,10 @@ class _SendPageBodyState extends State<_SendPageBody> {
             ),
           ),
           suffix: Observer(builder: (_) {
-            final rawBalanceAmount = EtherAmount.inWei(widget
-                        .sendVM.balanceVM.balances[widget.sendVM.spendCurrency]
-                        ?.getBalance() ??
-                    BigInt.zero)
-                .getInWei;
+            final rawBalanceAmount = widget.sendVM.balanceStore
+                    .balances[widget.sendVM.spendCurrency.balanceId]
+                    ?.getBalance() ??
+                BigInt.zero;
 
             return CupertinoButton(
               onPressed: () => widget.sendVM.rawCryptoAmount = formatFixed(
@@ -192,7 +191,6 @@ class _SendPageBodyState extends State<_SendPageBody> {
 
     _addressController.addListener(() {
       final address = _addressController.text;
-
       if (address != widget.sendVM.address) widget.sendVM.address = address;
     });
 
