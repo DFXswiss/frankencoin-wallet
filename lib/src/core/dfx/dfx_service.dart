@@ -85,7 +85,8 @@ class DFXService extends DFXAuthService {
         'asset-in': assetIn,
         // 'blockchains': supportedBlockchains.join(','),
         'assets': supportedAssets.join(','),
-        if (paymentMethod != null) 'payment-method': paymentMethod
+        if (paymentMethod != null) 'payment-method': paymentMethod,
+        if (DeviceInfo.instance.isMobile) 'headless': 'true'
       });
 
       _isLoading = false;
