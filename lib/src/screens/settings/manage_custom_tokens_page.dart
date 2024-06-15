@@ -24,6 +24,34 @@ class ManageCustomTokensPage extends BasePage {
   @override
   Widget body(BuildContext context) =>
       _ManageCustomTokensPageBody(customErc20TokenStore, bottomSheetService);
+
+  @override
+  Widget? trailing(BuildContext context) => MergeSemantics(
+        child: SizedBox(
+          height: 37,
+          width: 37,
+          child: ButtonTheme(
+            minWidth: double.minPositive,
+            child: Semantics(
+              label: S.of(context).edit_asset,
+              child: TextButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateColor.resolveWith(
+                      (states) => Colors.transparent),
+                ),
+                onPressed: null,
+                // onPressed: () => Navigator.of(context)
+                //     .pushNamed(Routes.settingsCustomTokensEdit),
+                child: Icon(
+                  Icons.add,
+                  color: pageIconColor(context),
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
 }
 
 class _ManageCustomTokensPageBody extends StatefulWidget {

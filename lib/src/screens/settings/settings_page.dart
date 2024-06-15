@@ -24,88 +24,91 @@ class SettingsPage extends BasePage {
   String get title => S.current.settings;
 
   @override
-  Widget body(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
-              child: Text(
-                S.of(context).settings_general,
-                style: const TextStyle(color: FrankencoinColors.frRed),
+  Widget body(BuildContext context) => SingleChildScrollView(
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                  child: Text(
+                    S.of(context).settings_general,
+                    style: const TextStyle(color: FrankencoinColors.frRed),
+                  ),
+                ),
               ),
-            ),
-          ),
-          OptionRow(
-            name: "WalletConnect",
-            type: OptionRowType.navigate,
-            onTap: (_) =>
-                Navigator.of(context).pushNamed(Routes.settingsWalletConnect),
-          ),
-          OptionRow(
-            name: S.of(context).contacts,
-            type: OptionRowType.navigate,
-            onTap: (_) => Navigator.of(context).pushNamed(Routes.addressBook),
-          ),
-          OptionRow(
-            name: S.of(context).nodes,
-            type: OptionRowType.navigate,
-            onTap: (_) => Navigator.of(context).pushNamed(Routes.settingsNodes),
-          ),
-          OptionRow(
-            name: S.of(context).assets,
-            type: OptionRowType.navigate,
-            onTap: (_) =>
-                Navigator.of(context).pushNamed(Routes.settingsCustomTokens),
-          ),
-          Observer(
-            builder: (_) => OptionRow(
-              name: S.of(context).settings_language,
-              type: OptionRowType.edit,
-              suffix: settingsStore.language.name,
-              onTap: _setLanguage,
-            ),
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
-              child: Text(
-                S.of(context).danger_zone,
-                style: const TextStyle(color: FrankencoinColors.frRed),
+              OptionRow(
+                name: "WalletConnect",
+                type: OptionRowType.navigate,
+                onTap: (_) => Navigator.of(context)
+                    .pushNamed(Routes.settingsWalletConnect),
               ),
-            ),
+              OptionRow(
+                name: S.of(context).contacts,
+                type: OptionRowType.navigate,
+                onTap: (_) =>
+                    Navigator.of(context).pushNamed(Routes.addressBook),
+              ),
+              OptionRow(
+                name: S.of(context).nodes,
+                type: OptionRowType.navigate,
+                onTap: (_) =>
+                    Navigator.of(context).pushNamed(Routes.settingsNodes),
+              ),
+              OptionRow(
+                name: S.of(context).assets,
+                type: OptionRowType.navigate,
+                onTap: (_) => Navigator.of(context)
+                    .pushNamed(Routes.settingsCustomTokens),
+              ),
+              Observer(
+                builder: (_) => OptionRow(
+                  name: S.of(context).settings_language,
+                  type: OptionRowType.edit,
+                  suffix: settingsStore.language.name,
+                  onTap: _setLanguage,
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                  child: Text(
+                    S.of(context).danger_zone,
+                    style: const TextStyle(color: FrankencoinColors.frRed),
+                  ),
+                ),
+              ),
+              OptionRow(
+                name: S.of(context).show_seed,
+                type: OptionRowType.navigate,
+                onTap: (_) =>
+                    Navigator.of(context).pushNamed(Routes.settingsSeed),
+              ),
+              Observer(
+                builder: (_) => OptionRow(
+                  name: S.of(context).experimental_features,
+                  type: OptionRowType.edit,
+                  suffix: settingsStore.enableExperimentalFeatures
+                      ? S.of(context).enabled
+                      : S.of(context).disabled,
+                  onTap: (_) => settingsStore.enableExperimentalFeatures =
+                      !settingsStore.enableExperimentalFeatures,
+                ),
+              ),
+              CupertinoButton(
+                onPressed: () => _deleteWallet(context),
+                child: Text(
+                  S.of(context).sign_out,
+                  style: const TextStyle(color: FrankencoinColors.frRed),
+                ),
+              )
+            ],
           ),
-          OptionRow(
-            name: S.of(context).show_seed,
-            type: OptionRowType.navigate,
-            onTap: (_) => Navigator.of(context).pushNamed(Routes.settingsSeed),
-          ),
-          Observer(
-            builder: (_) => OptionRow(
-              name: S.of(context).experimental_features,
-              type: OptionRowType.edit,
-              suffix: settingsStore.enableExperimentalFeatures
-                  ? S.of(context).enabled
-                  : S.of(context).disabled,
-              onTap: (_) => settingsStore.enableExperimentalFeatures =
-                  !settingsStore.enableExperimentalFeatures,
-            ),
-          ),
-          CupertinoButton(
-            onPressed: () => _deleteWallet(context),
-            child: Text(
-              S.of(context).sign_out,
-              style: const TextStyle(color: FrankencoinColors.frRed),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+        ),
+      );
 
   Future<void> _setLanguage(BuildContext context) async {
     final setLanguage = await showDialog(
