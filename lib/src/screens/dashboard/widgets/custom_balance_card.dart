@@ -47,28 +47,33 @@ class CustomBalanceCard extends StatelessWidget {
               children: [
                 if (token.icon != null) CustomTokenIcon(erc20token: token),
                 Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              token.name,
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Lato',
-                                  color: Colors.white),
-                            ),
-                            Text(
-                              token.symbol,
-                              style: const TextStyle(
-                                  fontFamily: 'Lato', color: Colors.white),
-                            )
-                          ],
-                        ))),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          token.name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Lato',
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          token.symbol,
+                          style: const TextStyle(
+                            fontFamily: 'Lato',
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 Text(
                   formatFixed(
                       balanceInfo?.getBalance() ?? balance ?? BigInt.zero,

@@ -92,6 +92,7 @@
     "total_supply": "Im Umlauf",
     "trade": "Handeln",
     "transaction_id": "Transaktions-ID",
+    "unable_to_edit_trusted_asset": "${assetName} ist ein Vermögenswert aus vertrauenswürdiger Quelle und kann nicht bearbeitet werden.",
     "your_seed": "Dein Frankencoin-Seed",
     "your_seed_disclaimer": "Dies ist Ihr einzigartiger und privater Seed und der einzige Weg, um Ihre Wallet im Falle eines Verlusts oder einer Fehlfunktion wiederherzustellen.",
     "wallet_address_receiver": "Emfänger-Wallet",

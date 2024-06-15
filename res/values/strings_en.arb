@@ -93,6 +93,7 @@
     "total_supply": "Total supply",
     "trade": "Trade",
     "transaction_id": "Transactions-id",
+    "unable_to_edit_trusted_asset": "${assetName} is an asset from a trustworthy source and can not be edited.",
     "your_seed": "Your Frankencoin-seed",
     "your_seed_disclaimer": "This is your unique and private seed and it is the only way to recover your wallet in case of loss or malfunction.",
     "wallet_address_receiver": "Receiver wallet",
