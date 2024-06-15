@@ -34,6 +34,8 @@
     "dfx_unavailable": "DFX nicht erreichbar",
     "disabled": "Deaktiviert",
     "disconnect": "Verbindung trennen",
+    "edit_asset": "Asset bearbeiten",
+    "edit_assets": "Vermögenswerte bearbeiten",
     "edit_node": "Node bearbeiten",
     "estimated_fee": "Geschätzte Gebühr",
     "enabled": "Aktiv",

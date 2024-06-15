@@ -41,21 +41,30 @@ class SettingsPage extends BasePage {
           ),
           OptionRow(
             name: "WalletConnect",
+            type: OptionRowType.navigate,
             onTap: (_) =>
                 Navigator.of(context).pushNamed(Routes.settingsWalletConnect),
           ),
           OptionRow(
             name: S.of(context).contacts,
-            onTap: (_) =>
-                Navigator.of(context).pushNamed(Routes.addressBook),
+            type: OptionRowType.navigate,
+            onTap: (_) => Navigator.of(context).pushNamed(Routes.addressBook),
           ),
           OptionRow(
             name: S.of(context).nodes,
+            type: OptionRowType.navigate,
             onTap: (_) => Navigator.of(context).pushNamed(Routes.settingsNodes),
+          ),
+          OptionRow(
+            name: S.of(context).assets,
+            type: OptionRowType.navigate,
+            onTap: (_) =>
+                Navigator.of(context).pushNamed(Routes.settingsCustomTokens),
           ),
           Observer(
             builder: (_) => OptionRow(
               name: S.of(context).settings_language,
+              type: OptionRowType.edit,
               suffix: settingsStore.language.name,
               onTap: _setLanguage,
             ),
@@ -72,11 +81,13 @@ class SettingsPage extends BasePage {
           ),
           OptionRow(
             name: S.of(context).show_seed,
+            type: OptionRowType.navigate,
             onTap: (_) => Navigator.of(context).pushNamed(Routes.settingsSeed),
           ),
           Observer(
             builder: (_) => OptionRow(
               name: S.of(context).experimental_features,
+              type: OptionRowType.edit,
               suffix: settingsStore.enableExperimentalFeatures
                   ? S.of(context).enabled
                   : S.of(context).disabled,

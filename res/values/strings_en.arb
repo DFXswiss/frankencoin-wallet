@@ -34,6 +34,8 @@
     "deposit_with_card_description": "Buy ZCHF with your Visa or Mastercard. Apple Pay and Google Pay available.",
     "disabled": "Disabled",
     "disconnect": "Disconnect",
+    "edit_asset": "Edit asset",
+    "edit_assets": "Edit assets",
     "edit_node": "Edit node",
     "estimated_fee": "Estimated fee",
     "enabled": "Enabled",

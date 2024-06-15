@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
-import 'package:frankencoin_wallet/src/di.dart';
-import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
-import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
-import 'package:frankencoin_wallet/src/screens/dashboard/widgets/action_bar.dart';
-import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
-import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_section.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/custom_balance_card.dart';
 import 'package:frankencoin_wallet/src/stores/custom_erc20_token_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
-import 'package:frankencoin_wallet/src/widgets/bottom_sheet_listener.dart';
 
 class MoreAssetsPage extends BasePage {
   final BalanceViewModel balanceVM;

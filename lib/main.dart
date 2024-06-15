@@ -13,6 +13,7 @@ import 'package:frankencoin_wallet/src/entities/node.dart';
 import 'package:frankencoin_wallet/src/screens/router.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
+import 'package:frankencoin_wallet/src/utils/load_tokenslist.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/load_wallet.dart';
 import 'package:isar/isar.dart';
@@ -69,7 +70,10 @@ Future<void> setup(SharedPreferences sharedPreferences, Isar isar) async {
       }
     }
 
-    for (final token in defaultCustomErc20Tokens) {
+    final tokenList = await loadTrustedTokenList();
+    tokenList.addAll(defaultCustomErc20Tokens);
+
+    for (final token in tokenList) {
       if (await isar.customErc20Tokens.get(token.id) == null) {
         await isar.customErc20Tokens.put(token);
       }

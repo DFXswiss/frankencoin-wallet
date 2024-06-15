@@ -2,19 +2,47 @@ import 'package:flutter/material.dart';
 
 class OptionRow extends StatelessWidget {
   final String name;
+  final String? subtitle;
   final Widget? leading;
   final String? suffix;
   final void Function(BuildContext context)? onTap;
   final bool canEdit;
+  final OptionRowType type;
+  final Color suffixIconColor;
 
   const OptionRow({
     super.key,
     required this.name,
+    required this.type,
     this.leading,
     this.suffix,
+    this.subtitle,
     this.onTap,
-    this.canEdit = false,
+    this.canEdit = true,
+    this.suffixIconColor = Colors.white,
   });
+
+  Widget? get _suffixIcon {
+    if (suffix != null) {
+      return Text(
+        suffix!,
+        style: const TextStyle(
+          fontSize: 16,
+          fontFamily: 'Lato',
+          color: Colors.grey,
+        ),
+      );
+    }
+    if (!canEdit) return Icon(Icons.lock, color: suffixIconColor);
+    switch (type) {
+      case OptionRowType.edit:
+        return Icon(Icons.edit, color: suffixIconColor);
+      case OptionRowType.navigate:
+        return Icon(Icons.keyboard_arrow_right, color: suffixIconColor);
+      default:
+        return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,38 +60,45 @@ class OptionRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (leading != null) leading!,
+            leading,
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Lato',
-                    color: Colors.white,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Lato',
+                        color: Colors.white,
+                      ),
+                    ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Lato',
+                          color: Colors.grey,
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
-            if (suffix != null) ...[
-              Text(
-                suffix!,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'Lato',
-                  color: Colors.grey,
-                ),
-              )
-            ] else
-              Icon(
-                canEdit ? Icons.edit : Icons.keyboard_arrow_right,
-                color: Colors.white,
-              ),
-          ],
+            _suffixIcon
+          ].nonNulls.toList(),
         ),
       ),
     );
   }
+}
+
+enum OptionRowType {
+  edit,
+  navigate,
+  info;
 }

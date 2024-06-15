@@ -11,6 +11,8 @@ class Routes {
   static const send = '/dashboard/send';
   static const settings = '/settings';
   static const settingsNodes = '/settings/nodes';
+  static const settingsCustomTokens = '/settings/tokens';
+  static const settingsCustomTokensEdit = '/settings/tokens/edit';
   static const settingsNodesEdit = '/settings/nodes/edit';
   static const settingsWalletConnect = '/settings/wallet_connect';
   static const settingsSeed = '/settings/seed';

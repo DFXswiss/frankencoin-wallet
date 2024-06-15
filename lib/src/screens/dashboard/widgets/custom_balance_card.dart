@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
-import 'package:frankencoin_wallet/src/core/asset_logo.dart';
 import 'package:frankencoin_wallet/src/entities/balance_info.dart';
-import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
-import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
+import 'package:frankencoin_wallet/src/widgets/chain_asset_icon.dart';
 
 class CustomBalanceCard extends StatelessWidget {
   final CustomErc20Token token;
@@ -47,7 +45,7 @@ class CustomBalanceCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (token.icon != null) ...[token.icon!],
+                if (token.icon != null) CustomTokenIcon(erc20token: token),
                 Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 16),

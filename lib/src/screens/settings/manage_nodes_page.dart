@@ -41,6 +41,7 @@ class _ManageNodesPageBodyState extends State<_ManageNodesPageBody> {
               ...widget.settingsStore.nodes.map(
                 (e) => OptionRow(
                   name: e.name,
+                  type: OptionRowType.navigate,
                   leading: Image.asset(
                     getChainAssetImagePath(e.chainId),
                     width: 40,
