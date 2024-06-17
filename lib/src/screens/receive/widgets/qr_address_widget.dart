@@ -18,7 +18,7 @@ class QRAddressWidget extends StatelessWidget {
         QrImageView(
           data: address,
           // errorCorrectionLevel: errorCorrectionLevel,
-          size: 200,
+          size: 300,
           eyeStyle: const QrEyeStyle(color: Colors.white),
           dataModuleStyle: const QrDataModuleStyle(
             color: Colors.white,

@@ -56,7 +56,8 @@ class FrankencoinPayService extends DFXAuthService {
     return response['lightningAddress'] as String;
   }
 
-  Future<String> getLightningInvoice(String amount) async {
+  Future<String> getLightningInvoice(String amountRaw) async {
+    final amount = amountRaw.replaceAll(",", ".");
     final addressParts =
         frankencoinPayStore.getLightningAddress(walletAddress)!.split("@");
 

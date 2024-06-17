@@ -17,9 +17,8 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(17, 24, 39, 1.0),
-      body: WillPopScope(
-        //canPop: false,
-        onWillPop: () async => false,
+      body: PopScope(
+        canPop: false,
         child: SafeArea(
           child: SizedBox(
             width: double.infinity,

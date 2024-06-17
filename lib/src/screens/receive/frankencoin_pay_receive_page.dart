@@ -72,7 +72,7 @@ class _FrankencoinPayReceivePageBodyState
                   const TextInputType.numberWithOptions(decimal: true),
               placeholder: S.of(context).amount,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d{0,2}$")),
+                FilteringTextInputFormatter.allow(RegExp(r"^\d*[.,]?\d{0,2}$")),
               ],
               prefix: const Padding(
                   padding: EdgeInsets.all(15),
