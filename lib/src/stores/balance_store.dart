@@ -6,6 +6,7 @@ import 'package:frankencoin_wallet/src/core/fiat_conversion_service.dart';
 import 'package:frankencoin_wallet/src/entities/balance_info.dart';
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/entities/fiat_conversion_rate.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/custom_erc20_token_store.dart';
@@ -170,6 +171,9 @@ abstract class BalanceStoreBase with Store {
   }
 
   BigInt getBalance(CryptoCurrency currency) =>
+      balances[currency.balanceId]?.getBalance() ?? BigInt.zero;
+
+  BigInt getCustomBalance(CustomErc20Token currency) =>
       balances[currency.balanceId]?.getBalance() ?? BigInt.zero;
 
   BalanceInfo _loadBalanceInfo(

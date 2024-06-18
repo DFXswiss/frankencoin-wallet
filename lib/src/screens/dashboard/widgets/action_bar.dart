@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:bolt11_decoder/bolt11_decoder.dart';
@@ -8,6 +9,7 @@ import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
@@ -129,18 +131,31 @@ class ActionBar extends StatelessWidget {
     } else if (result.startsWith("lnbc")) {
       final res = Bolt11PaymentRequest(result);
 
-      res.timestamp;
+      // ToDo: Parse less primitive
+      // Primitive description parsing
+      final description = res.tags
+          .firstWhere((element) => element.type == "description")
+          .data as String;
 
-      // ToDo: Parse Data Field to get Address and amount
+      if (description.startsWith("Pay this Lightning bill to transfer")) {
+        final dataPart = description.split("send ")[1];
 
-      getIt.get<BottomSheetService>().queueBottomSheet(
-          isModalDismissible: true,
-          widget: BottomSheetMessageDisplayWidget(
-            title: "Ohh ein Frankencoin Pay Code",
-            message: res.tags
-                .firstWhere((element) => element.type == "description")
-                .data as String,
-          ));
+        log(dataPart, name: "Fankencoin Pay");
+
+        final address = RegExp(r'(0x)?[0-9a-f]{40}', caseSensitive: false)
+            .firstMatch(dataPart)
+            ?.group(0);
+        final amount = dataPart.split(" ZCHF")[0];
+
+        await Navigator.of(context).pushNamed(Routes.send,
+            arguments: [address, amount, CryptoCurrency.zchf]);
+      } else {
+        getIt.get<BottomSheetService>().queueBottomSheet(
+            isModalDismissible: true,
+            widget: const BottomSheetMessageDisplayWidget(
+              message: "⚡ Not Frankencoin Pay",
+            ));
+      }
     } else if (result.startsWith("0x")) {
       await Navigator.of(context)
           .pushNamed(Routes.send, arguments: [result, null, null]);
