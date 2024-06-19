@@ -1,12 +1,11 @@
-import 'dart:developer';
 import 'dart:ui';
 
-import 'package:bolt11_decoder/bolt11_decoder.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
@@ -129,31 +128,17 @@ class ActionBar extends StatelessWidget {
     if (result.toLowerCase().startsWith("wc:")) {
       getIt.get<WalletConnectService>().pairWithUri(Uri.parse(result));
     } else if (result.startsWith("lnbc")) {
-      final res = Bolt11PaymentRequest(result);
-
-      // ToDo: Parse less primitive
-      // Primitive description parsing
-      final description = res.tags
-          .firstWhere((element) => element.type == "description")
-          .data as String;
-
-      if (description.startsWith("Pay this Lightning bill to transfer")) {
-        final dataPart = description.split("send ")[1];
-
-        log(dataPart, name: "Fankencoin Pay");
-
-        final address = RegExp(r'(0x)?[0-9a-f]{40}', caseSensitive: false)
-            .firstMatch(dataPart)
-            ?.group(0);
-        final amount = dataPart.split(" ZCHF")[0];
-
+      try {
+        final res = getIt
+            .get<FrankencoinPayService>()
+            .getLightningInvoiceDetails(result);
         await Navigator.of(context).pushNamed(Routes.send,
-            arguments: [address, amount, CryptoCurrency.zchf]);
-      } else {
+            arguments: [res.$1, res.$2, CryptoCurrency.zchf]);
+      } catch (e) {
         getIt.get<BottomSheetService>().queueBottomSheet(
             isModalDismissible: true,
-            widget: const BottomSheetMessageDisplayWidget(
-              message: "⚡ Not Frankencoin Pay",
+            widget: BottomSheetMessageDisplayWidget(
+              message: e.toString(),
             ));
       }
     } else if (result.startsWith("0x")) {

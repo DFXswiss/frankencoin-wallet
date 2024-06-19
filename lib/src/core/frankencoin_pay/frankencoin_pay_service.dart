@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:bolt11_decoder/bolt11_decoder.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
 import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
@@ -73,6 +74,30 @@ class FrankencoinPayService extends DFXAuthService {
     } else {
       throw Exception(
           'Failed to get sign message. Status: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  (String, String) getLightningInvoiceDetails(String rawInvoice) {
+    final res = Bolt11PaymentRequest(rawInvoice);
+
+    // ToDo: Parse less primitive and move to separate class
+    // Primitive description parsing
+    final description = res.tags
+        .firstWhere((element) => element.type == "description")
+        .data as String;
+
+    if (description.startsWith("Pay this Lightning bill to transfer")) {
+      final dataPart = description.split("send ")[1];
+
+      log(dataPart, name: "Fankencoin Pay");
+
+      final address = RegExp(r'(0x)?[0-9a-f]{40}', caseSensitive: false)
+          .firstMatch(dataPart)!
+          .group(0)!;
+      final amount = dataPart.split(" ZCHF")[0];
+      return (address, amount);
+    } else {
+      throw Exception('Not a FrankencoinPay invoice');
     }
   }
 
