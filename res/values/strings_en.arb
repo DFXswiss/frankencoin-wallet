@@ -62,6 +62,7 @@
     "node": "Node",
     "nodes": "Nodes",
     "not_enough_token": "You do not have enough ${tokenSymbol} in this wallet",
+    "okay": "Okay",
     "receive": "Receive",
     "restore_wallet": "Restore Wallet",
     "restore_wallet_from_seed": "Restore wallet with seed",

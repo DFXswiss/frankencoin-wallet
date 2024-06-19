@@ -61,6 +61,7 @@
     "new_wallet_connect_connection": "Neue Verbindung",
     "nodes": "Nodes",
     "not_enough_token": "Sie haben nicht genug ${tokenSymbol} in diesem Wallet",
+    "okay": "Okay",
     "receive": "Empfangen",
     "restore_wallet": "Wallet wiederherstellen",
     "restore_wallet_from_seed": "Wallet mit Seed wiederherstellen",

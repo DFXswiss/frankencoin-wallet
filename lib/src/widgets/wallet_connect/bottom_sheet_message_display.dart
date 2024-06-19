@@ -51,7 +51,7 @@ class BottomSheetMessageDisplayWidget extends StatelessWidget {
           const SizedBox(height: 15),
           FullwidthButton(
             onPressed: () => Navigator.of(context).pop(true),
-            label: "Okay", // ToDo: Localize
+            label: S.of(context).okay,
             backgroundColor: FrankencoinColors.frRed,
             labelColor: Colors.white,
           ),
