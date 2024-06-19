@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:erc20/erc20.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/alias_resolver/alias_resolver.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
@@ -9,6 +8,8 @@ import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/balance_store.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
+import 'package:frankencoin_wallet/src/wallet/create_transaction.dart';
+import 'package:frankencoin_wallet/src/wallet/is_evm_address.dart';
 import 'package:frankencoin_wallet/src/wallet/transaction_priority.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:mobx/mobx.dart';
@@ -130,8 +131,7 @@ abstract class SendViewModelBase with Store {
 
     final receiveAddress = resolvedAlias?.address ?? address;
 
-    if (!RegExp(r'^(0x)?[0-9a-f]{40}$', caseSensitive: false)
-        .hasMatch(receiveAddress)) {
+    if (!receiveAddress.isEthereumAddress) {
       state = FailureState(S.current.invalid_receive_address);
       return;
     }
@@ -160,18 +160,15 @@ abstract class SendViewModelBase with Store {
         _sendTransaction = () => client
             .sendRawTransaction(prependTransactionType(2, signedTransaction));
       } else {
-        final erc20 = ERC20(
-          client: client,
-          address: EthereumAddress.fromHex(spendCurrency.address),
+        _sendTransaction = await createERC20Transaction(
+          client,
+          currentAccount: appStore.wallet!.currentAccount.primaryAddress,
+          receiveAddress: receiveAddress,
+          amount: cryptoAmount,
+          contractAddress: spendCurrency.address,
           chainId: spendCurrency.chainId,
+          priority: priority,
         );
-
-        _sendTransaction = () => erc20.transfer(
-              EthereumAddress.fromHex(receiveAddress),
-              cryptoAmount,
-              credentials: currentAccount,
-              transaction: transaction,
-            );
       }
       state = AwaitingConfirmationExecutionState();
     } catch (e) {
