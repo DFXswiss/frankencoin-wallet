@@ -8,7 +8,6 @@ import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
-import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
@@ -132,8 +131,8 @@ class ActionBar extends StatelessWidget {
         final res = getIt
             .get<FrankencoinPayService>()
             .getLightningInvoiceDetails(result);
-        await Navigator.of(context).pushNamed(Routes.send,
-            arguments: [res.$1, res.$2, CryptoCurrency.zchf]);
+        await Navigator.of(context).pushNamed(Routes.sendFrankencoinPay,
+            arguments: res);
       } catch (e) {
         getIt.get<BottomSheetService>().queueBottomSheet(
             isModalDismissible: true,

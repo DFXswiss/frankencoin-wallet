@@ -3,8 +3,11 @@ import 'dart:developer';
 
 import 'package:bolt11_decoder/bolt11_decoder.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
+import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 import 'package:http/http.dart' as http;
 
@@ -77,16 +80,24 @@ class FrankencoinPayService extends DFXAuthService {
     }
   }
 
-  (String, String) getLightningInvoiceDetails(String rawInvoice) {
+  FrankencoinPayRequest getLightningInvoiceDetails(String rawInvoice) {
     final res = Bolt11PaymentRequest(rawInvoice);
 
     // ToDo: Parse less primitive and move to separate class
     // Primitive description parsing
     final description = res.tags
         .firstWhere((element) => element.type == "description")
-        .data as String;
+        .data as String?;
 
-    if (description.startsWith("Pay this Lightning bill to transfer")) {
+    if (description?.startsWith("Pay this Lightning bill to transfer") == true) {
+      final expiry = res.tags
+          .firstWhere((element) => element.type == "expiry")
+          .data as int;
+
+      final receiverName = RegExp(r'(?<=CHF to )(.*)(?=. Alternatively)')
+          .firstMatch(description!)!
+          .group(0)!;
+
       final dataPart = description.split("send ")[1];
 
       log(dataPart, name: "Fankencoin Pay");
@@ -94,8 +105,14 @@ class FrankencoinPayService extends DFXAuthService {
       final address = RegExp(r'(0x)?[0-9a-f]{40}', caseSensitive: false)
           .firstMatch(dataPart)!
           .group(0)!;
-      final amount = dataPart.split(" ZCHF")[0];
-      return (address, amount);
+      final rawAmount = dataPart.split(" ZCHF")[0];
+      final amount = parseFixed(rawAmount, CryptoCurrency.zchf.decimals);
+
+      return FrankencoinPayRequest(
+          address: address,
+          amount: amount,
+          receiverName: receiverName,
+          expiry: expiry);
     } else {
       throw Exception('Not a FrankencoinPay invoice');
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
@@ -18,6 +19,7 @@ import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_from_seed_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_options_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/screens/send/send_frankencoin_pay_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/send_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/edit_node_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/manage_custom_tokens_page.dart';
@@ -34,6 +36,7 @@ import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/frankencoin_pay/send_frankencoin_pay_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
@@ -98,6 +101,27 @@ Route<dynamic> createRoute(RouteSettings settings) {
                 initialAmount: arguments[1] as String?,
                 initialAsset: arguments[2] as CryptoCurrency?,
               ));
+
+    case Routes.sendFrankencoinPay:
+      final arguments = settings.arguments as FrankencoinPayRequest;
+
+      return MaterialPageRoute<void>(
+          builder: (_) => SendFrankencoinPayPage(
+                getIt.get<SendFrankencoinPayViewModel>(),
+                getIt.get<BottomSheetService>(),
+                frankencoinPayRequest: arguments,
+              ));
+
+    // case Routes.send:
+    //   final arguments = settings.arguments as List;
+    //
+    //   return MaterialPageRoute<void>(
+    //       builder: (_) => SendZCHFPage(
+    //             getIt.get<SendViewModel>(),
+    //             getIt.get<BottomSheetService>(),
+    //             initialAddress: arguments[0] as String?,
+    //             initialAmount: arguments[1] as String?,
+    //           ));
 
     case Routes.settings:
       return MaterialPageRoute<void>(

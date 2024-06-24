@@ -13,6 +13,7 @@ import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/frankencoin_pay/send_frankencoin_pay_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
@@ -54,8 +55,14 @@ void setupDependencyInjection(
       () => BalanceViewModel(getIt.get<BalanceStore>()));
   getIt.registerFactory<WalletViewModel>(() =>
       WalletViewModel(getIt.get<AppStore>(), getIt.get<SharedPreferences>()));
-  getIt.registerFactory<SendViewModel>(() =>
-      SendViewModel(getIt.get<BalanceStore>(), getIt.get<AppStore>()));
+  getIt.registerFactory<SendViewModel>(
+      () => SendViewModel(getIt.get<BalanceStore>(), getIt.get<AppStore>()));
+  getIt.registerFactory<SendFrankencoinPayViewModel>(
+      () => SendFrankencoinPayViewModel(
+            getIt.get<AppStore>(),
+            getIt.get<FrankencoinPayService>(),
+            getIt.get<BalanceStore>(),
+          ));
   getIt.registerFactory<SwapViewModel>(() => SwapViewModel(
         getIt.get<AppStore>(),
         getIt.get<SendViewModel>(),
