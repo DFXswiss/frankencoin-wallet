@@ -39,7 +39,7 @@ class ReceivePage extends BasePage {
                 leadingIcon: Icons.money,
                 action: () => getIt
                     .get<DFXService>()
-                    .launchProvider(context, true, "bank"),
+                    .launchProvider(context, true, paymentMethod: "bank"),
               ),
               OptionCard(
                 title: S.of(context).deposit_with_card,
@@ -47,7 +47,7 @@ class ReceivePage extends BasePage {
                 leadingIcon: Icons.credit_card,
                 action: () => getIt
                     .get<DFXService>()
-                    .launchProvider(context, true, "card"),
+                    .launchProvider(context, true, paymentMethod: "card"),
               ),
               if (_appStore.settingsStore.enableExperimentalFeatures)
                 OptionCard(
