@@ -17,7 +17,7 @@ import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
-import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
+import 'package:frankencoin_wallet/src/widgets/amount_info_row.dart';
 import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:mobx/mobx.dart';
@@ -158,11 +158,10 @@ class _SendPageBodyState extends State<_SendPageBody> {
       Observer(
         builder: (_) => Padding(
           padding: const EdgeInsets.only(left: 26, right: 26),
-          child: EstimatedTxFee(
-            estimatedFee:
-                EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
-                    .getValueInUnit(EtherUnit.ether),
-            nativeSymbol: widget.sendVM.spendCurrency.blockchain.nativeSymbol,
+          child: AmountInfoRow(
+            title: S.of(context).estimated_fee,
+            amount: BigInt.from(widget.sendVM.estimatedFee),
+            currencySymbol: widget.sendVM.spendCurrency.blockchain.nativeSymbol,
           ),
         ),
       ),

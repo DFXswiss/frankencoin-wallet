@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 
-class EstimatedTxFee extends StatelessWidget {
-  const EstimatedTxFee({
+class AmountInfoRow extends StatelessWidget {
+  const AmountInfoRow({
     super.key,
-    required this.estimatedFee,
-    required this.nativeSymbol,
+    required this.title,
+    required this.amount,
+    required this.currencySymbol,
+    this.decimals = 18,
+    this.fractionDigits = 6,
   });
 
-  final double estimatedFee;
-  final String nativeSymbol;
+  final BigInt amount;
+  final int decimals;
+  final int fractionDigits;
+  final String title;
+  final String currencySymbol;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +25,7 @@ class EstimatedTxFee extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              "${S.of(context).estimated_fee}:",
+              "$title:",
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
@@ -29,7 +35,7 @@ class EstimatedTxFee extends StatelessWidget {
             ),
           ),
           Text(
-            estimatedFee.toStringAsFixed(6),
+            formatFixed(amount, decimals, fractionalDigits: fractionDigits),
             style: const TextStyle(
               fontSize: 15,
               fontFamily: 'Lato',
@@ -37,7 +43,7 @@ class EstimatedTxFee extends StatelessWidget {
             ),
           ),
           Text(
-            " $nativeSymbol",
+            " $currencySymbol",
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w500,

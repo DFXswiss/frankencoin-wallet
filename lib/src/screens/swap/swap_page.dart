@@ -15,7 +15,7 @@ import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
-import 'package:frankencoin_wallet/src/widgets/estimated_tx_fee.dart';
+import 'package:frankencoin_wallet/src/widgets/amount_info_row.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/swap_route_infos.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
@@ -153,11 +153,10 @@ class _SwapPageBodyState extends State<_SwapPageBody> {
           Observer(
             builder: (_) => Padding(
               padding: const EdgeInsets.only(left: 26, right: 26),
-              child: EstimatedTxFee(
-                estimatedFee: EtherAmount.inWei(
-                        BigInt.from(widget.equityVM.sendVM.estimatedFee))
-                    .getValueInUnit(EtherUnit.ether),
-                nativeSymbol:
+              child: AmountInfoRow(
+                title: S.of(context).estimated_fee,
+                amount: BigInt.from(widget.equityVM.sendVM.estimatedFee),
+                currencySymbol:
                     widget.equityVM.sendCurrency.blockchain.nativeSymbol,
               ),
             ),
