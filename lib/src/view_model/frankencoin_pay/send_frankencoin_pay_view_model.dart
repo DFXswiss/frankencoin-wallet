@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
@@ -54,6 +55,24 @@ abstract class SendFrankencoinPayViewModelBase with Store {
     final priorityFee =
         EtherAmount.fromInt(EtherUnit.gwei, priority.tip).getInWei.toInt();
     return (_gasPrice + priorityFee) * _estimatedGas;
+  }
+
+  @action
+  Future<void> chooseBlockchain() async {
+    for (final zchf in [
+      CryptoCurrency.maticZCHF,
+      CryptoCurrency.baseZCHF,
+      CryptoCurrency.opZCHF,
+      CryptoCurrency.arbZCHF,
+      CryptoCurrency.zchf,
+    ]) {
+      if (balanceStore.getBalance(zchf) >= cryptoAmount) {
+        log('Choose ${zchf.blockchain.name} for Frankencoin Pay');
+        spendCurrency = zchf;
+        return;
+      }
+    }
+    log('No Blockchain has enough ZCHF for the request. Buy more ZCHF!');
   }
 
   @action

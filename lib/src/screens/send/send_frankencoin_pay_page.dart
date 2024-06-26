@@ -64,6 +64,7 @@ class _SendFrankencoinPayPageBodyState
     widget.sendVM.cryptoAmount = widget.frankencoinPayRequest.amount;
     widget.sendVM.timeLeft = widget.frankencoinPayRequest.expiry;
     widget.sendVM.startTimeLeft();
+    widget.sendVM.chooseBlockchain();
     widget.sendVM.syncFee();
   }
 
@@ -127,11 +128,10 @@ class _SendFrankencoinPayPageBodyState
       Observer(
         builder: (_) => Padding(
           padding: const EdgeInsets.only(left: 26, right: 26),
-          child: EstimatedTxFee(
-            estimatedFee:
-                EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
-                    .getValueInUnit(EtherUnit.ether),
-            nativeSymbol: widget.sendVM.spendCurrency.blockchain.nativeSymbol,
+          child: AmountInfoRow(
+            title: S.of(context).estimated_fee,
+            amount: BigInt.from(widget.sendVM.estimatedFee),
+            currencySymbol: widget.sendVM.spendCurrency.blockchain.nativeSymbol,
           ),
         ),
       ),
