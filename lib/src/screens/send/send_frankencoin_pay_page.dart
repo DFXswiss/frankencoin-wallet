@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
@@ -20,7 +21,7 @@ import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
 class SendFrankencoinPayPage extends BasePage {
-  SendFrankencoinPayPage(this.sendVM, this.bottomSheetService,
+  SendFrankencoinPayPage(this.sendVM, this.bottomSheetService, this.dfxService,
       {super.key, required this.frankencoinPayRequest});
 
   @override
@@ -28,12 +29,14 @@ class SendFrankencoinPayPage extends BasePage {
 
   final SendFrankencoinPayViewModel sendVM;
   final BottomSheetService bottomSheetService;
+  final DFXService dfxService;
   final FrankencoinPayRequest frankencoinPayRequest;
 
   @override
   Widget body(BuildContext context) => _SendFrankencoinPayPageBody(
         sendVM: sendVM,
         bottomSheetService: bottomSheetService,
+        dfxService: dfxService,
         frankencoinPayRequest: frankencoinPayRequest,
       );
 }
@@ -41,11 +44,13 @@ class SendFrankencoinPayPage extends BasePage {
 class _SendFrankencoinPayPageBody extends StatefulWidget {
   final SendFrankencoinPayViewModel sendVM;
   final FrankencoinPayRequest frankencoinPayRequest;
+  final DFXService dfxService;
   final BottomSheetService bottomSheetService;
 
   const _SendFrankencoinPayPageBody({
     required this.sendVM,
     required this.bottomSheetService,
+    required this.dfxService,
     required this.frankencoinPayRequest,
   });
 
@@ -64,8 +69,18 @@ class _SendFrankencoinPayPageBodyState
     widget.sendVM.cryptoAmount = widget.frankencoinPayRequest.amount;
     widget.sendVM.timeLeft = widget.frankencoinPayRequest.expiry;
     widget.sendVM.startTimeLeft();
-    widget.sendVM.chooseBlockchain();
     widget.sendVM.syncFee();
+
+    final needsRefill = widget.sendVM.chooseBlockchain();
+    if (!needsRefill) {
+      final amount = formatFixed(
+          widget.sendVM.cryptoAmount, widget.sendVM.spendCurrency.decimals);
+      widget.sendVM.spendCurrency = CryptoCurrency.maticZCHF;
+      widget.dfxService.launchProvider(context, true,
+          paymentMethod: "card",
+          blockchain: Blockchain.polygon,
+          amount: amount);
+    }
   }
 
   @override
@@ -145,8 +160,9 @@ class _SendFrankencoinPayPageBodyState
             color: FrankencoinColors.frRed,
             child: widget.sendVM.state is InitialExecutionState
                 ? Text(
-              widget.sendVM.timeLeft != 0
-                  ? "${S.of(context).pay} - ${S.of(context).seconds(widget.sendVM.timeLeft.toString())}" : S.of(context).expired,
+                    widget.sendVM.timeLeft != 0
+                        ? "${S.of(context).pay} - ${S.of(context).seconds(widget.sendVM.timeLeft.toString())}"
+                        : S.of(context).expired,
                     style: const TextStyle(fontSize: 16),
                   )
                 : const CupertinoActivityIndicator(),

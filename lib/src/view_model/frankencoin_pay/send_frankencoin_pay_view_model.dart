@@ -24,7 +24,10 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   final FrankencoinPayService frankencoinPayService;
 
   SendFrankencoinPayViewModelBase(
-      this.appStore, this.frankencoinPayService, this.balanceStore);
+    this.appStore,
+    this.frankencoinPayService,
+    this.balanceStore,
+  );
 
   @observable
   BigInt cryptoAmount = BigInt.zero;
@@ -58,7 +61,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   }
 
   @action
-  Future<void> chooseBlockchain() async {
+  bool chooseBlockchain() {
     for (final zchf in [
       CryptoCurrency.maticZCHF,
       CryptoCurrency.baseZCHF,
@@ -69,10 +72,10 @@ abstract class SendFrankencoinPayViewModelBase with Store {
       if (balanceStore.getBalance(zchf) >= cryptoAmount) {
         log('Choose ${zchf.blockchain.name} for Frankencoin Pay');
         spendCurrency = zchf;
-        return;
+        return true;
       }
     }
-    log('No Blockchain has enough ZCHF for the request. Buy more ZCHF!');
+    return false;
   }
 
   @action
@@ -106,8 +109,8 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   }
 
   void startTimeLeft() {
-    _updateTimeLeftTimer = Timer.periodic(
-        const Duration(seconds: 1), (timer) => updateTimeLeft());
+    _updateTimeLeftTimer =
+        Timer.periodic(const Duration(seconds: 1), (timer) => updateTimeLeft());
   }
 
   void stopTimers() {

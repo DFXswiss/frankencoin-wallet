@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
@@ -63,28 +64,27 @@ class DFXService extends DFXAuthService {
   //   'Arbitrum',
   // ];
 
-  String get blockchain => 'Ethereum';
+  String get blockchain => 'Polygon';
 
-  Future<void> launchProvider(BuildContext context, bool? isBuyAction,
-      [String? paymentMethod]) async {
+  Future<void> launchProvider(BuildContext context, bool isBuyAction,
+      {String? paymentMethod, Blockchain? blockchain, String? amount}) async {
     if (_isLoading) return;
 
     _isLoading = true;
     try {
-      final assetOut = this.assetOut;
-      final blockchain = this.blockchain;
-      final actionType = isBuyAction == true ? '/buy' : '/sell';
+      final actionType = isBuyAction ? '/buy' : '/sell';
 
       final accessToken = await getAuthToken();
 
       final uri = Uri.https('services.dfx.swiss', actionType, {
         'session': accessToken,
         'lang': langCode,
-        'asset-out': assetOut,
-        'blockchain': blockchain,
-        'asset-in': assetIn,
+        'asset-out': isBuyAction ? assetOut : assetIn,
+        'blockchain': blockchain?.name ?? this.blockchain,
+        'asset-in': isBuyAction ? assetIn : assetOut,
         // 'blockchains': supportedBlockchains.join(','),
         'assets': supportedAssets.join(','),
+        if (amount != null) 'amount-in': amount,
         if (paymentMethod != null) 'payment-method': paymentMethod,
         if (DeviceInfo.instance.isMobile) 'headless': 'true'
       });

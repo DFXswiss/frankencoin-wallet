@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
@@ -109,6 +110,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
           builder: (_) => SendFrankencoinPayPage(
                 getIt.get<SendFrankencoinPayViewModel>(),
                 getIt.get<BottomSheetService>(),
+                getIt.get<DFXService>(),
                 frankencoinPayRequest: arguments,
               ));
 
