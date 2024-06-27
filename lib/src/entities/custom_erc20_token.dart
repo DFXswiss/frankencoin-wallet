@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
+import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/utils/fast_hash.dart';
 import 'package:isar/isar.dart';
 
@@ -24,6 +25,14 @@ class CustomErc20Token {
     this.iconUrl,
     this.editable = true,
   });
+
+  CustomErc20Token.fromCryptoCurrency(CryptoCurrency cryptoCurrency)
+      : chainId = cryptoCurrency.chainId,
+        address = cryptoCurrency.address,
+        symbol = cryptoCurrency.symbol,
+        name = cryptoCurrency.name,
+        decimals = cryptoCurrency.decimals,
+        editable = false;
 
   Id get id => fastHash("$chainId:$address");
 
