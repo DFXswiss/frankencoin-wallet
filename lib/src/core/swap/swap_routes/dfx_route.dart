@@ -1,7 +1,7 @@
 import 'package:erc20/erc20.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_swap_service.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/swap_route.dart';
-import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:web3dart/credentials.dart';
@@ -11,8 +11,8 @@ class DFX_SwapRoute extends SwapRoute {
   late final ERC20 _sendContract;
 
   DFX_SwapRoute(
-    CryptoCurrency sendCurrency,
-    CryptoCurrency receiveCurrency,
+    CustomErc20Token sendCurrency,
+      CustomErc20Token receiveCurrency,
     this.dfxSwapService,
   ) : super(sendCurrency, receiveCurrency, SwapRouteProvider.dfx);
 

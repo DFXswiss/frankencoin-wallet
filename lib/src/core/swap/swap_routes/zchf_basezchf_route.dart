@@ -4,6 +4,7 @@ import 'package:erc20/erc20.dart';
 import 'package:frankencoin_wallet/src/core/contracts/L1StandardBridge.g.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/swap_route.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:web3dart/credentials.dart';
 
@@ -18,8 +19,8 @@ class ZCHF_baseZCHF_SwapRoute extends SwapRoute {
 
   ZCHF_baseZCHF_SwapRoute()
       : super(
-          CryptoCurrency.zchf,
-          CryptoCurrency.baseZCHF,
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.zchf),
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.baseZCHF),
           SwapRouteProvider.baseBridge,
         );
 

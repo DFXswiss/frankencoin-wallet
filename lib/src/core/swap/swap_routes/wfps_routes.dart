@@ -2,6 +2,7 @@ import 'package:frankencoin_wallet/src/core/contracts/Equity.g.dart';
 import 'package:frankencoin_wallet/src/core/contracts/FPSWrapper.g.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/swap_route.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:web3dart/credentials.dart';
 
@@ -14,8 +15,8 @@ class FPS_WFPS_SwapRoute extends SwapRoute {
 
   FPS_WFPS_SwapRoute()
       : super(
-          CryptoCurrency.fps,
-          CryptoCurrency.wfps,
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.fps),
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.wfps),
           SwapRouteProvider.wfpsContract,
         );
 
@@ -67,8 +68,8 @@ class WFPS_FPS_SwapRoute extends SwapRoute {
 
   WFPS_FPS_SwapRoute()
       : super(
-          CryptoCurrency.wfps,
-          CryptoCurrency.fps,
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.wfps),
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.fps),
           SwapRouteProvider.wfpsContract,
         );
 

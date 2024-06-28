@@ -8,6 +8,7 @@ import 'package:frankencoin_wallet/src/core/swap/swap_routes/fps_routes.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/swap_route.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_service.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
@@ -25,11 +26,15 @@ abstract class SwapViewModelBase with Store {
 
   SwapViewModelBase(this.appStore, this.sendVM, this.swapService) {
     reaction((_) => sendCurrency, (_) {
-      swapRoute = swapService.getRoute(sendCurrency, receiveCurrency);
+      swapRoute = swapService.getRoute(
+          CustomErc20Token.fromCryptoCurrency(sendCurrency),
+          CustomErc20Token.fromCryptoCurrency(receiveCurrency));
       updateExpectedReturn();
     });
     reaction((_) => receiveCurrency, (_) {
-      swapRoute = swapService.getRoute(sendCurrency, receiveCurrency);
+      swapRoute = swapService.getRoute(
+          CustomErc20Token.fromCryptoCurrency(sendCurrency),
+          CustomErc20Token.fromCryptoCurrency(receiveCurrency));
       updateExpectedReturn();
     });
 
@@ -75,7 +80,8 @@ abstract class SwapViewModelBase with Store {
     _completer?.cancel();
     _completer = CancelableOperation.fromFuture(
       swapService
-          .getRoute(sendCurrency, receiveCurrency)
+          .getRoute(CustomErc20Token.fromCryptoCurrency(sendCurrency),
+              CustomErc20Token.fromCryptoCurrency(receiveCurrency))
           .estimateReturn(investAmount),
       onCancel: () {},
     );

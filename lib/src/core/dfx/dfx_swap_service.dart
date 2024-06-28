@@ -7,6 +7,7 @@ import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/models/dfx_swap_payment_infos_data.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
@@ -31,20 +32,20 @@ class DFXSwapService extends DFXAuthService {
 
   DFXSwapPaymentInfosData? _storedSwapPaymentInfosData;
 
-  Future<bool> getIsAvailable(CryptoCurrency spendCurrency,
-          CryptoCurrency receiveCurrency, BigInt amount) async =>
+  Future<bool> getIsAvailable(CustomErc20Token spendCurrency,
+      CustomErc20Token receiveCurrency, BigInt amount) async =>
       _isErrorHandled(
         (await _sendRequest(spendCurrency, receiveCurrency, amount)).error,
       );
 
-  Future<double> getEstimatedReturn(CryptoCurrency spendCurrency,
-          CryptoCurrency receiveCurrency, BigInt amount) async =>
+  Future<double> getEstimatedReturn(CustomErc20Token spendCurrency,
+      CustomErc20Token receiveCurrency, BigInt amount) async =>
       (await _sendRequest(spendCurrency, receiveCurrency, amount))
           .estimatedAmount
           .toDouble();
 
-  Future<String> getDepositAddress(CryptoCurrency spendCurrency,
-      CryptoCurrency receiveCurrency, BigInt amount) async {
+  Future<String> getDepositAddress(CustomErc20Token spendCurrency,
+      CustomErc20Token receiveCurrency, BigInt amount) async {
     final result = await _sendRequest(spendCurrency, receiveCurrency, amount);
 
     if (result.error != null) {
@@ -61,10 +62,10 @@ class DFXSwapService extends DFXAuthService {
     return result.depositAddress;
   }
 
-  Future<DFXSwapPaymentInfosData> _sendRequest(CryptoCurrency spendCurrency,
-      CryptoCurrency receiveCurrency, BigInt amount) async {
-    final sourceAssetId = dfxAssetIds[spendCurrency];
-    final targetAssetId = dfxAssetIds[receiveCurrency];
+  Future<DFXSwapPaymentInfosData> _sendRequest(CustomErc20Token spendCurrency,
+      CustomErc20Token receiveCurrency, BigInt amount) async {
+    final sourceAssetId = dfxAssetIds[spendCurrency.balanceId];
+    final targetAssetId = dfxAssetIds[receiveCurrency.balanceId];
     final parsedAmount =
         double.parse(formatFixed(amount, spendCurrency.decimals));
 
@@ -93,6 +94,7 @@ class DFXSwapService extends DFXAuthService {
       }),
     );
 
+    print(response.body);
     if (response.statusCode == 200) {
       return DFXSwapPaymentInfosData.fromJson(jsonDecode(response.body));
     } else {

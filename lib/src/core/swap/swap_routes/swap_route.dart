@@ -3,6 +3,7 @@ import 'package:frankencoin_wallet/src/core/swap/swap_routes/wfps_routes.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/zchf_basezchf_route.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/zchf_opzchf_route.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/wallet/transaction_priority.dart';
 import 'package:web3dart/web3dart.dart';
@@ -46,8 +47,8 @@ enum SwapRouteProvider {
 }
 
 abstract class SwapRoute {
-  final CryptoCurrency sendCurrency;
-  final CryptoCurrency receiveCurrency;
+  final CustomErc20Token sendCurrency;
+  final CustomErc20Token receiveCurrency;
   final SwapRouteProvider provider;
 
   bool get requireApprove => false;
