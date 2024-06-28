@@ -8,6 +8,7 @@ import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/screens/address_book/add_contact_page.dart';
 import 'package:frankencoin_wallet/src/screens/address_book/address_book_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/asset_details_page.dart';
@@ -22,6 +23,7 @@ import 'package:frankencoin_wallet/src/screens/restore/restore_options_page.dart
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/screens/send/send_frankencoin_pay_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/send_page.dart';
+import 'package:frankencoin_wallet/src/screens/settings/edit_custom_token_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/edit_node_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/manage_custom_tokens_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/manage_nodes_page.dart';
@@ -135,6 +137,17 @@ Route<dynamic> createRoute(RouteSettings settings) {
           builder: (_) => ManageCustomTokensPage(
               getIt.get<CustomErc20TokenStore>(),
               getIt.get<BottomSheetService>()));
+
+    case Routes.settingsCustomTokensEdit:
+      final customErc20Token = settings.arguments as CustomErc20Token?;
+
+      return MaterialPageRoute<void>(
+          builder: (_) => EditCustomTokenPage(
+                getIt.get<AppStore>(),
+                getIt.get<CustomErc20TokenStore>(),
+                getIt.get<BottomSheetService>(),
+                customToken: customErc20Token,
+              ));
 
     case Routes.settingsNodes:
       return MaterialPageRoute<void>(

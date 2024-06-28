@@ -39,9 +39,8 @@ class ManageCustomTokensPage extends BasePage {
                   overlayColor: MaterialStateColor.resolveWith(
                       (states) => Colors.transparent),
                 ),
-                onPressed: null,
-                // onPressed: () => Navigator.of(context)
-                //     .pushNamed(Routes.settingsCustomTokensEdit),
+                onPressed: () => Navigator.of(context)
+                    .pushNamed(Routes.settingsCustomTokensEdit, arguments: null),
                 child: Icon(
                   Icons.add,
                   color: pageIconColor(context),
@@ -91,9 +90,8 @@ class _ManageCustomTokensPageBodyState
                   subtitle: e.address,
                   canEdit: e.editable,
                   onTap: e.editable
-                      ? (_) => Navigator.of(context).pushNamed(
-                          Routes.settingsNodesEdit,
-                          arguments: e.chainId)
+                      ? (_) => Navigator.of(context)
+                          .pushNamed(Routes.settingsCustomTokensEdit, arguments: e)
                       : (_) => _alertNotEditable(e),
                 ),
               ),

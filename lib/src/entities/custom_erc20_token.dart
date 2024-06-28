@@ -41,7 +41,9 @@ class CustomErc20Token {
 
   @ignore
   Image? get icon {
-    if (iconUrl == null) return null;
+    if (iconUrl == null) {
+      return Image.asset("assets/images/shrug.png", width: 40);
+    }
 
     if (iconUrl!.startsWith("assets/images/")) {
       return Image.asset(iconUrl!, width: 40);
