@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/dfx_route.dart';
-import 'package:frankencoin_wallet/src/core/swap/swap_routes/fps_routes.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/swap_route.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_service.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
@@ -25,6 +24,10 @@ abstract class SwapViewModelBase with Store {
   final SwapService swapService;
 
   SwapViewModelBase(this.appStore, this.sendVM, this.swapService) {
+    swapRoute = swapService.getRoute(
+        CustomErc20Token.fromCryptoCurrency(sendCurrency),
+        CustomErc20Token.fromCryptoCurrency(receiveCurrency));
+
     reaction((_) => sendCurrency, (_) {
       swapRoute = swapService.getRoute(
           CustomErc20Token.fromCryptoCurrency(sendCurrency),
@@ -54,7 +57,7 @@ abstract class SwapViewModelBase with Store {
   CryptoCurrency receiveCurrency = CryptoCurrency.fps;
 
   @observable
-  SwapRoute swapRoute = ZCHF_FPS_SwapRoute();
+  late SwapRoute swapRoute;
 
   @observable
   ExecutionState state = InitialExecutionState();
