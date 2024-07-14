@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/asset/widgets/info_card.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
@@ -113,7 +114,7 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
           BalanceCard(
             balanceInfo: widget.balanceVM.balances[CryptoCurrency.fps.balanceId],
             cryptoCurrency: CryptoCurrency.fps,
-            backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+            backgroundColor: FrankencoinColors.frDark,
             actionLabel: S.of(context).trade,
             action: () => Navigator.of(context).pushNamed(Routes.swap),
             navigateToDetails: false,
@@ -123,13 +124,13 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
             BalanceCard(
               balance: widget.assetVM.wfpsBalance,
               cryptoCurrency: CryptoCurrency.wfps,
-              backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+              backgroundColor: FrankencoinColors.frDark,
             ),
           if (widget.assetVM.maticWFPSBalance != BigInt.zero)
             BalanceCard(
               balance: widget.assetVM.maticWFPSBalance,
               cryptoCurrency: CryptoCurrency.maticWFPS,
-              backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+              backgroundColor: FrankencoinColors.frDark,
             ),
           const Padding(padding: EdgeInsets.all(10), child: Divider()),
           Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/custom_balance_card.dart';
 import 'package:frankencoin_wallet/src/stores/custom_erc20_token_store.dart';
@@ -41,7 +42,7 @@ class _MoreAssetsBodyState extends State<_MoreAssetsBody> {
                 balance:
                     widget.balanceVM.balances[token.balanceId]!.getBalance(),
                 token: token,
-                backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+                backgroundColor: FrankencoinColors.frDark,
               ),
             )
             .toList(),

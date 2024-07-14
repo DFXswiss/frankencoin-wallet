@@ -15,7 +15,7 @@ class AddressBookEntryCard extends StatelessWidget {
     required this.address,
     this.onTap,
     this.onDelete,
-    this.backgroundColor = const Color.fromRGBO(15, 23, 42, 1),
+    this.backgroundColor = FrankencoinColors.frLightDark,
   });
 
   Widget get leadingImage =>

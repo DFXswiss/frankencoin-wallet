@@ -38,7 +38,7 @@ class WCParingCard extends StatelessWidget {
         margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color.fromRGBO(5, 8, 23, 1),
+          color: FrankencoinColors.frDark,
         ),
         padding: const EdgeInsets.all(15),
         child: Column(

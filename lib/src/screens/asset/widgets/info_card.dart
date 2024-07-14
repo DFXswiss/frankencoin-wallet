@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/asset_logo.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 
@@ -23,7 +24,7 @@ class InfoCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color.fromRGBO(5, 8, 23, 1),
+        color: FrankencoinColors.frDark,
       ),
       padding: const EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
       child: Column(

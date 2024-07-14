@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
@@ -27,7 +28,7 @@ class DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(15, 23, 42, 1),
+      backgroundColor: FrankencoinColors.frLightDark,
       body: PopScope(
         canPop: false,
         child: BottomSheetListener(
@@ -35,7 +36,7 @@ class DashboardPageState extends State<DashboardPage> {
           child: SafeArea(
             bottom: false,
             child: Container(
-              color: const Color.fromRGBO(5, 8, 23, 1),
+              color: FrankencoinColors.frDark,
               width: double.infinity,
               child: Observer(
                 builder: (_) => Column(
@@ -51,8 +52,8 @@ class DashboardPageState extends State<DashboardPage> {
                           end: Alignment.bottomCenter,
                           stops: [0, 1],
                           colors: [
-                            Color.fromRGBO(15, 23, 42, 1),
-                            Color.fromRGBO(5, 8, 23, 1),
+                            FrankencoinColors.frLightDark,
+                            FrankencoinColors.frDark,
                           ],
                         ),
                       ),

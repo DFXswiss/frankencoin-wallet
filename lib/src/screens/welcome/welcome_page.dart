@@ -16,7 +16,7 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(17, 24, 39, 1.0),
+      backgroundColor: FrankencoinColors.frLightDark,
       body: PopScope(
         canPop: false,
         child: SafeArea(

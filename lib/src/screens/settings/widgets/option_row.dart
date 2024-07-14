@@ -51,7 +51,7 @@ class OptionRow extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          // color: const Color.fromRGBO(5, 8, 23, 1),
+          // color: FrankencoinColors.frDark,
         ),
         padding:
             const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),

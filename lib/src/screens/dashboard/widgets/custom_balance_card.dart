@@ -23,7 +23,7 @@ class CustomBalanceCard extends StatelessWidget {
     this.balance,
     this.actionLabel,
     this.action,
-    this.backgroundColor = const Color.fromRGBO(15, 23, 42, 1),
+    this.backgroundColor = FrankencoinColors.frLightDark,
     this.showBlockchainIcon = false,
     this.navigateToDetails = true,
   });

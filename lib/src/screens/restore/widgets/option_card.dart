@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 
 class OptionCard extends StatelessWidget {
   final void Function()? action;
@@ -21,7 +22,7 @@ class OptionCard extends StatelessWidget {
       margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color.fromRGBO(5, 8, 23, 1),
+        color: FrankencoinColors.frDark,
       ),
       padding: const EdgeInsets.all(15),
       child: InkWell(
@@ -36,7 +37,7 @@ class OptionCard extends StatelessWidget {
                 Icon(
                   leadingIcon,
                   size: 40,
-                  color: const Color.fromRGBO(251, 113, 133, 1),
+                  color: FrankencoinColors.frRed,
                 ),
                 // Image.asset(leadingImagePath, width: 40),
                 Expanded(

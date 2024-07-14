@@ -22,7 +22,7 @@ class BalanceSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       width: double.infinity,
-      color: const Color.fromRGBO(15, 23, 42, 1),
+      color: FrankencoinColors.frLightDark,
       child: Column(
         children: [
           Row(

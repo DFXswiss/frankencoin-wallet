@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 
 abstract class BasePage extends StatelessWidget {
   BasePage({super.key}) : _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -23,7 +24,7 @@ abstract class BasePage extends StatelessWidget {
   void onClose(BuildContext context) => Navigator.of(context).pop();
 
   Color pageBackgroundColor(BuildContext context) =>
-      const Color.fromRGBO(17, 24, 39, 1.0);
+      FrankencoinColors.frLightDark;
 
   // (currentTheme.type == ThemeType.dark
   //     ? backgroundDarkColor

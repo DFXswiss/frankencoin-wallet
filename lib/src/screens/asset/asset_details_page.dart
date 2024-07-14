@@ -89,7 +89,7 @@ class AssetDetailsPage extends BasePage {
               builder: (_) => BalanceCard(
                 balanceInfo: balanceVM.balances[cryptoCurrency.balanceId],
                 cryptoCurrency: cryptoCurrency,
-                backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+                backgroundColor: FrankencoinColors.frDark,
                 showBlockchainIcon: true,
                 navigateToDetails: false,
               ),
@@ -99,7 +99,7 @@ class AssetDetailsPage extends BasePage {
                 builder: (_) => BalanceCard(
                   balanceInfo: balanceVM.balances[cryptoCurrency.balanceId],
                   cryptoCurrency: cryptoCurrency,
-                  backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+                  backgroundColor: FrankencoinColors.frDark,
                   showBlockchainIcon: true,
                 ),
               ),

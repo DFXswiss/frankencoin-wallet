@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 
 class Handlebars {
   static Widget horizontal(
@@ -12,7 +13,7 @@ class Handlebars {
       height: 5,
       width: width,
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(5, 8, 23, 1),
+        color: FrankencoinColors.frDark,
         borderRadius: BorderRadius.circular(5.0),
       ),
     );

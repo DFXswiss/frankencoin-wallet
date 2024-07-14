@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/screens/address_book/widgets/address_book_entry_card.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
@@ -58,7 +59,7 @@ class AddressBookPage extends BasePage {
                           : () => addressBookVM.deleteEntry(e),
                       title: e.name,
                       address: e.address,
-                      backgroundColor: const Color.fromRGBO(5, 8, 23, 1),
+                      backgroundColor: FrankencoinColors.frDark,
                     ))
                 .toList(),
           ),
