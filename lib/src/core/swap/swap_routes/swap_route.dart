@@ -59,7 +59,8 @@ abstract class SwapRoute {
     ZCHF_FPS_SwapRoute(),
     FPS_ZCHF_SwapRoute(),
     FPS_WFPS_SwapRoute(),
-    WFPS_FPS_SwapRoute()
+    WFPS_FPS_SwapRoute(),
+    WFPS_ZCHF_SwapRoute(),
   ];
 
   const SwapRoute(this.sendCurrency, this.receiveCurrency, this.provider);

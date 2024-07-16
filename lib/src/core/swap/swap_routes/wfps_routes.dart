@@ -27,8 +27,8 @@ class FPS_WFPS_SwapRoute extends SwapRoute {
       client: appStore.getClient(CryptoCurrency.wfps.chainId),
     );
     _fpsContract = Equity(
-      address: EthereumAddress.fromHex(CryptoCurrency.wfps.address),
-      client: appStore.getClient(CryptoCurrency.wfps.chainId),
+      address: EthereumAddress.fromHex(CryptoCurrency.fps.address),
+      client: appStore.getClient(CryptoCurrency.fps.chainId),
     );
   }
 
@@ -89,6 +89,44 @@ class WFPS_FPS_SwapRoute extends SwapRoute {
           BigInt amount, BigInt expectedReturn, Credentials credentials) =>
       _fpsWrapperContract.withdrawTo(
         (account: credentials.address, amount: amount),
+        transaction:
+            getNewTransaction(credentials, _fpsWrapperContract.self.address),
+        credentials: credentials,
+      );
+}
+
+class WFPS_ZCHF_SwapRoute extends SwapRoute {
+  late final FPSWrapper _fpsWrapperContract;
+  late final Equity _fpsContract;
+
+  WFPS_ZCHF_SwapRoute()
+      : super(
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.wfps),
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.zchf),
+          SwapRouteProvider.wfpsContract,
+        );
+
+  @override
+  void init(AppStore appStore) {
+    _fpsWrapperContract = FPSWrapper(
+      address: EthereumAddress.fromHex(CryptoCurrency.wfps.address),
+      client: appStore.getClient(CryptoCurrency.wfps.chainId),
+    );
+    _fpsContract = Equity(
+      address: EthereumAddress.fromHex(CryptoCurrency.fps.address),
+      client: appStore.getClient(CryptoCurrency.fps.chainId),
+    );
+  }
+
+  @override
+  Future<BigInt> estimateReturn(BigInt amount) async =>
+      _fpsContract.calculateProceeds((shares: amount));
+
+  @override
+  Future<String> routeAction(
+          BigInt amount, BigInt expectedReturn, Credentials credentials) =>
+      _fpsWrapperContract.unwrapAndSell(
+        (amount: amount),
         transaction:
             getNewTransaction(credentials, _fpsWrapperContract.self.address),
         credentials: credentials,
