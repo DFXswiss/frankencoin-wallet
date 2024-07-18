@@ -8,6 +8,7 @@ import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/blockchain_selector.dart';
@@ -232,7 +233,7 @@ class _SendZCHFPageBodyState extends State<_SendZCHFPageBody> {
             amount: cryptoAmount.getValueInUnit(EtherUnit.ether).toString(),
             estimatedFee: estimatedFee.toString(),
             receiverAddress: receiverAddress,
-            spendCurrency: spendCurrency,
+            spendCurrency: CustomErc20Token.fromCryptoCurrency(spendCurrency),
             onConfirm: () => widget.sendVM.commitTransaction(),
             onDecline: () => widget.sendVM.state = InitialExecutionState(),
           ),

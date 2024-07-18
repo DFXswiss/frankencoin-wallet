@@ -9,6 +9,8 @@ class Routes {
   static const receive = '/dashboard/receive';
   static const receiveFrankencoinPay = '/dashboard/receive/frankencoin_pay';
   static const send = '/dashboard/send';
+  static const sendAsset = '/dashboard/send/asset';
+  static const sendReceiver = '/dashboard/send/receiver';
   static const sendFrankencoinPay = '/dashboard/send/frankencoin_pay';
   static const settings = '/settings';
   static const settingsNodes = '/settings/nodes';

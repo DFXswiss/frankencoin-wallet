@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
-import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/widgets/alert_background.dart';
 
 class ConfirmationAlert extends StatelessWidget {
   final String amount;
   final String estimatedFee;
-  final CryptoCurrency spendCurrency;
+  final CustomErc20Token spendCurrency;
   final String? receiverAddress;
 
   final Function onConfirm;

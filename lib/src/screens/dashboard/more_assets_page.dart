@@ -4,6 +4,7 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/custom_balance_card.dart';
+import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/stores/custom_erc20_token_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 
@@ -43,6 +44,7 @@ class _MoreAssetsBodyState extends State<_MoreAssetsBody> {
                     widget.balanceVM.balances[token.balanceId]!.getBalance(),
                 token: token,
                 backgroundColor: FrankencoinColors.frDark,
+                onTapSend: () => Navigator.of(context).pushNamed(Routes.sendAsset, arguments: [token, null, null]),
               ),
             )
             .toList(),

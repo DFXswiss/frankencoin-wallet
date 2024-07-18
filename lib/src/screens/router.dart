@@ -13,6 +13,7 @@ import 'package:frankencoin_wallet/src/screens/address_book/add_contact_page.dar
 import 'package:frankencoin_wallet/src/screens/address_book/address_book_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/asset_details_page.dart';
 import 'package:frankencoin_wallet/src/screens/asset/fps_asset_details_page.dart';
+import 'package:frankencoin_wallet/src/screens/asset/send_asset_page.dart';
 import 'package:frankencoin_wallet/src/screens/create_wallet/create_wallet_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/dashboard_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/more_assets_page.dart';
@@ -21,6 +22,7 @@ import 'package:frankencoin_wallet/src/screens/receive/receive_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_from_seed_page.dart';
 import 'package:frankencoin_wallet/src/screens/restore/restore_options_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/screens/send/select_receiver_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/send_frankencoin_pay_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/send_page.dart';
 import 'package:frankencoin_wallet/src/screens/settings/edit_custom_token_page.dart';
@@ -40,6 +42,7 @@ import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/frankencoin_pay/send_frankencoin_pay_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/send_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/wallet_view_model.dart';
@@ -103,6 +106,29 @@ Route<dynamic> createRoute(RouteSettings settings) {
                 initialAddress: arguments[0] as String?,
                 initialAmount: arguments[1] as String?,
                 initialAsset: arguments[2] as CryptoCurrency?,
+              ));
+
+    case Routes.sendAsset:
+      final arguments = settings.arguments as List;
+
+      return MaterialPageRoute<void>(
+          builder: (_) => SendAssetPage(
+                getIt.get<SendAssetViewModel>(),
+                getIt.get<BottomSheetService>(),
+                sendCurrency: arguments[0] as CustomErc20Token,
+                initialAddress: arguments[1] as String?,
+                initialAmount: arguments[2] as String?,
+              ));
+
+    case Routes.sendReceiver:
+      final arguments = settings.arguments as List;
+
+      return MaterialPageRoute<void>(
+          builder: (_) => SelectReceiverPage(
+                getIt.get<SendViewModel>(),
+                getIt.get<AddressBookViewModel>(),
+                getIt.get<BottomSheetService>(),
+                initialAmount: arguments[1] as String?,
               ));
 
     case Routes.sendFrankencoinPay:

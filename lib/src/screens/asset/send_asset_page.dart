@@ -6,15 +6,14 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
-import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
-import 'package:frankencoin_wallet/src/screens/send/widgets/currency_picker.dart';
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
+import 'package:frankencoin_wallet/src/view_model/send_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
@@ -24,49 +23,57 @@ import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
-class SendPage extends BasePage {
-  SendPage(this.sendVM, this.bottomSheetService,
-      {super.key, this.initialAddress, this.initialAmount, this.initialAsset});
+class SendAssetPage extends BasePage {
+  SendAssetPage(
+    this.sendAssetVM,
+    this.bottomSheetService, {
+    super.key,
+    required this.sendCurrency,
+    this.initialAddress,
+    this.initialAmount,
+  }) {
+    sendAssetVM.spendCurrency = sendCurrency;
+  }
 
   @override
   String? get title => S.current.send;
 
-  final SendViewModel sendVM;
+  final SendAssetViewModel sendAssetVM;
   final BottomSheetService bottomSheetService;
   final String? initialAddress;
   final String? initialAmount;
-  final CryptoCurrency? initialAsset;
+  final CustomErc20Token sendCurrency;
 
   @override
-  Widget body(BuildContext context) => _SendPageBody(
-        sendVM: sendVM,
+  Widget body(BuildContext context) => _SendAssetPageBody(
+        sendAssetVM: sendAssetVM,
         bottomSheetService: bottomSheetService,
         initialAddress: initialAddress,
         initialAmount: initialAmount,
-        initialAsset: initialAsset,
+        sendCurrency: sendCurrency,
       );
 }
 
-class _SendPageBody extends StatefulWidget {
-  final SendViewModel sendVM;
+class _SendAssetPageBody extends StatefulWidget {
+  final SendAssetViewModel sendAssetVM;
   final String? initialAddress;
   final String? initialAmount;
-  final CryptoCurrency? initialAsset;
+  final CustomErc20Token sendCurrency;
   final BottomSheetService bottomSheetService;
 
-  const _SendPageBody({
-    required this.sendVM,
+  const _SendAssetPageBody({
+    required this.sendAssetVM,
     required this.bottomSheetService,
+    required this.sendCurrency,
     this.initialAddress,
     this.initialAmount,
-    this.initialAsset,
   });
 
   @override
-  State<StatefulWidget> createState() => _SendPageBodyState();
+  State<StatefulWidget> createState() => _SendAssetPageBodyState();
 }
 
-class _SendPageBodyState extends State<_SendPageBody> {
+class _SendAssetPageBodyState extends State<_SendAssetPageBody> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _cryptoAmountController = TextEditingController();
 
@@ -77,14 +84,13 @@ class _SendPageBodyState extends State<_SendPageBody> {
 
     _addressController.text = widget.initialAddress ?? "";
     _cryptoAmountController.text = widget.initialAmount ?? "";
-    widget.sendVM.spendCurrency = widget.initialAsset ?? CryptoCurrency.zchf;
-    widget.sendVM.syncFee();
+    widget.sendAssetVM.syncFee();
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.sendVM.stopSyncFee();
+    widget.sendAssetVM.stopSyncFee();
   }
 
   bool _effectsInstalled = false;
@@ -131,22 +137,22 @@ class _SendPageBodyState extends State<_SendPageBody> {
           placeholder: "0.0000",
           prefix: Observer(
             builder: (_) => CupertinoButton(
-              onPressed: () => _presentPicker(context),
-              child: Text(widget.sendVM.spendCurrency.symbol),
+              onPressed: null,
+              child: Text(widget.sendAssetVM.spendCurrency.symbol),
             ),
           ),
           suffix: Observer(builder: (_) {
-            final rawBalanceAmount = widget.sendVM.balanceStore
-                    .balances[widget.sendVM.spendCurrency.balanceId]
+            final rawBalanceAmount = widget.sendAssetVM.balanceStore
+                    .balances[widget.sendAssetVM.spendCurrency.balanceId]
                     ?.getBalance() ??
                 BigInt.zero;
 
             return CupertinoButton(
-              onPressed: () => widget.sendVM.rawCryptoAmount = formatFixed(
-                  rawBalanceAmount, widget.sendVM.spendCurrency.decimals),
+              onPressed: () => widget.sendAssetVM.rawCryptoAmount = formatFixed(
+                  rawBalanceAmount, widget.sendAssetVM.spendCurrency.decimals),
               child: Text(
                 formatFixed(
-                    rawBalanceAmount, widget.sendVM.spendCurrency.decimals,
+                    rawBalanceAmount, widget.sendAssetVM.spendCurrency.decimals,
                     fractionalDigits: 3, trimZeros: false),
               ),
             );
@@ -161,8 +167,9 @@ class _SendPageBodyState extends State<_SendPageBody> {
           padding: const EdgeInsets.only(left: 26, right: 26),
           child: AmountInfoRow(
             title: S.of(context).estimated_fee,
-            amount: BigInt.from(widget.sendVM.estimatedFee),
-            currencySymbol: widget.sendVM.spendCurrency.blockchain.nativeSymbol,
+            amount: BigInt.from(widget.sendAssetVM.estimatedFee),
+            currencySymbol:
+                widget.sendAssetVM.spendCurrency.blockchain.nativeSymbol,
           ),
         ),
       ),
@@ -170,11 +177,11 @@ class _SendPageBodyState extends State<_SendPageBody> {
         padding: const EdgeInsets.only(top: 20, bottom: 20),
         child: Observer(
           builder: (_) => CupertinoButton(
-            onPressed: widget.sendVM.isReadyToCreate
-                ? widget.sendVM.createTransaction
+            onPressed: widget.sendAssetVM.isReadyToCreate
+                ? widget.sendAssetVM.createTransaction
                 : null,
             color: FrankencoinColors.frRed,
-            child: widget.sendVM.state is InitialExecutionState
+            child: widget.sendAssetVM.state is InitialExecutionState
                 ? Text(
                     S.of(context).send,
                     style: const TextStyle(fontSize: 16),
@@ -191,49 +198,51 @@ class _SendPageBodyState extends State<_SendPageBody> {
 
     _addressController.addListener(() {
       final address = _addressController.text;
-      if (address != widget.sendVM.address) widget.sendVM.address = address;
+      if (address != widget.sendAssetVM.address)
+        widget.sendAssetVM.address = address;
     });
 
     _cryptoAmountController.addListener(() {
       final amount = _cryptoAmountController.text;
 
-      if (amount != widget.sendVM.rawCryptoAmount) {
-        widget.sendVM.rawCryptoAmount = amount;
+      if (amount != widget.sendAssetVM.rawCryptoAmount) {
+        widget.sendAssetVM.rawCryptoAmount = amount;
       }
     });
 
-    reaction((_) => widget.sendVM.address, (String address) {
+    reaction((_) => widget.sendAssetVM.address, (String address) {
       if (address != _addressController.text) _addressController.text = address;
     });
 
-    reaction((_) => widget.sendVM.rawCryptoAmount, (String rawCryptoAmount) {
+    reaction((_) => widget.sendAssetVM.rawCryptoAmount,
+        (String rawCryptoAmount) {
       if (rawCryptoAmount != _cryptoAmountController.text) {
         _cryptoAmountController.text = rawCryptoAmount;
       }
     });
 
-    reaction((_) => widget.sendVM.state, (ExecutionState state) {
+    reaction((_) => widget.sendAssetVM.state, (ExecutionState state) {
       if (state is AwaitingConfirmationExecutionState) {
-        final cryptoAmount = EtherAmount.inWei(parseFixed(
-            widget.sendVM.rawCryptoAmount.replaceAll(",", "."),
-            widget.sendVM.spendCurrency.decimals));
+        final cryptoAmount = formatFixed(
+            parseFixed(widget.sendAssetVM.rawCryptoAmount.replaceAll(",", "."),
+                widget.sendAssetVM.spendCurrency.decimals),
+            widget.sendAssetVM.spendCurrency.decimals);
 
         final estimatedFee =
-            EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
+            EtherAmount.inWei(BigInt.from(widget.sendAssetVM.estimatedFee))
                 .getValueInUnit(EtherUnit.ether);
-        final receiverAddress =
-            widget.sendVM.resolvedAlias?.address ?? widget.sendVM.address;
-        final spendCurrency = widget.sendVM.spendCurrency;
+        final receiverAddress = widget.sendAssetVM.resolvedAlias?.address ??
+            widget.sendAssetVM.address;
 
         showDialog<void>(
           context: context,
           builder: (BuildContext context) => ConfirmationAlert(
-            amount: cryptoAmount.getValueInUnit(EtherUnit.ether).toString(),
+            amount: cryptoAmount.toString(),
             estimatedFee: estimatedFee.toString(),
             receiverAddress: receiverAddress,
-            spendCurrency: CustomErc20Token.fromCryptoCurrency(spendCurrency),
-            onConfirm: () => widget.sendVM.commitTransaction(),
-            onDecline: () => widget.sendVM.state = InitialExecutionState(),
+            spendCurrency: widget.sendAssetVM.spendCurrency,
+            onConfirm: () => widget.sendAssetVM.commitTransaction(),
+            onDecline: () => widget.sendAssetVM.state = InitialExecutionState(),
           ),
         );
       }
@@ -268,28 +277,6 @@ class _SendPageBodyState extends State<_SendPageBody> {
     if (address != null) _addressController.text = address.address;
   }
 
-  Future<void> _presentPicker(BuildContext context) async {
-    final selected = await widget.bottomSheetService.queueBottomSheet(
-      isModalDismissible: true,
-      widget: Expanded(
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: CurrencyPicker(
-                availableCurrencies: CryptoCurrency.spendCurrencies,
-                selectedCurrency: widget.sendVM.spendCurrency,
-                textColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ) as CryptoCurrency?;
-
-    if (selected != null) widget.sendVM.spendCurrency = selected;
-  }
-
   Future<void> _presentQRScanner(BuildContext context) async {
     String address = await showDialog(
       context: context,
@@ -307,7 +294,6 @@ class _SendPageBodyState extends State<_SendPageBody> {
       final uri = ERC681URI.fromString(address);
       _addressController.text = uri.address;
       _cryptoAmountController.text = uri.amount;
-      widget.sendVM.spendCurrency = uri.asset ?? CryptoCurrency.zchf;
     }
   }
 }

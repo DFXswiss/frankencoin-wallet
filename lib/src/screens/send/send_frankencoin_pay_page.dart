@@ -8,6 +8,7 @@ import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
+import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/blockchain_selector.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
@@ -187,7 +188,7 @@ class _SendFrankencoinPayPageBodyState
                 widget.sendVM.spendCurrency.decimals),
             estimatedFee: estimatedFee.toString(),
             receiverAddress: widget.sendVM.address,
-            spendCurrency: widget.sendVM.spendCurrency,
+              spendCurrency: CustomErc20Token.fromCryptoCurrency(widget.sendVM.spendCurrency),
             onConfirm: () => widget.sendVM.commitTransaction(),
             onDecline: () => widget.sendVM.state = InitialExecutionState(),
           ),
