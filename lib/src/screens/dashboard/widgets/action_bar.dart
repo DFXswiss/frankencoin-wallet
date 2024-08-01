@@ -118,6 +118,7 @@ class ActionBar extends StatelessWidget {
         validateQR: (code, _) =>
             RegExp(r'(\b0x[a-fA-F0-9]{40}\b)').hasMatch(code!) ||
             code.toLowerCase().startsWith("wc:") ||
+            code.toLowerCase().startsWith("lnurl")||
             code.toLowerCase().startsWith("lnbc"),
         onData: (code, _) =>
             Navigator.of(dialogContext, rootNavigator: true).pop(code),
@@ -126,13 +127,19 @@ class ActionBar extends StatelessWidget {
 
     if (result.toLowerCase().startsWith("wc:")) {
       getIt.get<WalletConnectService>().pairWithUri(Uri.parse(result));
-    } else if (result.startsWith("lnbc")) {
+    } else if (result.toLowerCase().startsWith("lnurl")) {
+      final res = await getIt
+          .get<FrankencoinPayService>()
+          .getPaymentUri(result);
+      await Navigator.of(context)
+          .pushNamed(Routes.sendFrankencoinPay, arguments: res);
+    } else if (result.toLowerCase().startsWith("lnbc")) {
       try {
         final res = getIt
             .get<FrankencoinPayService>()
             .getLightningInvoiceDetails(result);
-        await Navigator.of(context).pushNamed(Routes.sendFrankencoinPay,
-            arguments: res);
+        await Navigator.of(context)
+            .pushNamed(Routes.sendFrankencoinPay, arguments: res);
       } catch (e) {
         getIt.get<BottomSheetService>().queueBottomSheet(
             isModalDismissible: true,

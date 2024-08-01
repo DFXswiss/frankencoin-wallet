@@ -31,5 +31,18 @@ class WebViewPageBodyState extends State<WebViewPageBody> {
           transparentBackground: true,
         ),
         initialUrlRequest: URLRequest(url: WebUri.uri(widget.uri)),
+        onLoadStart: (InAppWebViewController controller, WebUri? url) {
+          if (url.toString().startsWith("frankencoin-wallet://")) {
+            Navigator.of(context).pop();
+            controller.stopLoading();
+          }
+        },
+        // onNavigationResponse: (InAppWebViewController controller,
+        //     NavigationResponse navigationResponse) async {
+        //   if (navigationResponse.response?.url?.host.endsWith("dfx.swiss") == true) {
+        //     return NavigationResponseAction.ALLOW;
+        //   }
+        //   return NavigationResponseAction.CANCEL;
+        // },
       );
 }

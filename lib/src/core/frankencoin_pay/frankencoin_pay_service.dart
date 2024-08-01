@@ -3,11 +3,15 @@ import 'dart:developer';
 
 import 'package:bolt11_decoder/bolt11_decoder.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_exception.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
+import 'package:frankencoin_wallet/src/utils/lnurl.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
+import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 import 'package:http/http.dart' as http;
 
@@ -89,7 +93,8 @@ class FrankencoinPayService extends DFXAuthService {
         .firstWhere((element) => element.type == "description")
         .data as String?;
 
-    if (description?.startsWith("Pay this Lightning bill to transfer") == true) {
+    if (description?.startsWith("Pay this Lightning bill to transfer") ==
+        true) {
       final expiry = res.tags
           .firstWhere((element) => element.type == "expiry")
           .data as int;
@@ -118,9 +123,102 @@ class FrankencoinPayService extends DFXAuthService {
     }
   }
 
+  Future<FrankencoinPayRequest> getPaymentUri(String lnUrl) async {
+    final url = decodeLNURL(lnUrl);
+
+    final params = await _getFrankencoinPayParams(url);
+
+    return await _getFrankencoinPayRequest(params);
+  }
+
+  Future<(String, Map<CryptoCurrency, num>)> _getFrankencoinPayParams(
+      Uri uri) async {
+    final response = await http.get(uri);
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body) as Map;
+
+      for (final key in ['callback', 'transferAmounts']) {
+        if (!responseBody.keys.contains(key)) {
+          throw FrankencoinPayNotSupportedException();
+        }
+      }
+
+      final transferAmounts = <CryptoCurrency, num>{};
+      for (final transferAmountRaw in responseBody['transferAmounts'] as List) {
+        final transferAmount = transferAmountRaw as Map;
+        final amount = transferAmount['amount'] as num;
+        final asset = transferAmount['asset'] as String;
+        final method = transferAmount['method'] as String;
+        if (asset == 'ZCHF') {
+          transferAmounts[_zchfFromBlockchain(method)] = amount;
+        }
+      }
+
+      return (responseBody['callback'] as String, transferAmounts);
+    } else {
+      throw FrankencoinPayException(
+          'Failed to get FrankencoinPay Request. Status: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<FrankencoinPayRequest> _getFrankencoinPayRequest(
+      (String, Map<CryptoCurrency, num>) params) async {
+    final uri = Uri.parse(params.$1);
+    final asset = params.$2.keys.first;
+    final amount = params.$2[asset];
+
+    final queryParams = Map.of(uri.queryParameters);
+    queryParams['amount'] = amount!.toString();
+    queryParams['asset'] = asset.symbol;
+    queryParams['method'] = asset.blockchain.name;
+
+    final response =
+        await http.get(Uri.https(uri.authority, uri.path, queryParams));
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body) as Map;
+
+      for (final key in ['expiryDate', 'uri']) {
+        if (!responseBody.keys.contains(key)) {
+          throw FrankencoinPayNotSupportedException();
+        }
+      }
+
+      final paymentUri = ERC681URI.fromString(responseBody['uri']);
+      final expiry = DateTime.now()
+          .difference(DateTime.parse(responseBody['expiryDate']))
+          .inSeconds;
+      return FrankencoinPayRequest(
+        address: paymentUri.address,
+        amount: parseFixed(paymentUri.amount, asset.decimals),
+        receiverName: uri.pathSegments[uri.pathSegments.length - 1],
+        expiry: expiry < 0 ? 0 : expiry,
+        blockchains: params.$2.keys.map((e) => e.blockchain).toList()
+      );
+    } else {
+      throw FrankencoinPayException(
+          'Failed to create FrankencoinPay Request. Status: ${response.statusCode} ${response.body}');
+    }
+  }
+
   String _lightningAddressToUrl(String lightningAddress) {
     final addressParts =
         frankencoinPayStore.getLightningAddress(walletAddress)!.split("@");
     return 'https://${addressParts[1]}/.well-known/lnurlp/${addressParts[0]}';
+  }
+
+  CryptoCurrency _zchfFromBlockchain(String blockchain) {
+    switch (blockchain.toUpperCase()) {
+      case "ETHEREUM":
+        return CryptoCurrency.zchf;
+      case "POLYGON":
+        return CryptoCurrency.maticZCHF;
+      case "ARBITRUM":
+        return CryptoCurrency.arbZCHF;
+      case "OPTIMISM":
+        return CryptoCurrency.opZCHF;
+      case "BASE":
+        return CryptoCurrency.baseZCHF;
+    }
+    throw FrankencoinPayException("Unsupported Blockchain");
   }
 }

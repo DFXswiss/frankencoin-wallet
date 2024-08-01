@@ -86,7 +86,8 @@ class DFXService extends DFXAuthService {
         'assets': supportedAssets.join(','),
         if (amount != null) 'amount-in': amount,
         if (paymentMethod != null) 'payment-method': paymentMethod,
-        if (DeviceInfo.instance.isMobile) 'headless': 'true'
+        if (DeviceInfo.instance.isMobile) 'headless': 'true',
+        'redirect-uri': 'frankencoin-wallet://callback'
       });
 
       _isLoading = false;

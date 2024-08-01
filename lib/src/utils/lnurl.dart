@@ -2,12 +2,7 @@ import 'dart:convert';
 
 import 'package:bech32/bech32.dart';
 
-String encodeLNURL(String url) {
-  final raw = _convert(utf8.encode(url), 8, 5, true);
-  return const Bech32Codec().encode(Bech32('lnurl', raw), 255);
-}
-
-Uri decodeLNURL(String encodedUrl) {
+Uri decodeLnUrl(String encodedUrl) {
   Uri decodedUri;
 
   /// The URL doesn't have to be encoded at all as per LUD-17: Protocol schemes and raw (non bech32-encoded) URLs.
@@ -33,7 +28,7 @@ Uri decodeLNURL(String encodedUrl) {
 
     /// Decode the lnurl using bech32
     final bech32 = const Bech32Codec().decode(lnUrl, lnUrl.length);
-    decodedUri = Uri.parse(utf8.decode(_convert(bech32.data, 5, 8, false)));
+    decodedUri = Uri.parse(utf8.decode(_fromWords(bech32.data)));
   }
   return decodedUri;
 }
@@ -51,6 +46,10 @@ String _findLnUrl(String input) {
     throw ArgumentError('Not a valid lnurl string');
   }
 }
+
+/// Converts a list of character positions in the bech32 alphabet ("words")
+/// to binary data.
+List<int> _fromWords(List<int> words) => _convert(words, 5, 8, false);
 
 /// Taken from bech32 (bitcoinjs): https://github.com/bitcoinjs/bech32
 List<int> _convert(List<int> data, int inBits, int outBits, bool pad) {
