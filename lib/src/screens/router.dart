@@ -205,7 +205,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
       final args = settings.arguments as List;
       final title = args.first as String;
       final url = args[1] as Uri;
-      return CupertinoPageRoute<void>(builder: (_) => WebViewPage(title, url));
+      return CupertinoPageRoute<String?>(builder: (_) => WebViewPage(title, url));
 
     case Routes.addressBook:
       final isSelector = settings.arguments as bool?;

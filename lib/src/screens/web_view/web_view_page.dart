@@ -27,22 +27,16 @@ class WebViewPageBody extends StatefulWidget {
 class WebViewPageBodyState extends State<WebViewPageBody> {
   @override
   Widget build(BuildContext context) => InAppWebView(
-        initialSettings: InAppWebViewSettings(
-          transparentBackground: true,
-        ),
-        initialUrlRequest: URLRequest(url: WebUri.uri(widget.uri)),
-        onLoadStart: (InAppWebViewController controller, WebUri? url) {
-          if (url.toString().startsWith("frankencoin-wallet://")) {
-            Navigator.of(context).pop();
-            controller.stopLoading();
-          }
-        },
-        // onNavigationResponse: (InAppWebViewController controller,
-        //     NavigationResponse navigationResponse) async {
-        //   if (navigationResponse.response?.url?.host.endsWith("dfx.swiss") == true) {
-        //     return NavigationResponseAction.ALLOW;
-        //   }
-        //   return NavigationResponseAction.CANCEL;
-        // },
+      initialSettings: InAppWebViewSettings(
+        transparentBackground: true,
+        resourceCustomSchemes: ["frankencoin-wallet"]
+      ),
+      initialUrlRequest: URLRequest(url: WebUri.uri(widget.uri)),
+      onLoadStart: (InAppWebViewController controller, WebUri? url) {
+        if (url?.scheme == "frankencoin-wallet") {
+          controller.stopLoading();
+          Navigator.of(context).pop(url.toString());
+        }
+      },
       );
 }
