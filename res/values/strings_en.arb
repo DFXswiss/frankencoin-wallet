@@ -51,6 +51,7 @@
     "frankencoin_pay": "Frankencoin Pay",
     "frankencoin_pay_bill": "Frankencoin Pay bill",
     "frankencoin_pay_description": "Be paid in ZCHF via FrankencoinPay. Free of charge and uncomplicated.",
+    "frankencoin_pay_not_supported": "This provider does not support Frankencoin Pay: ${provider}",
     "holding_duration": "FPS-Holding Duration",
     "invalid_address": "Invalid address",
     "invalid_receive_address": "Invalid receiver-address",

@@ -5,6 +5,7 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_exception.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
@@ -118,8 +119,7 @@ class ActionBar extends StatelessWidget {
         validateQR: (code, _) =>
             RegExp(r'(\b0x[a-fA-F0-9]{40}\b)').hasMatch(code!) ||
             code.toLowerCase().startsWith("wc:") ||
-            code.toLowerCase().startsWith("lnurl")||
-            code.toLowerCase().startsWith("lnbc"),
+            FrankencoinPayService.isFrankencoinPayQR(code),
         onData: (code, _) =>
             Navigator.of(dialogContext, rootNavigator: true).pop(code),
       ),
@@ -127,24 +127,20 @@ class ActionBar extends StatelessWidget {
 
     if (result.toLowerCase().startsWith("wc:")) {
       getIt.get<WalletConnectService>().pairWithUri(Uri.parse(result));
-    } else if (result.toLowerCase().startsWith("lnurl")) {
-      final res = await getIt
-          .get<FrankencoinPayService>()
-          .getPaymentUri(result);
-      await Navigator.of(context)
-          .pushNamed(Routes.sendFrankencoinPay, arguments: res);
-    } else if (result.toLowerCase().startsWith("lnbc")) {
+    } else if (FrankencoinPayService.isFrankencoinPayQR(result)) {
       try {
-        final res = getIt
+        final res = await getIt
             .get<FrankencoinPayService>()
-            .getLightningInvoiceDetails(result);
-        await Navigator.of(context)
-            .pushNamed(Routes.sendFrankencoinPay, arguments: res);
-      } catch (e) {
+            .getFrankencoinPayRequest(result);
+        if (context.mounted) {
+          await Navigator.of(context)
+              .pushNamed(Routes.sendFrankencoinPay, arguments: res);
+        }
+      } on FrankencoinPayException catch (e) {
         getIt.get<BottomSheetService>().queueBottomSheet(
             isModalDismissible: true,
             widget: BottomSheetMessageDisplayWidget(
-              message: e.toString(),
+              message: e.message.toString(),
             ));
       }
     } else if (result.startsWith("0x")) {

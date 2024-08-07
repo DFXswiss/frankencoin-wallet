@@ -6,10 +6,8 @@ import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_exception.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
-import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
-import 'package:frankencoin_wallet/src/utils/lnurl.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
@@ -17,6 +15,11 @@ import 'package:http/http.dart' as http;
 
 class FrankencoinPayService extends DFXAuthService {
   static const String defaultProvider = 'lightning.space';
+
+  static bool isFrankencoinPayQR(String value) =>
+      value.toLowerCase().contains("lightning=lnurl") ||
+      value.toLowerCase().startsWith("lnurl") ||
+      value.toLowerCase().startsWith("lnbc");
 
   final FrankencoinPayStore frankencoinPayStore;
 
@@ -55,13 +58,9 @@ class FrankencoinPayService extends DFXAuthService {
       final lightningAddress = await _getLightningAddress();
       await frankencoinPayStore.setLightningAddress(
           walletAddress, lightningAddress);
-      log('Set up Frankencoin Pay with $provider and got $lightningAddress');
+      log('Set up Frankencoin Pay with $provider and got $lightningAddress',
+          name: runtimeType.toString());
     }
-  }
-
-  Future<String> _getLightningAddress() async {
-    final response = await getAuthResponse(false);
-    return response['lightningAddress'] as String;
   }
 
   Future<String> getLightningInvoice(String amountRaw) async {
@@ -82,6 +81,16 @@ class FrankencoinPayService extends DFXAuthService {
       throw Exception(
           'Failed to get sign message. Status: ${response.statusCode} ${response.body}');
     }
+  }
+
+  Future<FrankencoinPayRequest> getFrankencoinPayRequest(String payload) async {
+    if (payload.toLowerCase().contains("lightning=lnurl") ||
+        payload.toLowerCase().startsWith("lnurl")) {
+      return getPaymentUri(payload);
+    } else if (payload.toLowerCase().startsWith("lnbc")) {
+      return getLightningInvoiceDetails(payload);
+    }
+    throw FrankencoinPayException("Not a Frankencoin Pay QR");
   }
 
   FrankencoinPayRequest getLightningInvoiceDetails(String rawInvoice) {
@@ -105,7 +114,7 @@ class FrankencoinPayService extends DFXAuthService {
 
       final dataPart = description.split("send ")[1];
 
-      log(dataPart, name: "Fankencoin Pay");
+      log(dataPart, name: runtimeType.toString());
 
       final address = RegExp(r'(0x)?[0-9a-f]{40}', caseSensitive: false)
           .firstMatch(dataPart)!
@@ -119,16 +128,32 @@ class FrankencoinPayService extends DFXAuthService {
           receiverName: receiverName,
           expiry: expiry);
     } else {
-      throw Exception('Not a FrankencoinPay invoice');
+      throw FrankencoinPayException('Not a FrankencoinPay invoice');
     }
   }
 
   Future<FrankencoinPayRequest> getPaymentUri(String lnUrl) async {
+    if (lnUrl.toLowerCase().startsWith("http")) {
+      final uri = Uri.parse(lnUrl);
+      final params = uri.queryParameters;
+      if (!params.containsKey("lightning")) {
+        throw FrankencoinPayNotSupportedException(uri.authority);
+      }
+
+      lnUrl = params["lightning"] as String;
+    }
     final url = decodeLNURL(lnUrl);
+
+    log("Resolved URL: $url", name: runtimeType.toString());
 
     final params = await _getFrankencoinPayParams(url);
 
     return await _getFrankencoinPayRequest(params);
+  }
+
+  Future<String> _getLightningAddress() async {
+    final response = await getAuthResponse(false);
+    return response['lightningAddress'] as String;
   }
 
   Future<(String, Map<CryptoCurrency, num>)> _getFrankencoinPayParams(
@@ -139,7 +164,7 @@ class FrankencoinPayService extends DFXAuthService {
 
       for (final key in ['callback', 'transferAmounts']) {
         if (!responseBody.keys.contains(key)) {
-          throw FrankencoinPayNotSupportedException();
+          throw FrankencoinPayNotSupportedException(uri.authority);
         }
       }
 
@@ -179,7 +204,7 @@ class FrankencoinPayService extends DFXAuthService {
 
       for (final key in ['expiryDate', 'uri']) {
         if (!responseBody.keys.contains(key)) {
-          throw FrankencoinPayNotSupportedException();
+          throw FrankencoinPayNotSupportedException(uri.authority);
         }
       }
 
@@ -188,12 +213,11 @@ class FrankencoinPayService extends DFXAuthService {
           .difference(DateTime.parse(responseBody['expiryDate']))
           .inSeconds;
       return FrankencoinPayRequest(
-        address: paymentUri.address,
-        amount: parseFixed(paymentUri.amount, asset.decimals),
-        receiverName: uri.pathSegments[uri.pathSegments.length - 1],
-        expiry: expiry < 0 ? 0 : expiry,
-        blockchains: params.$2.keys.map((e) => e.blockchain).toList()
-      );
+          address: paymentUri.address,
+          amount: parseFixed(paymentUri.amount, asset.decimals),
+          receiverName: uri.pathSegments[uri.pathSegments.length - 1],
+          expiry: expiry < 0 ? 0 : expiry,
+          blockchains: params.$2.keys.map((e) => e.blockchain).toList());
     } else {
       throw FrankencoinPayException(
           'Failed to create FrankencoinPay Request. Status: ${response.statusCode} ${response.body}');

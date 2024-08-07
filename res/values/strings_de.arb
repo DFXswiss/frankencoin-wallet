@@ -51,6 +51,7 @@
     "frankencoin_pay": "Frankencoin Pay",
     "frankencoin_pay_bill": "Frankencoin Pay Rechnung",
     "frankencoin_pay_description": "Lass dich in ZCHF über FrankencoinPay gebührenfrei und unkompliziert bezahlen.",
+    "frankencoin_pay_not_supported": "Dieser Anbieter unterstützt Frankencoin Pay nicht: ${provider}",
     "holding_duration": "FPS-Haltedauer",
     "invalid_address": "Ungültige Addresse",
     "invalid_receive_address": "Ungültige Emfängeraddresse",
