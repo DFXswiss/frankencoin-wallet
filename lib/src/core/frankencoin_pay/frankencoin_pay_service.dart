@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:bolt11_decoder/bolt11_decoder.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_exception.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
@@ -18,8 +17,7 @@ class FrankencoinPayService extends DFXAuthService {
 
   static bool isFrankencoinPayQR(String value) =>
       value.toLowerCase().contains("lightning=lnurl") ||
-      value.toLowerCase().startsWith("lnurl") ||
-      value.toLowerCase().startsWith("lnbc");
+      value.toLowerCase().startsWith("lnurl");
 
   final FrankencoinPayStore frankencoinPayStore;
 
@@ -83,54 +81,9 @@ class FrankencoinPayService extends DFXAuthService {
     }
   }
 
-  Future<FrankencoinPayRequest> getFrankencoinPayRequest(String payload) async {
-    if (payload.toLowerCase().contains("lightning=lnurl") ||
-        payload.toLowerCase().startsWith("lnurl")) {
-      return getPaymentUri(payload);
-    } else if (payload.toLowerCase().startsWith("lnbc")) {
-      return getLightningInvoiceDetails(payload);
-    }
-    throw FrankencoinPayException("Not a Frankencoin Pay QR");
-  }
-
-  FrankencoinPayRequest getLightningInvoiceDetails(String rawInvoice) {
-    final res = Bolt11PaymentRequest(rawInvoice);
-
-    // ToDo: Parse less primitive and move to separate class
-    // Primitive description parsing
-    final description = res.tags
-        .firstWhere((element) => element.type == "description")
-        .data as String?;
-
-    if (description?.startsWith("Pay this Lightning bill to transfer") ==
-        true) {
-      final expiry = res.tags
-          .firstWhere((element) => element.type == "expiry")
-          .data as int;
-
-      final receiverName = RegExp(r'(?<=CHF to )(.*)(?=. Alternatively)')
-          .firstMatch(description!)!
-          .group(0)!;
-
-      final dataPart = description.split("send ")[1];
-
-      log(dataPart, name: runtimeType.toString());
-
-      final address = RegExp(r'(0x)?[0-9a-f]{40}', caseSensitive: false)
-          .firstMatch(dataPart)!
-          .group(0)!;
-      final rawAmount = dataPart.split(" ZCHF")[0];
-      final amount = parseFixed(rawAmount, CryptoCurrency.zchf.decimals);
-
-      return FrankencoinPayRequest(
-          address: address,
-          amount: amount,
-          receiverName: receiverName,
-          expiry: expiry);
-    } else {
-      throw FrankencoinPayException('Not a FrankencoinPay invoice');
-    }
-  }
+  Future<FrankencoinPayRequest> getFrankencoinPayRequest(
+          String payload) async =>
+      getPaymentUri(payload);
 
   Future<FrankencoinPayRequest> getPaymentUri(String lnUrl) async {
     if (lnUrl.toLowerCase().startsWith("http")) {
