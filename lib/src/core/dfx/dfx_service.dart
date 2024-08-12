@@ -101,7 +101,7 @@ class DFXService extends DFXAuthService {
               .pushNamed(Routes.webView, arguments: [title, uri]);
 
           if (!isBuyAction && response != null) {
-            _completeSell(context, response as String);
+            completeSell(context, response as String);
           }
         } else {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -120,7 +120,7 @@ class DFXService extends DFXAuthService {
     }
   }
 
-  Future<void> _completeSell(
+  Future<void> completeSell(
       BuildContext context, String callbackResponse) async {
     final uri = Uri.parse(callbackResponse);
     final params = uri.queryParameters;
