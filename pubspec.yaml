@@ -26,6 +26,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  app_links: ^6.2.0
   async: ^2.11.0
   auto_size_text: ^3.0.0
   basic_utils: ^5.7.0
@@ -38,6 +39,10 @@ dependencies:
   encrypt: ^5.0.3
   erc20: ^1.0.1
   eth_sig_util: ^0.0.9
+  etherscan_api:
+    git:
+      url: https://github.com/konstantinullrich/etherscan_api
+      ref: up-to-date-dependecies
   flutter_inappwebview: ^6.0.0
   flutter_mobx: ^2.2.0+2
   flutter_secure_storage: ^9.0.0

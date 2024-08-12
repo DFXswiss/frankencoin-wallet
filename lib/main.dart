@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -5,6 +6,7 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/default_custom_erc20_tokens.dart';
 import 'package:frankencoin_wallet/src/core/default_nodes.dart';
+import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/entities/address_book_entry.dart';
 import 'package:frankencoin_wallet/src/entities/balance_info.dart';
@@ -19,6 +21,8 @@ import 'package:frankencoin_wallet/src/wallet/load_wallet.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   try {
@@ -92,6 +96,14 @@ class FankencoinApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    AppLinks().uriLinkStream.listen((uri) {
+      if (uri.host == 'dfx') {
+        getIt
+            .get<DFXService>()
+            .completeSell(navigatorKey.currentContext!, uri.toString());
+      }
+    });
+
     return Observer(builder: (_) {
       final language = getIt.get<SettingsStore>().language;
 
@@ -108,6 +120,7 @@ class FankencoinApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
+        navigatorKey: navigatorKey,
         locale: Locale(language.code),
         debugShowCheckedModeBanner: false,
         onGenerateRoute: createRoute,
@@ -116,3 +129,4 @@ class FankencoinApp extends StatelessWidget {
     });
   }
 }
+// frankencoin-wallet://test

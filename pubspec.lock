@@ -25,6 +25,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
+  app_links:
+    dependency: "direct main"
+    description:
+      name: app_links
+      sha256: "4acba851087b25136e8f6e32a53bd4536eb3bec69947ddb66e7b9a5792ceb0c7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.0"
+  app_links_linux:
+    dependency: transitive
+    description:
+      name: app_links_linux
+      sha256: f5f7173a78609f3dfd4c2ff2c95bd559ab43c80a87dc6a095921d96c05688c81
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
+  app_links_platform_interface:
+    dependency: transitive
+    description:
+      name: app_links_platform_interface
+      sha256: "05f5379577c513b534a29ddea68176a4d4802c46180ee8e2e966257158772a3f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
+  app_links_web:
+    dependency: transitive
+    description:
+      name: app_links_web
+      sha256: af060ed76183f9e2b87510a9480e56a5352b6c249778d07bd2c95fc35632a555
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   archive:
     dependency: transitive
     description:
@@ -105,14 +137,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
-  bolt11_decoder:
-    dependency: "direct main"
-    description:
-      name: bolt11_decoder
-      sha256: ce3c4e4311e84c7b6ceb06ffbf84329bf6bdac1244ecfa1fc157c46038021bbc
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -305,14 +329,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  decimal:
+  dartz:
     dependency: transitive
     description:
-      name: decimal
-      sha256: "24a261d5d5c87e86c7651c417a5dbdf8bcd7080dd592533910e8d0505a279f21"
+      name: dartz
+      sha256: e6acf34ad2e31b1eb00948692468c30ab48ac8250e0f0df661e29f12dd252168
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.3"
+    version: "0.10.1"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      sha256: e17f6b3097b8c51b72c74c9f071a605c47bcc8893839bd66732457a5ebe73714
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.5.0+1"
+  dio_web_adapter:
+    dependency: transitive
+    description:
+      name: dio_web_adapter
+      sha256: "36c5b2d79eb17cdae41e974b7a8284fec631651d2a6f39a8a2ff22327e90aeac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   ed25519_edwards:
     dependency: transitive
     description:
@@ -369,6 +409,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.9"
+  etherscan_api:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: up-to-date-dependecies
+      resolved-ref: d58b647032aacb6bd328fecbc9367d884d47569f
+      url: "https://github.com/konstantinullrich/etherscan_api"
+    source: git
+    version: "1.0.1"
   event:
     dependency: transitive
     description:
@@ -605,6 +654,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  gtk:
+    dependency: transitive
+    description:
+      name: gtk
+      sha256: e8ce9ca4b1df106e4d72dad201d345ea1a036cc12c360f1a7d5a758f78ffa42c
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   hex:
     dependency: transitive
     description:
@@ -753,10 +810,10 @@ packages:
     dependency: transitive
     description:
       name: logger
-      sha256: af05cc8714f356fd1f3888fb6741cbe9fbe25cdb6eedbab80e1a6db21047d4a4
+      sha256: "697d067c60c20999686a0add96cf6aba723b3aa1f83ecf806a8097231529ec32"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.4.0"
   logging:
     dependency: transitive
     description:
@@ -989,14 +1046,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
-  rational:
-    dependency: transitive
-    description:
-      name: rational
-      sha256: cb808fb6f1a839e6fc5f7d8cb3b0a10e1db48b3be102de73938c627f0b636336
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.3"
   sec:
     dependency: transitive
     description:
