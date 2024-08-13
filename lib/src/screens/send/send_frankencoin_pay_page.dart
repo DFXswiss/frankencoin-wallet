@@ -72,14 +72,13 @@ class _SendFrankencoinPayPageBodyState
     widget.sendVM.startTimeLeft();
     widget.sendVM.syncFee();
 
-    final needsRefill = widget.sendVM.chooseBlockchain();
+    final needsRefill = widget.sendVM.needsRefill();
     if (!needsRefill) {
       final amount = formatFixed(
-          widget.sendVM.cryptoAmount, widget.sendVM.spendCurrency.decimals);
-      widget.sendVM.spendCurrency = CryptoCurrency.maticZCHF;
+          widget.sendVM.refillAmount(), widget.sendVM.spendCurrency.decimals);
       widget.dfxService.launchProvider(context, true,
           paymentMethod: "card",
-          blockchain: Blockchain.polygon,
+          blockchain: widget.sendVM.spendCurrency.blockchain,
           amount: amount);
     }
   }
@@ -188,7 +187,8 @@ class _SendFrankencoinPayPageBodyState
                 widget.sendVM.spendCurrency.decimals),
             estimatedFee: estimatedFee.toString(),
             receiverAddress: widget.sendVM.address,
-              spendCurrency: CustomErc20Token.fromCryptoCurrency(widget.sendVM.spendCurrency),
+            spendCurrency: CustomErc20Token.fromCryptoCurrency(
+                widget.sendVM.spendCurrency),
             onConfirm: () => widget.sendVM.commitTransaction(),
             onDecline: () => widget.sendVM.state = InitialExecutionState(),
           ),

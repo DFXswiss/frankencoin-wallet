@@ -61,7 +61,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   }
 
   @action
-  bool chooseBlockchain() {
+  bool needsRefill() {
     for (final zchf in [
       CryptoCurrency.maticZCHF,
       CryptoCurrency.baseZCHF,
@@ -76,6 +76,21 @@ abstract class SendFrankencoinPayViewModelBase with Store {
       }
     }
     return false;
+  }
+
+  BigInt refillAmount() {
+    var amount = cryptoAmount;
+    for (final zchf in [
+      CryptoCurrency.maticZCHF,
+      CryptoCurrency.baseZCHF,
+      CryptoCurrency.opZCHF,
+      CryptoCurrency.arbZCHF,
+      CryptoCurrency.zchf,
+    ]) {
+      final refillAmount = cryptoAmount - balanceStore.getBalance(zchf);
+      if (refillAmount < amount) amount = refillAmount;
+    }
+    return amount;
   }
 
   @action
