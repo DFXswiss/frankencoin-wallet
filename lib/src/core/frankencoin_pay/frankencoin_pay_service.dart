@@ -109,13 +109,13 @@ class FrankencoinPayService extends DFXAuthService {
     return response['lightningAddress'] as String;
   }
 
-  Future<(String, Map<CryptoCurrency, num>)> _getFrankencoinPayParams(
-      Uri uri) async {
+  Future<(_FrankencoinPayQuote, Map<CryptoCurrency, num>)>
+      _getFrankencoinPayParams(Uri uri) async {
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body) as Map;
 
-      for (final key in ['callback', 'transferAmounts']) {
+      for (final key in ['callback', 'transferAmounts', 'quote']) {
         if (!responseBody.keys.contains(key)) {
           throw FrankencoinPayNotSupportedException(uri.authority);
         }
@@ -124,15 +124,23 @@ class FrankencoinPayService extends DFXAuthService {
       final transferAmounts = <CryptoCurrency, num>{};
       for (final transferAmountRaw in responseBody['transferAmounts'] as List) {
         final transferAmount = transferAmountRaw as Map;
-        final amount = transferAmount['amount'] as num;
-        final asset = transferAmount['asset'] as String;
         final method = transferAmount['method'] as String;
-        if (asset == 'ZCHF') {
-          transferAmounts[_zchfFromBlockchain(method)] = amount;
+
+        for (final asset in transferAmount['assets'] as List) {
+          final assetTicker = asset['asset'] as String;
+          final amount = asset['amount'] as num;
+          if (assetTicker == 'ZCHF') {
+            transferAmounts[_zchfFromBlockchain(method)] = amount;
+          }
         }
       }
 
-      return (responseBody['callback'] as String, transferAmounts);
+      final quote = _FrankencoinPayQuote.fromJson(
+          responseBody['callback'] as String,
+          responseBody['displayName'] as String?,
+          responseBody['quote'] as Map);
+
+      return (quote, transferAmounts);
     } else {
       throw FrankencoinPayException(
           'Failed to get FrankencoinPay Request. Status: ${response.statusCode} ${response.body}');
@@ -140,13 +148,13 @@ class FrankencoinPayService extends DFXAuthService {
   }
 
   Future<FrankencoinPayRequest> _getFrankencoinPayRequest(
-      (String, Map<CryptoCurrency, num>) params) async {
-    final uri = Uri.parse(params.$1);
+      (_FrankencoinPayQuote, Map<CryptoCurrency, num>) params) async {
+    final uri = Uri.parse(params.$1.callbackUrl);
     final asset = params.$2.keys.first;
-    final amount = params.$2[asset];
 
     final queryParams = Map.of(uri.queryParameters);
-    queryParams['amount'] = amount!.toString();
+
+    queryParams['quote'] = params.$1.id;
     queryParams['asset'] = asset.symbol;
     queryParams['method'] = asset.blockchain.name;
 
@@ -168,7 +176,8 @@ class FrankencoinPayService extends DFXAuthService {
       return FrankencoinPayRequest(
           address: paymentUri.address,
           amount: parseFixed(paymentUri.amount, asset.decimals),
-          receiverName: uri.pathSegments[uri.pathSegments.length - 1],
+          receiverName: params.$1.displayName ??
+              uri.pathSegments[uri.pathSegments.length - 1],
           expiry: expiry < 0 ? 0 : expiry,
           blockchains: params.$2.keys.map((e) => e.blockchain).toList());
     } else {
@@ -198,4 +207,18 @@ class FrankencoinPayService extends DFXAuthService {
     }
     throw FrankencoinPayException("Unsupported Blockchain");
   }
+}
+
+class _FrankencoinPayQuote {
+  final String callbackUrl;
+  final String? displayName;
+  final String id;
+  final DateTime expiration;
+
+  _FrankencoinPayQuote(
+      this.callbackUrl, this.displayName, this.id, this.expiration);
+
+  _FrankencoinPayQuote.fromJson(this.callbackUrl, this.displayName, Map json)
+      : id = json['id'] as String,
+        expiration = DateTime.parse(json['expiration']);
 }
