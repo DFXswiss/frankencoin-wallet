@@ -30,6 +30,7 @@ abstract class AppStoreBase with Store {
 
   final SettingsStore settingsStore;
   final BottomSheetService bottomSheetService;
+  final Client httpClient = Client();
 
   @observable
   Wallet? wallet;
@@ -42,6 +43,6 @@ abstract class AppStoreBase with Store {
 
   web3dart.Web3Client getClient(int chainId) {
     final node = settingsStore.getNode(chainId);
-    return web3dart.Web3Client(node.httpsUrl, Client());
+    return web3dart.Web3Client(node.httpsUrl, httpClient);
   }
 }

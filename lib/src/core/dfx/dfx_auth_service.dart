@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
-import 'package:http/http.dart' as http;
 
 abstract class DFXAuthService {
   static const walletName = 'FrankencoinWallet';
@@ -22,9 +21,8 @@ abstract class DFXAuthService {
   Future<String> getSignMessage() async {
     final uri = Uri.https(baseUrl, signMessagePath, {'address': walletAddress});
 
-    print(uri);
-    final response =
-        await http.get(uri, headers: {'accept': 'application/json'});
+    final response = await appStore.httpClient
+        .get(uri, headers: {'accept': 'application/json'});
 
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
@@ -53,7 +51,7 @@ abstract class DFXAuthService {
           });
 
     final uri = Uri.https(baseUrl, authPath);
-    final response = await http.post(
+    final response = await appStore.httpClient.post(
       uri,
       headers: {'Content-Type': 'application/json'},
       body: requestBody,

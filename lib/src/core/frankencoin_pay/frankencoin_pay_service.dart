@@ -10,7 +10,6 @@ import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
-import 'package:http/http.dart' as http;
 
 class FrankencoinPayService extends DFXAuthService {
   static const String defaultProvider = 'lightning.space';
@@ -69,8 +68,8 @@ class FrankencoinPayService extends DFXAuthService {
     final uri = Uri.https(currentProvider,
         '/.well-known/lnurlp/${addressParts.first}/cb', {'amount': '₣$amount'});
 
-    final response =
-        await http.get(uri, headers: {'accept': 'application/json'});
+    final response = await appStore.httpClient
+        .get(uri, headers: {'accept': 'application/json'});
 
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
@@ -111,7 +110,8 @@ class FrankencoinPayService extends DFXAuthService {
 
   Future<(_FrankencoinPayQuote, Map<CryptoCurrency, num>)>
       _getFrankencoinPayParams(Uri uri) async {
-    final response = await http.get(uri);
+    final response = await appStore.httpClient.get(uri);
+
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body) as Map;
 
@@ -158,8 +158,9 @@ class FrankencoinPayService extends DFXAuthService {
     queryParams['asset'] = asset.symbol;
     queryParams['method'] = asset.blockchain.name;
 
-    final response =
-        await http.get(Uri.https(uri.authority, uri.path, queryParams));
+    final response = await appStore.httpClient
+        .get(Uri.https(uri.authority, uri.path, queryParams));
+
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body) as Map;
 
@@ -170,8 +171,8 @@ class FrankencoinPayService extends DFXAuthService {
       }
 
       final paymentUri = ERC681URI.fromString(responseBody['uri']);
-      final expiry = DateTime.now()
-          .difference(DateTime.parse(responseBody['expiryDate']))
+      final expiry = DateTime.parse(responseBody['expiryDate'])
+          .difference(DateTime.now())
           .inSeconds;
       return FrankencoinPayRequest(
           address: paymentUri.address,
