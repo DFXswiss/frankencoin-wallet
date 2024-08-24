@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -52,17 +54,17 @@
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>frankencoin-wallet</string>
-        </array>
-        <key>CFBundleURLName</key>
-        <string>frankencoin-wallet</string>
-      </dict>
-    </array>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>frankencoin-wallet</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>frankencoin-wallet</string>
+		</dict>
+	</array>
 	<key>FlutterDeepLinkingEnabled</key>
-    <true/>
+	<true/>
 </dict>
 </plist>
