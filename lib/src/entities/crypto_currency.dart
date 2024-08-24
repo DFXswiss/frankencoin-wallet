@@ -69,4 +69,6 @@ enum CryptoCurrency {
   Blockchain get blockchain => Blockchain.getFromChainId(chainId);
 
   String get balanceId => "$chainId:$address";
+
+  bool get hasPermit => [CryptoCurrency.zchf, CryptoCurrency.fps, CryptoCurrency.baseZCHF, CryptoCurrency.opZCHF].contains(this);
 }

@@ -13,7 +13,6 @@ import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 class DFXSwapService extends DFXAuthService {
@@ -80,7 +79,7 @@ class DFXSwapService extends DFXAuthService {
 
     final authToken = await getAuthToken();
 
-    final response = await http.put(
+    final response = await appStore.httpClient.put(
       uri,
       headers: {
         'Content-Type': 'application/json',
