@@ -1,26 +1,26 @@
 import 'package:erc20/erc20.dart';
-import 'package:frankencoin_wallet/src/core/contracts/RootChainManager.g.dart';
+import 'package:eth_sig_util/eth_sig_util.dart';
+import 'package:frankencoin_wallet/src/core/contracts/L1GatewayRouter.g.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/swap_route.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
-import 'package:frankencoin_wallet/src/utils/bigint_extension.dart';
-import 'package:web3dart/web3dart.dart';
+import 'package:web3dart/credentials.dart';
 
-class ZCHF_maticZCHF_SwapRoute extends SwapRoute {
+class ZCHF_arbZCHF_SwapRoute extends SwapRoute {
   final _bridgeAddress =
-      EthereumAddress.fromHex("0xA0c68C638235ee32657e8f720a23ceC1bFc77C77");
+      EthereumAddress.fromHex("0x72Ce9c846789fdB6fC1f34aC4AD25Dd9ef7031ef");
   late final ERC20 _zchfContract;
-  late final RootChainManager _bridge;
+  late final L1GatewayRouter _bridge;
 
   @override
   bool get requireApprove => true;
 
-  ZCHF_maticZCHF_SwapRoute()
+  ZCHF_arbZCHF_SwapRoute()
       : super(
           CustomErc20Token.fromCryptoCurrency(CryptoCurrency.zchf),
-          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.maticZCHF),
-          SwapRouteProvider.maticBridge,
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.arbZCHF),
+          SwapRouteProvider.opBridge,
         );
 
   @override
@@ -29,7 +29,7 @@ class ZCHF_maticZCHF_SwapRoute extends SwapRoute {
       address: EthereumAddress.fromHex(sendCurrency.address),
       client: appStore.getClient(sendCurrency.chainId),
     );
-    _bridge = RootChainManager(
+    _bridge = L1GatewayRouter(
       address: _bridgeAddress,
       client: appStore.getClient(sendCurrency.chainId),
     );
@@ -40,16 +40,30 @@ class ZCHF_maticZCHF_SwapRoute extends SwapRoute {
 
   @override
   Future<String> routeAction(
-          BigInt amount, BigInt expectedReturn, Credentials credentials) =>
-      _bridge.depositFor(
-        (
-          user: credentials.address,
-          rootToken: _zchfContract.self.address,
-          depositData: encodeBigInt(amount)
-        ),
-        transaction: getNewTransaction(credentials, _bridgeAddress),
-        credentials: credentials,
-      );
+      BigInt amount, BigInt expectedReturn, Credentials credentials) {
+    final maxSubmissionCost = BigInt.one; //ToDo
+
+    return _bridge.outboundTransfer(
+      (
+        token: EthereumAddress.fromHex(sendCurrency.address),
+        to: credentials.address,
+        amount: amount,
+        maxGas: BigInt.from(200000), //ToDo
+        gasPriceBid: BigInt.from(60000000),
+        data: AbiUtil.rawEncode([
+          'uint256',
+          'bytes'
+        ], [
+          // maxSubmissionCost
+          maxSubmissionCost,
+          // callHookData
+          '0x',
+        ]),
+      ),
+      transaction: getNewTransaction(credentials, _bridgeAddress),
+      credentials: credentials,
+    );
+  }
 
   @override
   Future<String> approve(BigInt amount, Credentials credentials) =>
