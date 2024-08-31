@@ -57,11 +57,13 @@ class SettingsPage extends BasePage {
                 onTap: (_) =>
                     Navigator.of(context).pushNamed(Routes.settingsNodes),
               ),
-              OptionRow(
-                name: S.of(context).assets,
-                type: OptionRowType.navigate,
-                onTap: (_) => Navigator.of(context)
-                    .pushNamed(Routes.settingsCustomTokens),
+              Observer(
+                builder: (_) => settingsStore.enableAdvancedMode ? OptionRow(
+                  name: S.of(context).assets,
+                  type: OptionRowType.navigate,
+                  onTap: (_) => Navigator.of(context)
+                      .pushNamed(Routes.settingsCustomTokens),
+                ) : const SizedBox.shrink()
               ),
               Observer(
                 builder: (_) => OptionRow(
@@ -96,6 +98,17 @@ class SettingsPage extends BasePage {
                       : S.of(context).disabled,
                   onTap: (_) => settingsStore.enableExperimentalFeatures =
                       !settingsStore.enableExperimentalFeatures,
+                ),
+              ),
+              Observer(
+                builder: (_) => OptionRow(
+                  name: S.of(context).advanced_mode,
+                  type: OptionRowType.edit,
+                  suffix: settingsStore.enableAdvancedMode
+                      ? S.of(context).enabled
+                      : S.of(context).disabled,
+                  onTap: (_) => settingsStore.enableAdvancedMode =
+                      !settingsStore.enableAdvancedMode,
                 ),
               ),
               CupertinoButton(

@@ -9,6 +9,7 @@ import 'package:frankencoin_wallet/src/screens/dashboard/widgets/action_bar.dart
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_section.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/bottom_sheet_listener.dart';
 import 'package:frankencoin_wallet/src/widgets/primary_fullwidth_button.dart';
@@ -24,6 +25,7 @@ class DashboardPage extends StatefulWidget {
 
 class DashboardPageState extends State<DashboardPage> {
   final bottomSheetService = getIt.get<BottomSheetService>();
+  final settingsStore = getIt.get<SettingsStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -67,38 +69,42 @@ class DashboardPageState extends State<DashboardPage> {
                             slivers: [
                               SliverFillRemaining(
                                 hasScrollBody: false,
-                                child: Column(
-                                  children: <Widget>[
-                                    BalanceCard(
-                                      balance: widget
-                                          .balanceVM.zchfBalanceAggregated,
-                                      cryptoCurrency: CryptoCurrency.zchf,
-                                    ),
-                                    BalanceCard(
-                                      balance: widget.balanceVM
-                                          .getAggregatedBalance(
-                                              CryptoCurrency.eth),
-                                      cryptoCurrency: CryptoCurrency.eth,
-                                    ),
-                                    BalanceCard(
-                                      balanceInfo: widget.balanceVM.balances[
-                                          CryptoCurrency.matic.balanceId],
-                                      cryptoCurrency: CryptoCurrency.matic,
-                                    ),
-                                    BalanceCard(
-                                      balance:
-                                          widget.balanceVM.fpsBalanceAggregated,
-                                      cryptoCurrency: CryptoCurrency.fps,
-                                    ),
-                                    FullwidthButton(
-                                      label: S.of(context).more_assets,
-                                      onPressed: () => Navigator.of(context)
-                                          .pushNamed(Routes.moreAssets),
-                                    ),
-                                    const SizedBox(
-                                      height: 110,
-                                    )
-                                  ],
+                                child: Observer(
+                                  builder: (_) => Column(
+                                    children: <Widget>[
+                                      BalanceCard(
+                                        balance: widget
+                                            .balanceVM.zchfBalanceAggregated,
+                                        cryptoCurrency: CryptoCurrency.zchf,
+                                      ),
+                                      BalanceCard(
+                                        balance: widget.balanceVM
+                                            .getAggregatedBalance(
+                                                CryptoCurrency.eth),
+                                        cryptoCurrency: CryptoCurrency.eth,
+                                      ),
+                                      BalanceCard(
+                                        balanceInfo: widget.balanceVM.balances[
+                                            CryptoCurrency.matic.balanceId],
+                                        cryptoCurrency: CryptoCurrency.matic,
+                                      ),
+                                      if (settingsStore.enableAdvancedMode) ...[
+                                        BalanceCard(
+                                          balance: widget
+                                              .balanceVM.fpsBalanceAggregated,
+                                          cryptoCurrency: CryptoCurrency.fps,
+                                        ),
+                                        FullwidthButton(
+                                          label: S.of(context).more_assets,
+                                          onPressed: () => Navigator.of(context)
+                                              .pushNamed(Routes.moreAssets),
+                                        ),
+                                      ],
+                                      const SizedBox(
+                                        height: 110,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

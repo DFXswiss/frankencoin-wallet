@@ -11,11 +11,16 @@ part 'settings_store.g.dart';
 class SettingsStore = SettingsStoreBase with _$SettingsStore;
 
 abstract class SettingsStoreBase with Store {
-  SettingsStoreBase(this._sharedPreferences, this._isar,
-      {required Language initialLanguage,
-      required bool initialEnableExperimentalFeatures}) {
+  SettingsStoreBase(
+    this._sharedPreferences,
+    this._isar, {
+    required Language initialLanguage,
+    required bool initialEnableExperimentalFeatures,
+    required bool initialEnableAdvancedMode,
+  }) {
     language = initialLanguage;
     enableExperimentalFeatures = initialEnableExperimentalFeatures;
+    enableAdvancedMode = initialEnableAdvancedMode;
     nodes = _isar.nodes.where().findAllSync();
 
     reaction(
@@ -28,6 +33,11 @@ abstract class SettingsStoreBase with Store {
         (bool enableExperimentalFeatures) => _sharedPreferences.setBool(
             PreferencesKey.enableExperimentalFeatures,
             enableExperimentalFeatures));
+
+    reaction(
+        (_) => enableAdvancedMode,
+        (bool enableAdvancedMode) => _sharedPreferences.setBool(
+            PreferencesKey.enableAdvancedMode, enableAdvancedMode));
   }
 
   static SettingsStore load(SharedPreferences sharedPreferences, Isar isar) {
@@ -39,11 +49,15 @@ abstract class SettingsStoreBase with Store {
         sharedPreferences.getBool(PreferencesKey.enableExperimentalFeatures) ??
             false;
 
+    final initialEnableAdvancedMode =
+        sharedPreferences.getBool(PreferencesKey.enableAdvancedMode) ?? false;
+
     return SettingsStore(
       sharedPreferences,
       isar,
       initialLanguage: initialLanguage,
       initialEnableExperimentalFeatures: initialEnableExperimentalFeatures,
+      initialEnableAdvancedMode: initialEnableAdvancedMode,
     );
   }
 
@@ -58,6 +72,9 @@ abstract class SettingsStoreBase with Store {
 
   @observable
   late bool enableExperimentalFeatures;
+
+  @observable
+  late bool enableAdvancedMode;
 
   Node getNode(int chainId) =>
       _isar.nodes.getSync(chainId) ?? defaultNodes[chainId]!;
