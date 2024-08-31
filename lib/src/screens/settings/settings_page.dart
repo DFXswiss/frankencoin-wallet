@@ -51,20 +51,24 @@ class SettingsPage extends BasePage {
                 onTap: (_) =>
                     Navigator.of(context).pushNamed(Routes.addressBook),
               ),
-              OptionRow(
-                name: S.of(context).nodes,
-                type: OptionRowType.navigate,
-                onTap: (_) =>
-                    Navigator.of(context).pushNamed(Routes.settingsNodes),
-              ),
               Observer(
-                builder: (_) => settingsStore.enableAdvancedMode ? OptionRow(
-                  name: S.of(context).assets,
-                  type: OptionRowType.navigate,
-                  onTap: (_) => Navigator.of(context)
-                      .pushNamed(Routes.settingsCustomTokens),
-                ) : const SizedBox.shrink()
-              ),
+                  builder: (_) => settingsStore.enableAdvancedMode
+                      ? OptionRow(
+                          name: S.of(context).nodes,
+                          type: OptionRowType.navigate,
+                          onTap: (_) => Navigator.of(context)
+                              .pushNamed(Routes.settingsNodes),
+                        )
+                      : const SizedBox.shrink()),
+              Observer(
+                  builder: (_) => settingsStore.enableAdvancedMode
+                      ? OptionRow(
+                          name: S.of(context).assets,
+                          type: OptionRowType.navigate,
+                          onTap: (_) => Navigator.of(context)
+                              .pushNamed(Routes.settingsCustomTokens),
+                        )
+                      : const SizedBox.shrink()),
               Observer(
                 builder: (_) => OptionRow(
                   name: S.of(context).settings_language,
