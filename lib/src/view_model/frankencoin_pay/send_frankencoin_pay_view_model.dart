@@ -156,7 +156,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
     }
 
     if (balanceStore.getBalance(spendCurrency) < cryptoAmount) {
-      state = FailureState(S.current.not_enough_token(spendCurrency.name));
+      state = FailureState(S.current.not_enough_token(spendCurrency.name, balanceStore.getBalance(spendCurrency).toString(), cryptoAmount.toString()));
       return;
     }
 

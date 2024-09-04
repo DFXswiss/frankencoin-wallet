@@ -67,7 +67,7 @@
     "new_wallet_connect_connection": "New Connection",
     "node": "Node",
     "nodes": "Nodes",
-    "not_enough_token": "You do not have enough ${tokenSymbol} in this wallet",
+    "not_enough_token": "You do not have enough ${tokenSymbol} in this wallet\nBalance: ${balance}\nAmount: ${amount}",
     "okay": "Okay",
     "pay": "Pay",
     "receive": "Receive",

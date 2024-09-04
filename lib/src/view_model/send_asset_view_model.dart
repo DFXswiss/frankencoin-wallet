@@ -130,7 +130,7 @@ abstract class SendAssetViewModelBase with Store {
     }
 
     if (balanceStore.getCustomBalance(spendCurrency) < cryptoAmount) {
-      state = FailureState(S.current.not_enough_token(spendCurrency.name));
+      state = FailureState(S.current.not_enough_token(spendCurrency.name, balanceStore.getCustomBalance(spendCurrency).toString(), cryptoAmount.toString()));
       return;
     }
 
