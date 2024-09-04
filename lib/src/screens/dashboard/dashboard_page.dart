@@ -88,18 +88,21 @@ class DashboardPageState extends State<DashboardPage> {
                                             CryptoCurrency.matic.balanceId],
                                         cryptoCurrency: CryptoCurrency.matic,
                                       ),
-                                      if (settingsStore.enableAdvancedMode) ...[
+                                      if (settingsStore.enableAdvancedMode ||
+                                          widget.balanceVM
+                                                  .fpsBalanceAggregated >
+                                              BigInt.zero)
                                         BalanceCard(
                                           balance: widget
                                               .balanceVM.fpsBalanceAggregated,
                                           cryptoCurrency: CryptoCurrency.fps,
                                         ),
+                                      if (settingsStore.enableAdvancedMode)
                                         FullwidthButton(
                                           label: S.of(context).more_assets,
                                           onPressed: () => Navigator.of(context)
                                               .pushNamed(Routes.moreAssets),
                                         ),
-                                      ],
                                       const SizedBox(
                                         height: 110,
                                       )
