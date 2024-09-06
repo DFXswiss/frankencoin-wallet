@@ -80,11 +80,34 @@ class FrankencoinPayService extends DFXAuthService {
     }
   }
 
-  Future<FrankencoinPayRequest> getFrankencoinPayRequest(
-          String payload) async =>
-      getPaymentUri(payload);
+  Future<String> commitFrankencoinPayRequest(String txHex,
+      {required String callbackUrl,
+      required String blockchain,
+      required String quote,
+      required String asset}) async {
+    final uri = Uri.parse(callbackUrl.replaceAll("cb", "tx"));
 
-  Future<FrankencoinPayRequest> getPaymentUri(String lnUrl) async {
+    final queryParams = Map.of(uri.queryParameters);
+
+    queryParams['quote'] = quote;
+    queryParams['asset'] = asset;
+    queryParams['method'] = blockchain;
+    queryParams['hex'] = "0x$txHex";
+
+    final response = await appStore.httpClient
+        .get(Uri.https(uri.authority, uri.path, queryParams));
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+
+      if (body["status"] == "Success") return body["txId"];
+      throw FrankencoinPayException(body["message"]);
+    }
+    throw FrankencoinPayException(
+        "Unexpected status code ${response.statusCode}");
+  }
+
+  Future<FrankencoinPayRequest> getFrankencoinPayRequest(String lnUrl) async {
     if (lnUrl.toLowerCase().startsWith("http")) {
       final uri = Uri.parse(lnUrl);
       final params = uri.queryParameters;
@@ -180,7 +203,9 @@ class FrankencoinPayService extends DFXAuthService {
           receiverName: params.$1.displayName ??
               uri.pathSegments[uri.pathSegments.length - 1],
           expiry: expiry < 0 ? 0 : expiry,
-          blockchains: params.$2.keys.map((e) => e.blockchain).toList());
+          blockchains: params.$2.keys.map((e) => e.blockchain).toList(),
+          callbackUrl: params.$1.callbackUrl,
+          quote: params.$1.id);
     } else {
       throw FrankencoinPayException(
           'Failed to create FrankencoinPay Request. Status: ${response.statusCode} ${response.body}');

@@ -6,12 +6,16 @@ class FrankencoinPayRequest {
   final String receiverName;
   final List<Blockchain> blockchains;
   final int expiry;
+  final String callbackUrl;
+  final String quote;
 
   FrankencoinPayRequest({
     required this.address,
     required this.amount,
     required this.receiverName,
     required this.expiry,
+    required this.callbackUrl,
+    required this.quote,
     this.blockchains = Blockchain.values,
   });
 }

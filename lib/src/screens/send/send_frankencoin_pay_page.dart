@@ -189,7 +189,8 @@ class _SendFrankencoinPayPageBodyState
             receiverAddress: widget.sendVM.address,
             spendCurrency: CustomErc20Token.fromCryptoCurrency(
                 widget.sendVM.spendCurrency),
-            onConfirm: () => widget.sendVM.commitTransaction(),
+            onConfirm: () =>
+                widget.sendVM.commitTransaction(widget.frankencoinPayRequest),
             onDecline: () => widget.sendVM.state = InitialExecutionState(),
           ),
         );

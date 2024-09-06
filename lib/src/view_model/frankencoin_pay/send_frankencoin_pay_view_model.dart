@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:frankencoin_wallet/generated/i18n.dart';
+import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
 import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
@@ -134,7 +135,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
     _updateTimeLeftTimer?.cancel();
   }
 
-  Future<String> Function()? _sendTransaction;
+  String? _signedTransaction;
 
   @action
   Future<void> createTransaction() async {
@@ -156,12 +157,15 @@ abstract class SendFrankencoinPayViewModelBase with Store {
     }
 
     if (balanceStore.getBalance(spendCurrency) < cryptoAmount) {
-      state = FailureState(S.current.not_enough_token(spendCurrency.name, balanceStore.getBalance(spendCurrency).toString(), cryptoAmount.toString()));
+      state = FailureState(S.current.not_enough_token(
+          spendCurrency.name,
+          balanceStore.getBalance(spendCurrency).toString(),
+          cryptoAmount.toString()));
       return;
     }
 
     try {
-      _sendTransaction = await createERC20Transaction(
+      _signedTransaction = await prepareERC20Transaction(
         client,
         currentAccount: appStore.wallet!.currentAccount.primaryAddress,
         receiveAddress: address,
@@ -177,12 +181,18 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   }
 
   @action
-  Future<void> commitTransaction() async {
-    if (_sendTransaction == null) throw Exception("No pending transaction");
+  Future<void> commitTransaction(FrankencoinPayRequest request) async {
+    if (_signedTransaction == null) throw Exception("No pending transaction");
     state = CommittingExecutionState();
     try {
-      final txId = await _sendTransaction!.call();
-      state = ExecutedSuccessfullyState(payload: txId);
+      frankencoinPayService.commitFrankencoinPayRequest(
+        _signedTransaction!,
+        callbackUrl: request.callbackUrl,
+        blockchain: spendCurrency.blockchain.name,
+        quote: request.quote,
+        asset: spendCurrency.symbol,
+      );
+      state = ExecutedSuccessfullyState();
     } catch (e) {
       print("Failed ${e.toString()}");
       state = FailureState(e.toString());
