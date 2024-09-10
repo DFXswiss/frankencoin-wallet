@@ -102,8 +102,8 @@ class FrankencoinPayService extends DFXAuthService {
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
 
-      if (body["status"] == "Success") return body["txId"];
-      throw FrankencoinPayException(body["message"]);
+      if (body.keys.contains("txId")) return body["txId"];
+      throw FrankencoinPayException(body.toString());
     }
     throw FrankencoinPayException(
         "Unexpected status code ${response.statusCode}");
