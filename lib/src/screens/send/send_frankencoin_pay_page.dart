@@ -66,7 +66,6 @@ class _SendFrankencoinPayPageBodyState
     super.initState();
     _setEffects(context);
 
-    widget.sendVM.address = widget.frankencoinPayRequest.address;
     widget.sendVM.cryptoAmount = widget.frankencoinPayRequest.amount;
     widget.sendVM.timeLeft = widget.frankencoinPayRequest.expiry;
     widget.sendVM.startTimeLeft();
@@ -186,7 +185,6 @@ class _SendFrankencoinPayPageBodyState
             amount: formatFixed(widget.sendVM.cryptoAmount,
                 widget.sendVM.spendCurrency.decimals),
             estimatedFee: estimatedFee.toString(),
-            receiverAddress: widget.sendVM.address,
             spendCurrency: CustomErc20Token.fromCryptoCurrency(
                 widget.sendVM.spendCurrency),
             onConfirm: () =>
@@ -198,7 +196,7 @@ class _SendFrankencoinPayPageBodyState
 
       if (state is ExecutedSuccessfullyState) {
         final txId = state.payload as String;
-
+        Navigator.of(context).pop();
         showDialog<void>(
           context: context,
           builder: (_) => SuccessfulTxDialog(

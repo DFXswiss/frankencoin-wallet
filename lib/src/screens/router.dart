@@ -132,14 +132,14 @@ Route<dynamic> createRoute(RouteSettings settings) {
               ));
 
     case Routes.sendFrankencoinPay:
-      final arguments = settings.arguments as FrankencoinPayRequest;
+      final request = settings.arguments as FrankencoinPayRequest;
 
       return MaterialPageRoute<void>(
           builder: (_) => SendFrankencoinPayPage(
-                getIt.get<SendFrankencoinPayViewModel>(),
+                getIt.get<SendFrankencoinPayViewModel>(param1: request),
                 getIt.get<BottomSheetService>(),
                 getIt.get<DFXService>(),
-                frankencoinPayRequest: arguments,
+                frankencoinPayRequest: request,
               ));
 
     // case Routes.send:

@@ -18,6 +18,8 @@ class FrankencoinPayService extends DFXAuthService {
       value.toLowerCase().contains("lightning=lnurl") ||
       value.toLowerCase().startsWith("lnurl");
 
+  static const CryptoCurrency defaultAsset = CryptoCurrency.maticZCHF;
+
   final FrankencoinPayStore frankencoinPayStore;
 
   FrankencoinPayService(super.appStore, this.frankencoinPayStore);
@@ -123,7 +125,14 @@ class FrankencoinPayService extends DFXAuthService {
 
     final params = await _getFrankencoinPayParams(url);
 
-    return await _getFrankencoinPayRequest(params);
+    return FrankencoinPayRequest(
+        address: "",
+        amount: parseFixed(params.$2[defaultAsset].toString(), defaultAsset.decimals),
+        receiverName: params.$1.displayName ?? "Unknown",
+        expiry: params.$1.expiration.difference(DateTime.now()).inSeconds,
+        blockchains: params.$2.keys.map((e) => e.blockchain).toList(),
+        callbackUrl: params.$1.callbackUrl,
+        quote: params.$1.id);
   }
 
   Future<String> _getLightningAddress() async {
@@ -170,14 +179,12 @@ class FrankencoinPayService extends DFXAuthService {
     }
   }
 
-  Future<FrankencoinPayRequest> _getFrankencoinPayRequest(
-      (_FrankencoinPayQuote, Map<CryptoCurrency, num>) params) async {
-    final uri = Uri.parse(params.$1.callbackUrl);
-    final asset = params.$2.keys.first;
-
+  Future<String> getFrankencoinPayAddress(
+      String quoteId, String callbackUrl, CryptoCurrency asset) async {
+    final uri = Uri.parse(callbackUrl);
     final queryParams = Map.of(uri.queryParameters);
 
-    queryParams['quote'] = params.$1.id;
+    queryParams['quote'] = quoteId;
     queryParams['asset'] = asset.symbol;
     queryParams['method'] = asset.blockchain.name;
 
@@ -194,18 +201,7 @@ class FrankencoinPayService extends DFXAuthService {
       }
 
       final paymentUri = ERC681URI.fromString(responseBody['uri']);
-      final expiry = DateTime.parse(responseBody['expiryDate'])
-          .difference(DateTime.now())
-          .inSeconds;
-      return FrankencoinPayRequest(
-          address: paymentUri.address,
-          amount: parseFixed(paymentUri.amount, asset.decimals),
-          receiverName: params.$1.displayName ??
-              uri.pathSegments[uri.pathSegments.length - 1],
-          expiry: expiry < 0 ? 0 : expiry,
-          blockchains: params.$2.keys.map((e) => e.blockchain).toList(),
-          callbackUrl: params.$1.callbackUrl,
-          quote: params.$1.id);
+      return paymentUri.address;
     } else {
       throw FrankencoinPayException(
           'Failed to create FrankencoinPay Request. Status: ${response.statusCode} ${response.body}');

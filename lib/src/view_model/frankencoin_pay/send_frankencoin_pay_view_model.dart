@@ -23,18 +23,14 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   final AppStore appStore;
   final BalanceStore balanceStore;
   final FrankencoinPayService frankencoinPayService;
+  final FrankencoinPayRequest request;
 
   SendFrankencoinPayViewModelBase(
-    this.appStore,
-    this.frankencoinPayService,
-    this.balanceStore,
-  );
+      this.appStore, this.frankencoinPayService, this.balanceStore,
+      {required this.request});
 
   @observable
   BigInt cryptoAmount = BigInt.zero;
-
-  @observable
-  String address = '';
 
   @observable
   int _gasPrice = 0;
@@ -151,6 +147,11 @@ abstract class SendFrankencoinPayViewModelBase with Store {
 
     state = CreatingExecutionState();
 
+    final address = await frankencoinPayService.getFrankencoinPayAddress(
+        request.quote, request.callbackUrl, spendCurrency);
+
+    log(address);
+
     if (!address.isEthereumAddress) {
       state = FailureState(S.current.invalid_receive_address);
       return;
@@ -185,14 +186,14 @@ abstract class SendFrankencoinPayViewModelBase with Store {
     if (_signedTransaction == null) throw Exception("No pending transaction");
     state = CommittingExecutionState();
     try {
-      frankencoinPayService.commitFrankencoinPayRequest(
+      final txId = await frankencoinPayService.commitFrankencoinPayRequest(
         _signedTransaction!,
         callbackUrl: request.callbackUrl,
         blockchain: spendCurrency.blockchain.name,
         quote: request.quote,
         asset: spendCurrency.symbol,
       );
-      state = ExecutedSuccessfullyState();
+      state = ExecutedSuccessfullyState(payload: txId);
     } catch (e) {
       print("Failed ${e.toString()}");
       state = FailureState(e.toString());
