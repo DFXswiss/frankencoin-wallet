@@ -14,7 +14,7 @@ publish_to: 'none'
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.5+29
+version: 1.0.5+30
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -72,6 +72,14 @@ dev_dependencies:
   isar_generator: *isar_version
   mobx_codegen: ^2.6.0+1
   web3dart_builders: ^0.1.0
+
+dependency_overrides:
+  # TODO: Recheck once flutter_inappwebview version >6.0.0 is released
+  flutter_inappwebview_ios:
+    git:
+      url: https://github.com/IncM/flutter_inappwebview
+      path: flutter_inappwebview_ios
+      ref: cbc214c7b2cf5fd7996ff2e9e25d203946b74bc3
 
 
 flutter:

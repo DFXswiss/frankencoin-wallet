@@ -55,7 +55,7 @@ Future<void> main() async {
                 const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
             child: Text(
               'Error:\n${e.toString()}',
-              style: const TextStyle(fontSize: 22),
+              style: const TextStyle(fontSize: 22, color: Colors.black),
             ),
           ),
         ),

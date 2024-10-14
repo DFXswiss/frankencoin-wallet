@@ -24,7 +24,10 @@ class CreateWalletPage extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Image.asset("assets/images/frankencoin.png"),
+                  child: Image.asset(
+                    "assets/images/frankencoin.png",
+                    width: 155,
+                  ),
                 ),
                 Text(
                   S.of(context).your_seed,

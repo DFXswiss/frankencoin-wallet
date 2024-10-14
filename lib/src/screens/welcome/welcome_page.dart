@@ -28,7 +28,10 @@ class WelcomePage extends StatelessWidget {
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Image.asset("assets/images/frankencoin.png"),
+                  child: Image.asset(
+                    "assets/images/frankencoin.png",
+                    width: 155,
+                  ),
                 ),
                 Text(
                   S.of(context).welcome_frankecoin_wallet,
