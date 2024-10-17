@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
-import 'package:walletconnect_flutter_v2/apis/core/pairing/utils/pairing_models.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 
 class WCParingCard extends StatelessWidget {
   final PairingInfo paringInfo;

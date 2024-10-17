@@ -60,7 +60,7 @@ dependencies:
   shared_preferences: ^2.2.2
   styled_text: ^8.1.0
   url_launcher: ^6.3.0
-  walletconnect_flutter_v2: 2.2.1
+  reown_walletkit: ^1.0.1
   web3dart: ^2.7.1
 
 dev_dependencies:

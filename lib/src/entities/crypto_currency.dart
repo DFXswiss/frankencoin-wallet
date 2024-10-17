@@ -8,7 +8,7 @@ enum CryptoCurrency {
       "Frankencoin Pool Share", 18),
   wfps(1, "0x5052D3Cc819f53116641e89b96Ff4cD1EE80B182", "WFPS",
       "Wrapped Frankencoin Pool Share", 18, fps),
-  matic(137, "0x0", "MATIC", "Polygon", 18),
+  matic(137, "0x0", "POL", "Polygon", 18),
   maticZCHF(137, "0x02567e4b14b25549331fCEe2B56c647A8bAB16FD", "ZCHF",
       "Frankencoin (Polygon)", 18, zchf),
   maticWFPS(137, "0x54Cc50D5CC4914F0c5DA8b0581938dC590d29b3D", "WFPS",
@@ -68,7 +68,13 @@ enum CryptoCurrency {
 
   Blockchain get blockchain => Blockchain.getFromChainId(chainId);
 
-  String get balanceId => "$chainId:$address";
+  String get balanceId =>
+      address == "0x0" ? "$chainId:$symbol" : "$chainId:$address";
 
-  bool get hasPermit => [CryptoCurrency.zchf, CryptoCurrency.fps, CryptoCurrency.baseZCHF, CryptoCurrency.opZCHF].contains(this);
+  bool get hasPermit => [
+        CryptoCurrency.zchf,
+        CryptoCurrency.fps,
+        CryptoCurrency.baseZCHF,
+        CryptoCurrency.opZCHF
+      ].contains(this);
 }

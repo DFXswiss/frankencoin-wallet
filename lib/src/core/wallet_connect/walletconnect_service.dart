@@ -11,7 +11,7 @@ import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_messa
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/session_proposal_modal.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/web3request_modal.dart';
 import 'package:mobx/mobx.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 
 part 'walletconnect_service.g.dart';
 
@@ -21,7 +21,7 @@ class WalletConnectService = WalletConnectServiceBase
 abstract class WalletConnectServiceBase with Store {
   final AppStore appStore;
 
-  late Web3Wallet _web3Wallet;
+  late ReownWalletKit _web3Wallet;
 
   @observable
   bool isInitialized;
@@ -32,20 +32,16 @@ abstract class WalletConnectServiceBase with Store {
   @observable
   ObservableList<SessionData> sessions;
 
-  @observable
-  ObservableList<StoredCacao> auth;
-
   WalletConnectServiceBase(this.appStore)
       : pairings = ObservableList<PairingInfo>(),
         sessions = ObservableList<SessionData>(),
-        auth = ObservableList<StoredCacao>(),
         isInitialized = false;
 
   @action
   void create() {
     // Create the web3wallet client
-    _web3Wallet = Web3Wallet(
-      core: Core(projectId: secrets.walletConnectProjectId),
+    _web3Wallet = ReownWalletKit(
+      core: ReownCore(projectId: secrets.walletConnectProjectId),
       metadata: const PairingMetadata(
         name: 'Frankencoin Wallet',
         description: 'Frankencoin Wallet',
@@ -95,9 +91,6 @@ abstract class WalletConnectServiceBase with Store {
 
     final newSessions = _web3Wallet.sessions.getAll();
     sessions.addAll(newSessions);
-
-    final newAuthRequests = _web3Wallet.completeRequests.getAll();
-    auth.addAll(newAuthRequests);
   }
 
   @action
@@ -160,9 +153,7 @@ abstract class WalletConnectServiceBase with Store {
       } else {
         _web3Wallet.rejectSession(
           id: args.id,
-          reason: Errors.getSdkError(
-            Errors.USER_REJECTED,
-          ),
+          reason: const ReownSignError(code: 5000, message: 'User rejected.'),
         );
       }
     }
@@ -182,7 +173,7 @@ abstract class WalletConnectServiceBase with Store {
     try {
       log('Pairing with URI: $uri');
       await _web3Wallet.core.pairing.pair(uri: uri);
-    } on WalletConnectError catch (e) {
+    } on ReownCoreError catch (e) {
       appStore.bottomSheetService.queueBottomSheet(
         isModalDismissible: true,
         widget: BottomSheetMessageDisplayWidget(message: e.message),
@@ -212,8 +203,12 @@ abstract class WalletConnectServiceBase with Store {
     await _web3Wallet.core.pairing.disconnect(topic: topic);
     if (session != null) {
       await _web3Wallet.disconnectSession(
-          topic: session.topic,
-          reason: Errors.getSdkError(Errors.USER_DISCONNECTED));
+        topic: session.topic,
+        reason: const ReownSignError(
+          code: 6000,
+          message: 'User disconnected.',
+        ),
+      );
     }
   }
 

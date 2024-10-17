@@ -9,7 +9,7 @@ import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/blockchain_selector.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/custom_erc20_token_store.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3dart/web3dart.dart';
 
 class EditCustomTokenPage extends BasePage {
   EditCustomTokenPage(

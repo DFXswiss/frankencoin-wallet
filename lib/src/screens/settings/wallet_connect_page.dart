@@ -7,7 +7,7 @@ import 'package:frankencoin_wallet/src/screens/settings/widgets/wc_paring_card.d
 import 'package:frankencoin_wallet/src/utils/device_info.dart';
 import 'package:frankencoin_wallet/src/widgets/primary_fullwidth_button.dart';
 import 'package:frankencoin_wallet/src/widgets/qr_scan_dialog.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 
 class WalletConnectPage extends BasePage {
   WalletConnectPage(this.wcService, {super.key});

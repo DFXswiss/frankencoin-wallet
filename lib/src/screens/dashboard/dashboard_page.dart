@@ -91,10 +91,10 @@ class DashboardPageState extends State<DashboardPage> {
                                     ),
                                     Offstage(
                                       offstage:
-                                          settingsStore.enableAdvancedMode ||
+                                          !(settingsStore.enableAdvancedMode ||
                                               widget.balanceVM
                                                       .fpsBalanceAggregated >
-                                                  BigInt.zero,
+                                                  BigInt.zero),
                                       child: BalanceCard(
                                         balance: widget
                                             .balanceVM.fpsBalanceAggregated,
@@ -103,7 +103,7 @@ class DashboardPageState extends State<DashboardPage> {
                                     ),
                                     Offstage(
                                       offstage:
-                                          settingsStore.enableAdvancedMode,
+                                          !settingsStore.enableAdvancedMode,
                                       child: FullwidthButton(
                                         label: S.of(context).more_assets,
                                         onPressed: () => Navigator.of(context)

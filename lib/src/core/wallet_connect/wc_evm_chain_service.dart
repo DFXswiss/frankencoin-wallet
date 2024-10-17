@@ -10,12 +10,13 @@ import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/web3request_modal.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
+import 'package:web3dart/web3dart.dart' as web3;
 
 class CWEvmChainService {
   final Blockchain blockchain;
   final AppStore appStore;
-  final Web3Wallet wallet;
+  final ReownWalletKit wallet;
 
   static const namespace = 'eip155';
   static const pSign = 'personal_sign';
@@ -29,7 +30,7 @@ class CWEvmChainService {
     required this.blockchain,
     required this.appStore,
     required this.wallet,
-    Web3Client? web3Client,
+    web3.Web3Client? web3Client,
   }) {
     for (final String event in getEvents()) {
       wallet.registerEventEmitter(chainId: getChainId(), event: event);

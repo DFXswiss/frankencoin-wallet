@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 
 class SessionProposalModal extends StatelessWidget {
   final String? icon;
