@@ -126,10 +126,10 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
               cryptoCurrency: CryptoCurrency.wfps,
               backgroundColor: FrankencoinColors.frDark,
             ),
-          if (widget.assetVM.maticWFPSBalance != BigInt.zero)
+          if (widget.assetVM.polWFPSBalance != BigInt.zero)
             BalanceCard(
-              balance: widget.assetVM.maticWFPSBalance,
-              cryptoCurrency: CryptoCurrency.maticWFPS,
+              balance: widget.assetVM.polWFPSBalance,
+              cryptoCurrency: CryptoCurrency.polWFPS,
               backgroundColor: FrankencoinColors.frDark,
             ),
           const Padding(padding: EdgeInsets.all(10), child: Divider()),

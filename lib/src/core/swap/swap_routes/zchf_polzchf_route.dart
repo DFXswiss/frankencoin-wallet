@@ -7,7 +7,7 @@ import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/utils/bigint_extension.dart';
 import 'package:web3dart/web3dart.dart';
 
-class ZCHF_maticZCHF_SwapRoute extends SwapRoute {
+class ZCHF_polZCHF_SwapRoute extends SwapRoute {
   final _bridgeAddress =
       EthereumAddress.fromHex("0xA0c68C638235ee32657e8f720a23ceC1bFc77C77");
   late final ERC20 _zchfContract;
@@ -16,11 +16,11 @@ class ZCHF_maticZCHF_SwapRoute extends SwapRoute {
   @override
   bool get requireApprove => true;
 
-  ZCHF_maticZCHF_SwapRoute()
+  ZCHF_polZCHF_SwapRoute()
       : super(
           CustomErc20Token.fromCryptoCurrency(CryptoCurrency.zchf),
-          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.maticZCHF),
-          SwapRouteProvider.maticBridge,
+          CustomErc20Token.fromCryptoCurrency(CryptoCurrency.polZCHF),
+          SwapRouteProvider.polBridge,
         );
 
   @override

@@ -60,7 +60,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   @action
   bool needsRefill() {
     for (final zchf in [
-      CryptoCurrency.maticZCHF,
+      CryptoCurrency.polZCHF,
       CryptoCurrency.baseZCHF,
       CryptoCurrency.opZCHF,
       CryptoCurrency.arbZCHF,
@@ -78,7 +78,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   BigInt refillAmount() {
     var amount = cryptoAmount;
     for (final zchf in [
-      CryptoCurrency.maticZCHF,
+      CryptoCurrency.polZCHF,
       CryptoCurrency.baseZCHF,
       CryptoCurrency.opZCHF,
       CryptoCurrency.arbZCHF,
@@ -137,7 +137,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   Future<void> createTransaction() async {
     assert([
       CryptoCurrency.zchf,
-      CryptoCurrency.maticZCHF,
+      CryptoCurrency.polZCHF,
       CryptoCurrency.baseZCHF,
       CryptoCurrency.opZCHF,
       CryptoCurrency.arbZCHF

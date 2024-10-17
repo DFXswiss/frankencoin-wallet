@@ -18,7 +18,7 @@ class FrankencoinPayService extends DFXAuthService {
       value.toLowerCase().contains("lightning=lnurl") ||
       value.toLowerCase().startsWith("lnurl");
 
-  static const CryptoCurrency defaultAsset = CryptoCurrency.maticZCHF;
+  static const CryptoCurrency defaultAsset = CryptoCurrency.polZCHF;
 
   final FrankencoinPayStore frankencoinPayStore;
 
@@ -219,7 +219,7 @@ class FrankencoinPayService extends DFXAuthService {
       case "ETHEREUM":
         return CryptoCurrency.zchf;
       case "POLYGON":
-        return CryptoCurrency.maticZCHF;
+        return CryptoCurrency.polZCHF;
       case "ARBITRUM":
         return CryptoCurrency.arbZCHF;
       case "OPTIMISM":

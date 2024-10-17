@@ -86,8 +86,8 @@ class DashboardPageState extends State<DashboardPage> {
                                     ),
                                     BalanceCard(
                                       balanceInfo: widget.balanceVM.balances[
-                                          CryptoCurrency.matic.balanceId],
-                                      cryptoCurrency: CryptoCurrency.matic,
+                                          CryptoCurrency.pol.balanceId],
+                                      cryptoCurrency: CryptoCurrency.pol,
                                     ),
                                     Offstage(
                                       offstage:

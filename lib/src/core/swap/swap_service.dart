@@ -17,7 +17,7 @@ class SwapService {
 
   final List<CryptoCurrency> swappableAssets = [
     CryptoCurrency.zchf,
-    CryptoCurrency.maticZCHF,
+    CryptoCurrency.polZCHF,
     CryptoCurrency.baseZCHF,
     CryptoCurrency.opZCHF,
     CryptoCurrency.arbZCHF,

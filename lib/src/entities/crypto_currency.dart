@@ -8,10 +8,10 @@ enum CryptoCurrency {
       "Frankencoin Pool Share", 18),
   wfps(1, "0x5052D3Cc819f53116641e89b96Ff4cD1EE80B182", "WFPS",
       "Wrapped Frankencoin Pool Share", 18, fps),
-  matic(137, "0x0", "POL", "Polygon", 18),
-  maticZCHF(137, "0x02567e4b14b25549331fCEe2B56c647A8bAB16FD", "ZCHF",
+  pol(137, "0x0", "POL", "Polygon", 18),
+  polZCHF(137, "0x02567e4b14b25549331fCEe2B56c647A8bAB16FD", "ZCHF",
       "Frankencoin (Polygon)", 18, zchf),
-  maticWFPS(137, "0x54Cc50D5CC4914F0c5DA8b0581938dC590d29b3D", "WFPS",
+  polWFPS(137, "0x54Cc50D5CC4914F0c5DA8b0581938dC590d29b3D", "WFPS",
       "Wrapped Frankencoin Pool Share (Polygon)", 18, fps),
   baseETH(8453, "0x0", "ETH", "Base Ethereum", 18, eth),
   baseZCHF(8453, "0x20D1c515e38aE9c345836853E2af98455F919637", "ZCHF",
@@ -34,9 +34,9 @@ enum CryptoCurrency {
   static const erc20Tokens = [
     fps,
     wfps,
-    maticWFPS,
+    polWFPS,
     zchf,
-    maticZCHF,
+    polZCHF,
     opZCHF,
     baseZCHF,
     arbZCHF,
@@ -44,15 +44,15 @@ enum CryptoCurrency {
 
   static const spendCurrencies = [
     zchf,
-    maticZCHF,
+    polZCHF,
     baseZCHF,
     opZCHF,
     arbZCHF,
     fps,
     wfps,
-    maticWFPS,
+    polWFPS,
     eth,
-    matic,
+    pol,
   ];
 
   final int chainId;

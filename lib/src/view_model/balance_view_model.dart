@@ -21,7 +21,7 @@ abstract class BalanceViewModelBase with Store {
         _balanceStore.balances[CryptoCurrency.zchf.balanceId]?.getBalance() ??
             BigInt.zero;
 
-    balance += _balanceStore.getBalance(CryptoCurrency.maticZCHF);
+    balance += _balanceStore.getBalance(CryptoCurrency.polZCHF);
     balance += _balanceStore.getBalance(CryptoCurrency.baseZCHF);
     balance += _balanceStore.getBalance(CryptoCurrency.arbZCHF);
     balance += _balanceStore.getBalance(CryptoCurrency.opZCHF);
@@ -35,7 +35,7 @@ abstract class BalanceViewModelBase with Store {
             BigInt.zero;
 
     balance += _balanceStore.getBalance(CryptoCurrency.wfps);
-    balance += _balanceStore.getBalance(CryptoCurrency.maticWFPS);
+    balance += _balanceStore.getBalance(CryptoCurrency.polWFPS);
     return balance;
   }
 

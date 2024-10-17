@@ -1,7 +1,7 @@
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/fps_routes.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/wfps_routes.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/zchf_basezchf_route.dart';
-import 'package:frankencoin_wallet/src/core/swap/swap_routes/zchf_maticzchf_route.dart';
+import 'package:frankencoin_wallet/src/core/swap/swap_routes/zchf_polzchf_route.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_routes/zchf_opzchf_route.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
@@ -14,7 +14,7 @@ enum SwapRouteProvider {
   wfpsContract,
   baseBridge,
   opBridge,
-  maticBridge,
+  polBridge,
   dfx;
 
   String get icon {
@@ -27,8 +27,8 @@ enum SwapRouteProvider {
         return "assets/images/crypto/base.png";
       case opBridge:
         return "assets/images/crypto/optimism.png";
-      case maticBridge:
-        return "assets/images/crypto/matic.png";
+      case polBridge:
+        return "assets/images/crypto/pol.png";
       case dfx:
         return "assets/images/dfx_logo_small.png";
     }
@@ -44,7 +44,7 @@ enum SwapRouteProvider {
         return "Base Bridge";
       case opBridge:
         return "Optimism Bridge";
-      case maticBridge:
+      case polBridge:
         return "Polygon Bridge";
       case dfx:
         return "DFX Swap";
@@ -62,7 +62,7 @@ abstract class SwapRoute {
   static List<SwapRoute> allRoutes = [
     ZCHF_baseZCHF_SwapRoute(),
     ZCHF_opZCHF_SwapRoute(),
-    ZCHF_maticZCHF_SwapRoute(),
+    ZCHF_polZCHF_SwapRoute(),
     ZCHF_FPS_SwapRoute(),
     FPS_ZCHF_SwapRoute(),
     FPS_WFPS_SwapRoute(),

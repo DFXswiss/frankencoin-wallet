@@ -223,7 +223,7 @@ class _SendFrankencoinPayPageBodyState
         widget.sendVM.spendCurrency = CryptoCurrency.zchf;
         break;
       case Blockchain.polygon:
-        widget.sendVM.spendCurrency = CryptoCurrency.maticZCHF;
+        widget.sendVM.spendCurrency = CryptoCurrency.polZCHF;
         break;
       case Blockchain.base:
         widget.sendVM.spendCurrency = CryptoCurrency.baseZCHF;
