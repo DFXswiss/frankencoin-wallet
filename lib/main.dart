@@ -129,4 +129,3 @@ class FankencoinApp extends StatelessWidget {
     });
   }
 }
-// frankencoin-wallet://test

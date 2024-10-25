@@ -17,7 +17,9 @@ import 'package:frankencoin_wallet/src/widgets/vertical_icon_button.dart';
 import 'package:frankencoin_wallet/src/widgets/wallet_connect/bottom_sheet_message_display.dart';
 
 class ActionBar extends StatelessWidget {
-  const ActionBar({super.key});
+  final bool showDFX;
+
+  const ActionBar({super.key, required this.showDFX});
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +45,19 @@ class ActionBar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: VerticalIconButton(
-                          onPressed: () => getIt
-                              .get<DFXService>()
-                              .launchProvider(context, true),
-                          icon: const Icon(
-                            Icons.attach_money,
-                            color: FrankencoinColors.frRed,
+                      if (showDFX)
+                        Expanded(
+                          child: VerticalIconButton(
+                            onPressed: () => getIt
+                                .get<DFXService>()
+                                .launchProvider(context, true),
+                            icon: const Icon(
+                              Icons.attach_money,
+                              color: FrankencoinColors.frRed,
+                            ),
+                            label: S.of(context).buy,
                           ),
-                          label: S.of(context).buy,
                         ),
-                      ),
                       Expanded(
                         child: VerticalIconButton(
                           onPressed: () =>
@@ -89,18 +92,19 @@ class ActionBar extends StatelessWidget {
                           label: S.of(context).send,
                         ),
                       ),
-                      Expanded(
-                        child: VerticalIconButton(
-                          onPressed: () => getIt
-                              .get<DFXService>()
-                              .launchProvider(context, false),
-                          icon: const Icon(
-                            Icons.money_off,
-                            color: FrankencoinColors.frRed,
+                      if (showDFX)
+                        Expanded(
+                          child: VerticalIconButton(
+                            onPressed: () => getIt
+                                .get<DFXService>()
+                                .launchProvider(context, false),
+                            icon: const Icon(
+                              Icons.money_off,
+                              color: FrankencoinColors.frRed,
+                            ),
+                            label: S.of(context).sell,
                           ),
-                          label: S.of(context).sell,
                         ),
-                      ),
                     ],
                   ),
                 ),

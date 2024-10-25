@@ -9,15 +9,17 @@ import 'package:frankencoin_wallet/src/screens/dashboard/widgets/action_bar.dart
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_section.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/bottom_sheet_listener.dart';
 import 'package:frankencoin_wallet/src/widgets/primary_fullwidth_button.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage(this.balanceVM, {super.key});
+  const DashboardPage(this.balanceVM, this.appStore, {super.key});
 
   final BalanceViewModel balanceVM;
+  final AppStore appStore;
 
   @override
   State<StatefulWidget> createState() => DashboardPageState();
@@ -117,7 +119,11 @@ class DashboardPageState extends State<DashboardPage> {
                             ),
                           ],
                         ),
-                        const ActionBar()
+                        Observer(
+                          builder: (_) => ActionBar(
+                            showDFX: widget.appStore.dfxAuthToken != null,
+                          ),
+                        )
                       ],
                     ),
                   ),

@@ -67,7 +67,11 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
     case Routes.dashboard:
       return MaterialPageRoute<void>(
-          builder: (_) => DashboardPage(getIt.get<BalanceViewModel>()));
+        builder: (_) => DashboardPage(
+          getIt.get<BalanceViewModel>(),
+          getIt.get<AppStore>(),
+        ),
+      );
 
     case Routes.assetDetails:
       final cryptoCurrency = settings.arguments as CryptoCurrency;
@@ -205,7 +209,8 @@ Route<dynamic> createRoute(RouteSettings settings) {
       final args = settings.arguments as List;
       final title = args.first as String;
       final url = args[1] as Uri;
-      return CupertinoPageRoute<String?>(builder: (_) => WebViewPage(title, url));
+      return CupertinoPageRoute<String?>(
+          builder: (_) => WebViewPage(title, url));
 
     case Routes.addressBook:
       final isSelector = settings.arguments as bool?;
