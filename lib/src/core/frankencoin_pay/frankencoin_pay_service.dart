@@ -109,6 +109,18 @@ class FrankencoinPayService extends DFXAuthService {
         "Unexpected status code ${response.statusCode}");
   }
 
+  Future<void> cancelFrankencoinPayRequest(
+      FrankencoinPayRequest request) async {
+    final authority = Uri.parse(request.callbackUrl).authority;
+
+    final uri = Uri.https(authority, '/v1/lnurlp/cancel/${request.quote}');
+    print(uri);
+
+    final response = await appStore.httpClient.delete(uri);
+
+    print(response.statusCode);
+  }
+
   Future<FrankencoinPayRequest> getFrankencoinPayRequest(String lnUrl) async {
     if (lnUrl.toLowerCase().startsWith("http")) {
       final uri = Uri.parse(lnUrl);
@@ -127,7 +139,8 @@ class FrankencoinPayService extends DFXAuthService {
 
     return FrankencoinPayRequest(
         address: "",
-        amount: parseFixed(params.$2[defaultAsset].toString(), defaultAsset.decimals),
+        amount: parseFixed(
+            params.$2[defaultAsset].toString(), defaultAsset.decimals),
         receiverName: params.$1.displayName ?? "Unknown",
         expiry: params.$1.expiration.difference(DateTime.now()).inSeconds,
         blockchains: params.$2.keys.map((e) => e.blockchain).toList(),

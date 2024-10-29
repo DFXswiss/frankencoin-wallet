@@ -131,6 +131,11 @@ abstract class SendFrankencoinPayViewModelBase with Store {
     _updateTimeLeftTimer?.cancel();
   }
 
+  void cancelRequest() {
+    frankencoinPayService.cancelFrankencoinPayRequest(request);
+    stopTimers();
+  }
+
   String? _signedTransaction;
 
   @action

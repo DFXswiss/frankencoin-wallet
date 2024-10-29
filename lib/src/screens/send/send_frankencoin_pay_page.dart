@@ -15,8 +15,8 @@ import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.d
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/frankencoin_pay/send_frankencoin_pay_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
-import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/amount_info_row.dart';
+import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
 import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
@@ -72,13 +72,16 @@ class _SendFrankencoinPayPageBodyState
     widget.sendVM.syncFee();
 
     final needsRefill = widget.sendVM.needsRefill();
-    if (!needsRefill) {
+    if (!needsRefill && widget.dfxService.isAvailable) {
       final amount = formatFixed(
           widget.sendVM.refillAmount(), widget.sendVM.spendCurrency.decimals);
-      widget.dfxService.launchProvider(context, true,
-          paymentMethod: "card",
-          blockchain: widget.sendVM.spendCurrency.blockchain,
-          amount: amount);
+      widget.dfxService.launchProvider(
+        context,
+        true,
+        paymentMethod: "card",
+        blockchain: widget.sendVM.spendCurrency.blockchain,
+        amount: amount,
+      );
     }
   }
 
@@ -150,22 +153,46 @@ class _SendFrankencoinPayPageBodyState
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 20),
-        child: Observer(
-          builder: (_) => CupertinoButton(
-            onPressed: widget.sendVM.timeLeft != 0
-                ? widget.sendVM.createTransaction
-                : null,
-            color: FrankencoinColors.frRed,
-            child: widget.sendVM.state is InitialExecutionState
-                ? Text(
-                    widget.sendVM.timeLeft != 0
-                        ? "${S.of(context).pay} - ${S.of(context).seconds(widget.sendVM.timeLeft.toString())}"
-                        : S.of(context).expired,
-                    style: const TextStyle(fontSize: 16),
-                  )
-                : const CupertinoActivityIndicator(),
-          ),
+        padding:
+            const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: CupertinoButton(
+                    onPressed: onPressedCancel,
+                    color: FrankencoinColors.frRed,
+                    padding: const EdgeInsets.only(top: 14, bottom: 14),
+                    child: const Icon(
+                      CupertinoIcons.xmark,
+                      color: Colors.white,
+                      size: 19,
+                    )),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Observer(
+                builder: (_) => CupertinoButton(
+                  onPressed: widget.sendVM.timeLeft != 0
+                      ? widget.sendVM.createTransaction
+                      : null,
+                  color: FrankencoinColors.frGreen,
+                  child: widget.sendVM.state is InitialExecutionState
+                      ? Text(
+                          widget.sendVM.timeLeft != 0
+                              ? S.of(context).pay
+                              // ? "${S.of(context).pay} - ${S.of(context).seconds(widget.sendVM.timeLeft.toString())}"
+                              : S.of(context).expired,
+                          style: const TextStyle(fontSize: 16),
+                        )
+                      : const CupertinoActivityIndicator(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     ]);
@@ -235,5 +262,10 @@ class _SendFrankencoinPayPageBodyState
         widget.sendVM.spendCurrency = CryptoCurrency.opZCHF;
         break;
     }
+  }
+
+  void onPressedCancel() {
+    widget.sendVM.cancelRequest();
+    Navigator.of(context).pop();
   }
 }

@@ -34,6 +34,8 @@ class DFXService extends DFXAuthService {
 
   String get langCode => appStore.settingsStore.language.code;
 
+  bool get isAvailable => appStore.dfxAuthToken != null;
+
   static List<String> supportedAssets = [
     'Ethereum/ZCHF',
     'Polygon/ZCHF',
