@@ -44,6 +44,7 @@ abstract class DFXAuthService {
             'wallet': walletName,
             'address': walletAddress,
             'signature': signMessage,
+            'region': 1
           }
         : {
             'address': walletAddress,
@@ -71,11 +72,11 @@ abstract class DFXAuthService {
     }
   }
 
-  Future<String> getAuthToken() async {
+  Future<String?> getAuthToken() async {
     if (appStore.dfxAuthToken == null) {
       final response = await getAuthResponse();
       appStore.dfxAuthToken = response['accessToken'] as String;
     }
-    return appStore.dfxAuthToken!;
+    return appStore.dfxAuthToken;
   }
 }

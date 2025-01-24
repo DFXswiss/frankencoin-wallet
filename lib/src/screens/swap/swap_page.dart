@@ -94,9 +94,10 @@ class _SwapPageBodyState extends State<_SwapPageBody> {
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               suffix: Observer(builder: (_) {
-                final rawBalanceAmount = widget
-                    .balanceVM.balances[widget.equityVM.sendCurrency.balanceId]!
-                    .getBalance();
+                final rawBalanceAmount = widget.balanceVM
+                        .balances[widget.equityVM.sendCurrency.balanceId]
+                        ?.getBalance() ??
+                    BigInt.zero;
                 return CupertinoButton(
                   onPressed: () => _amountController.text = formatFixed(
                       rawBalanceAmount, widget.equityVM.sendCurrency.decimals),
@@ -235,7 +236,8 @@ class _SwapPageBodyState extends State<_SwapPageBody> {
           builder: (BuildContext context) => ConfirmationAlert(
             amount: amount,
             estimatedFee: estimatedFee.toString(),
-            spendCurrency: CustomErc20Token.fromCryptoCurrency(widget.equityVM.sendCurrency),
+            spendCurrency: CustomErc20Token.fromCryptoCurrency(
+                widget.equityVM.sendCurrency),
             onConfirm: () => widget.equityVM.commitTransaction(),
             onDecline: () => widget.equityVM.state = InitialExecutionState(),
           ),

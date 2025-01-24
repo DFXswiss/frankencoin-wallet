@@ -18,6 +18,8 @@ abstract class AppStoreBase with Store {
   AppStoreBase(this.settingsStore, this.bottomSheetService) {
     reaction((_) => wallet, (wallet) async {
       if (wallet != null) {
+        await setupRefreshServices();
+
         final walletConnectService = getIt.get<WalletConnectService>()
           ..onDispose()
           ..create();
@@ -25,7 +27,6 @@ abstract class AppStoreBase with Store {
 
         await getIt.get<FrankencoinPayService>().setupProvider();
         await getIt.get<DFXService>().getAuthToken();
-        await setupRefreshServices();
       }
     });
   }
