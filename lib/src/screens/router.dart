@@ -83,8 +83,8 @@ Route<dynamic> createRoute(RouteSettings settings) {
       }
 
       return MaterialPageRoute<void>(
-          builder: (_) =>
-              AssetDetailsPage(cryptoCurrency, getIt.get<BalanceViewModel>()));
+          builder: (_) => AssetDetailsPage(cryptoCurrency,
+              getIt.get<BalanceViewModel>(), getIt.get<SettingsStore>()));
 
     case Routes.moreAssets:
       return MaterialPageRoute<void>(

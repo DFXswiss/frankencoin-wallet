@@ -7,15 +7,18 @@ import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/dashboard/widgets/balance_card.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
+import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/vertical_icon_button.dart';
 
 class AssetDetailsPage extends BasePage {
-  AssetDetailsPage(this.cryptoCurrency, this.balanceVM, {super.key});
+  AssetDetailsPage(this.cryptoCurrency, this.balanceVM, this.settingsStore,
+      {super.key});
 
   final CryptoCurrency cryptoCurrency;
   final BalanceViewModel balanceVM;
+  final SettingsStore settingsStore;
 
   @override
   String get title => cryptoCurrency.name;
@@ -59,16 +62,19 @@ class AssetDetailsPage extends BasePage {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-              child: VerticalIconButton(
-                icon: const Icon(
-                  Icons.swap_horiz,
-                  color: FrankencoinColors.frRed,
-                  size: 30,
+            Offstage(
+              offstage: !settingsStore.enableAdvancedMode,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+                child: VerticalIconButton(
+                  icon: const Icon(
+                    Icons.swap_horiz,
+                    color: FrankencoinColors.frRed,
+                    size: 30,
+                  ),
+                  label: S.of(context).swap,
+                  onPressed: () => Navigator.of(context).pushNamed(Routes.swap),
                 ),
-                label: S.of(context).swap,
-                onPressed: () => Navigator.of(context).pushNamed(Routes.swap),
               ),
             ),
             Padding(
