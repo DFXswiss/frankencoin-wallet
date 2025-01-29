@@ -87,7 +87,7 @@ class FrankencoinPayService extends DFXAuthService {
       required String blockchain,
       required String quote,
       required String asset}) async {
-    final uri = Uri.parse(callbackUrl.replaceAll("cb", "tx"));
+    final uri = Uri.parse(callbackUrl.replaceAll("/cb/", "/tx/"));
 
     final queryParams = Map.of(uri.queryParameters);
 
@@ -111,14 +111,9 @@ class FrankencoinPayService extends DFXAuthService {
 
   Future<void> cancelFrankencoinPayRequest(
       FrankencoinPayRequest request) async {
-    final authority = Uri.parse(request.callbackUrl).authority;
+    final uri = Uri.parse(request.callbackUrl.replaceAll("/cb/", "/cancel/"));
 
-    final uri = Uri.https(authority, '/v1/lnurlp/cancel/${request.quote}');
-    print(uri);
-
-    final response = await appStore.httpClient.delete(uri);
-
-    print(response.statusCode);
+    await appStore.httpClient.delete(uri);
   }
 
   Future<FrankencoinPayRequest> getFrankencoinPayRequest(String lnUrl) async {

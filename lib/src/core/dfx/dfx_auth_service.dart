@@ -44,7 +44,7 @@ abstract class DFXAuthService {
             'wallet': walletName,
             'address': walletAddress,
             'signature': signMessage,
-            'region': 1
+            'region': '1'
           }
         : {
             'address': walletAddress,
