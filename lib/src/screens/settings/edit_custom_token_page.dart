@@ -99,79 +99,81 @@ class _EditCustomTokenPageBodyState extends State<_EditCustomTokenPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: SingleChildScrollView(child: Column(
-      children: [
-        Padding(
-          padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 10),
-          child: CupertinoTextField(
-            controller: _addressController,
-            placeholder: S.of(context).address,
-            suffix: const SizedBox(height: 52),
-          ),
-        ),
-        Padding(
-          padding:
-          const EdgeInsets.only(left: 26, right: 26),
-          child: BlockchainSelector(
-            bottomSheetService: widget.bottomSheetService,
-            blockchain: Blockchain.getFromChainId(_chainId),
-            onSelect: (blockchain) =>
-                setState(() => _chainId = blockchain.chainId),
-          ),
-        ),
-        Padding(
-          padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 20, bottom: 10),
-          child: CupertinoTextField(
-            controller: _nameController,
-            placeholder: S.of(context).name,
-            suffix: const SizedBox(height: 52),
-          ),
-        ),
-        Padding(
-          padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
-          child: CupertinoTextField(
-            controller: _symbolController,
-            placeholder: S.of(context).token_symbol,
-            suffix: const SizedBox(height: 52),
-          ),
-        ),
-        Padding(
-          padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
-          child: CupertinoTextField(
-            controller: _decimalsController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: false),
-            placeholder: S.of(context).token_decimals,
-            suffix: const SizedBox(height: 52),
-          ),
-        ),
-        Padding(
-          padding:
-          const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
-          child: CupertinoTextField(
-            controller: _iconUrlController,
-            placeholder: S.of(context).token_icon_url,
-            suffix: const SizedBox(height: 52),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
-          child: CupertinoButton(
-            onPressed: _isLoading ? null : _save,
-            color: FrankencoinColors.frRed,
-            child: _isLoading
-                ? const CupertinoActivityIndicator()
-                : Text(
-              S.of(context).save,
-              style: const TextStyle(fontSize: 16),
+    return SafeArea(
+        child: SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 26, right: 26, top: 10),
+            child: CupertinoTextField(
+              controller: _addressController,
+              placeholder: S.of(context).address,
+              suffix: const SizedBox(height: 52),
             ),
           ),
-        ),
-      ],
-    ),));
+          Padding(
+            padding: const EdgeInsets.only(left: 26, right: 26),
+            child: BlockchainSelector(
+              bottomSheetService: widget.bottomSheetService,
+              blockchain: Blockchain.getFromChainId(_chainId),
+              onSelect: (blockchain) =>
+                  setState(() => _chainId = blockchain.chainId),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 26, right: 26, top: 20, bottom: 10),
+            child: CupertinoTextField(
+              controller: _nameController,
+              placeholder: S.of(context).name,
+              suffix: const SizedBox(height: 52),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
+            child: CupertinoTextField(
+              controller: _symbolController,
+              placeholder: S.of(context).token_symbol,
+              suffix: const SizedBox(height: 52),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
+            child: CupertinoTextField(
+              controller: _decimalsController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: false),
+              placeholder: S.of(context).token_decimals,
+              suffix: const SizedBox(height: 52),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 10),
+            child: CupertinoTextField(
+              controller: _iconUrlController,
+              placeholder: S.of(context).token_icon_url,
+              suffix: const SizedBox(height: 52),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 20),
+            child: CupertinoButton(
+              onPressed: _isLoading ? null : _save,
+              color: FrankencoinColors.frRed,
+              child: _isLoading
+                  ? const CupertinoActivityIndicator()
+                  : Text(
+                      S.of(context).save,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 
   Future<void> _save() async {

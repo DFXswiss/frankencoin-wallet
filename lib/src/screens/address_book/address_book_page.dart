@@ -29,7 +29,7 @@ class AddressBookPage extends BasePage {
               label: S.of(context).add_contact,
               child: TextButton(
                 style: ButtonStyle(
-                  overlayColor: MaterialStateColor.resolveWith(
+                  overlayColor: WidgetStateColor.resolveWith(
                       (states) => Colors.transparent),
                 ),
                 onPressed: () =>

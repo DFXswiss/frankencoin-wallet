@@ -68,7 +68,8 @@ abstract class SendAssetViewModelBase with Store {
   ExecutionState state = InitialExecutionState();
 
   @observable
-  CustomErc20Token spendCurrency = CustomErc20Token.fromCryptoCurrency(CryptoCurrency.zchf);
+  CustomErc20Token spendCurrency =
+      CustomErc20Token.fromCryptoCurrency(CryptoCurrency.zchf);
 
   @observable
   int _gasPrice = 0;
@@ -79,7 +80,7 @@ abstract class SendAssetViewModelBase with Store {
   @computed
   int get estimatedFee {
     final priorityFee =
-    EtherAmount.fromInt(EtherUnit.gwei, priority.tip).getInWei.toInt();
+        EtherAmount.fromInt(EtherUnit.gwei, priority.tip).getInWei.toInt();
     return (_gasPrice + priorityFee) * _estimatedGas;
   }
 
@@ -130,7 +131,10 @@ abstract class SendAssetViewModelBase with Store {
     }
 
     if (balanceStore.getCustomBalance(spendCurrency) < cryptoAmount) {
-      state = FailureState(S.current.not_enough_token(spendCurrency.name, balanceStore.getCustomBalance(spendCurrency).toString(), cryptoAmount.toString()));
+      state = FailureState(S.current.not_enough_token(
+          spendCurrency.name,
+          balanceStore.getCustomBalance(spendCurrency).toString(),
+          cryptoAmount.toString()));
       return;
     }
 

@@ -29,7 +29,6 @@ class WalletViewModel {
   }
 
   Future<bool> deleteWallet() async {
-
     appStore.wallet?.delete();
 
     appStore.wallet = null;

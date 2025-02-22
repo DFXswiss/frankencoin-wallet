@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
@@ -43,9 +42,9 @@ class CustomBalanceCard extends StatelessWidget {
           motion: const ScrollMotion(),
           children: [
             Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 5),
-                  child: InkWell(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: InkWell(
                   onTap: onTapSend,
                   enableFeedback: false,
                   child: DecoratedBox(

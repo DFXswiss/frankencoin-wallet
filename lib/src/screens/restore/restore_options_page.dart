@@ -42,7 +42,8 @@ class RestoreOptionsPage extends BasePage {
     String? seed = await showDialog(
       context: context,
       builder: (dialogContext) => QRScanDialog(
-        validateQR: (code, raw) => isSeedQr(code ?? "") || isCompactSeedQr(raw!),
+        validateQR: (code, raw) =>
+            isSeedQr(code ?? "") || isCompactSeedQr(raw!),
         onData: (code, raw) {
           if (isSeedQr(code ?? "")) {
             final seed = getSeedFromSeedQr(code!);

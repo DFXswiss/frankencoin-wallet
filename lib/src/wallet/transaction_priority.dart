@@ -5,7 +5,5 @@ enum TransactionPriority {
 
   const TransactionPriority(this.tip);
 
-
   final int tip;
 }
-

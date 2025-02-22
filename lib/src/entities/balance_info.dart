@@ -1,7 +1,6 @@
 import 'package:frankencoin_wallet/src/utils/fast_hash.dart';
 import 'package:isar/isar.dart';
 
-
 part 'balance_info.g.dart';
 
 @collection

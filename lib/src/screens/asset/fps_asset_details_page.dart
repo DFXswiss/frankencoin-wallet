@@ -112,7 +112,8 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
               ),
             ),
           BalanceCard(
-            balanceInfo: widget.balanceVM.balances[CryptoCurrency.fps.balanceId],
+            balanceInfo:
+                widget.balanceVM.balances[CryptoCurrency.fps.balanceId],
             cryptoCurrency: CryptoCurrency.fps,
             backgroundColor: FrankencoinColors.frDark,
             actionLabel: S.of(context).trade,

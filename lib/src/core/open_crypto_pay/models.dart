@@ -1,6 +1,6 @@
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 
-class FrankencoinPayRequest {
+class OpenCryptoPayRequest {
   final String address;
   final BigInt amount;
   final String receiverName;
@@ -9,7 +9,7 @@ class FrankencoinPayRequest {
   final String callbackUrl;
   final String quote;
 
-  FrankencoinPayRequest({
+  OpenCryptoPayRequest({
     required this.address,
     required this.amount,
     required this.receiverName,

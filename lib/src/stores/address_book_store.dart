@@ -4,8 +4,7 @@ import 'package:mobx/mobx.dart';
 
 part 'address_book_store.g.dart';
 
-class AddressBookStore = AddressBookStoreBase
-    with _$AddressBookStore;
+class AddressBookStore = AddressBookStoreBase with _$AddressBookStore;
 
 abstract class AddressBookStoreBase with Store {
   final Isar _isar;
@@ -29,7 +28,8 @@ abstract class AddressBookStoreBase with Store {
 
   @action
   Future<void> deleteEntry(AddressBookEntry entry) async {
-    await _isar.writeTxn(() async => await _isar.addressBookEntrys.delete(entry.id));
+    await _isar
+        .writeTxn(() async => await _isar.addressBookEntrys.delete(entry.id));
     entries.remove(entry);
   }
 }

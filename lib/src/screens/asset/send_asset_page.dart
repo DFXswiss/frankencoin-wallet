@@ -198,8 +198,9 @@ class _SendAssetPageBodyState extends State<_SendAssetPageBody> {
 
     _addressController.addListener(() {
       final address = _addressController.text;
-      if (address != widget.sendAssetVM.address)
+      if (address != widget.sendAssetVM.address) {
         widget.sendAssetVM.address = address;
+      }
     });
 
     _cryptoAmountController.addListener(() {

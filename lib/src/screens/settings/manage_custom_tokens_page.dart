@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:frankencoin_wallet/generated/i18n.dart';
@@ -36,11 +35,12 @@ class ManageCustomTokensPage extends BasePage {
               label: S.of(context).edit_asset,
               child: TextButton(
                 style: ButtonStyle(
-                  overlayColor: MaterialStateColor.resolveWith(
+                  overlayColor: WidgetStateColor.resolveWith(
                       (states) => Colors.transparent),
                 ),
-                onPressed: () => Navigator.of(context)
-                    .pushNamed(Routes.settingsCustomTokensEdit, arguments: null),
+                onPressed: () => Navigator.of(context).pushNamed(
+                    Routes.settingsCustomTokensEdit,
+                    arguments: null),
                 child: Icon(
                   Icons.add,
                   color: pageIconColor(context),
@@ -90,8 +90,9 @@ class _ManageCustomTokensPageBodyState
                   subtitle: e.address,
                   canEdit: e.editable,
                   onTap: e.editable
-                      ? (_) => Navigator.of(context)
-                          .pushNamed(Routes.settingsCustomTokensEdit, arguments: e)
+                      ? (_) => Navigator.of(context).pushNamed(
+                          Routes.settingsCustomTokensEdit,
+                          arguments: e)
                       : (_) => _alertNotEditable(e),
                 ),
               ),

@@ -14,7 +14,8 @@ class RestoreFromSeedPage extends BasePage {
   final WalletViewModel walletVM;
 
   @override
-  Widget body(BuildContext context) => _RestoreFromSeedPageBody(walletVM: walletVM);
+  Widget body(BuildContext context) =>
+      _RestoreFromSeedPageBody(walletVM: walletVM);
 }
 
 class _RestoreFromSeedPageBody extends StatefulWidget {

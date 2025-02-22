@@ -2,27 +2,27 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_exception.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/exceptions.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/lnurl.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/models.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
-import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
+import 'package:frankencoin_wallet/src/stores/open_crypto_pay_store.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
 import 'package:frankencoin_wallet/src/wallet/payment_uri.dart';
 import 'package:frankencoin_wallet/src/wallet/wallet_account.dart';
 
-class FrankencoinPayService extends DFXAuthService {
+class OpenCryptoPayService extends DFXAuthService {
   static const String defaultProvider = 'lightning.space';
 
-  static bool isFrankencoinPayQR(String value) =>
+  static bool isOpenCryptoPayQR(String value) =>
       value.toLowerCase().contains("lightning=lnurl") ||
       value.toLowerCase().startsWith("lnurl");
 
   static const CryptoCurrency defaultAsset = CryptoCurrency.polZCHF;
 
-  final FrankencoinPayStore frankencoinPayStore;
+  final OpenCryptoPayStore _openCryptoPayStore;
 
-  FrankencoinPayService(super.appStore, this.frankencoinPayStore);
+  OpenCryptoPayService(super.appStore, this._openCryptoPayStore);
 
   @override
   String get baseUrl => currentProvider;
@@ -38,16 +38,16 @@ class FrankencoinPayService extends DFXAuthService {
 
   String get currentProvider {
     final addressParts =
-        frankencoinPayStore.getLightningAddress(walletAddress)?.split("@");
+        _openCryptoPayStore.getLightningAddress(walletAddress)?.split("@");
     if (addressParts?.length == 2) return addressParts![1];
     return defaultProvider;
   }
 
   bool get isSetup =>
-      frankencoinPayStore.getLightningAddress(walletAddress) != null;
+      _openCryptoPayStore.getLightningAddress(walletAddress) != null;
 
   String get lightningAddress =>
-      frankencoinPayStore.getLightningAddress(walletAddress)!;
+      _openCryptoPayStore.getLightningAddress(walletAddress)!;
 
   String get lightningAddressEncoded =>
       encodeLNURL(_lightningAddressToUrl(lightningAddress));
@@ -55,9 +55,9 @@ class FrankencoinPayService extends DFXAuthService {
   Future<void> setupProvider([String provider = defaultProvider]) async {
     if (!isSetup) {
       final lightningAddress = await _getLightningAddress();
-      await frankencoinPayStore.setLightningAddress(
+      await _openCryptoPayStore.setLightningAddress(
           walletAddress, lightningAddress);
-      log('Set up Frankencoin Pay with $provider and got $lightningAddress',
+      log('Set up Open CryptoPay with $provider and got $lightningAddress',
           name: runtimeType.toString());
     }
   }
@@ -65,7 +65,7 @@ class FrankencoinPayService extends DFXAuthService {
   Future<String> getLightningInvoice(String amountRaw) async {
     final amount = amountRaw.replaceAll(",", ".");
     final addressParts =
-        frankencoinPayStore.getLightningAddress(walletAddress)!.split("@");
+        _openCryptoPayStore.getLightningAddress(walletAddress)!.split("@");
 
     final uri = Uri.https(currentProvider,
         '/.well-known/lnurlp/${addressParts.first}/cb', {'amount': '₣$amount'});
@@ -82,7 +82,7 @@ class FrankencoinPayService extends DFXAuthService {
     }
   }
 
-  Future<String> commitFrankencoinPayRequest(String txHex,
+  Future<String> commitOpenCryptoPayRequest(String txHex,
       {required String callbackUrl,
       required String blockchain,
       required String quote,
@@ -103,25 +103,24 @@ class FrankencoinPayService extends DFXAuthService {
       final body = jsonDecode(response.body);
 
       if (body.keys.contains("txId")) return body["txId"];
-      throw FrankencoinPayException(body.toString());
+      throw OpenCryptoPayException(body.toString());
     }
-    throw FrankencoinPayException(
+    throw OpenCryptoPayException(
         "Unexpected status code ${response.statusCode}");
   }
 
-  Future<void> cancelFrankencoinPayRequest(
-      FrankencoinPayRequest request) async {
+  Future<void> cancelOpenCryptoPayRequest(OpenCryptoPayRequest request) async {
     final uri = Uri.parse(request.callbackUrl.replaceAll("/cb/", "/cancel/"));
 
     await appStore.httpClient.delete(uri);
   }
 
-  Future<FrankencoinPayRequest> getFrankencoinPayRequest(String lnUrl) async {
+  Future<OpenCryptoPayRequest> getOpenCryptoPayInvoice(String lnUrl) async {
     if (lnUrl.toLowerCase().startsWith("http")) {
       final uri = Uri.parse(lnUrl);
       final params = uri.queryParameters;
       if (!params.containsKey("lightning")) {
-        throw FrankencoinPayNotSupportedException(uri.authority);
+        throw OpenCryptoPayNotSupportedException(uri.authority);
       }
 
       lnUrl = params["lightning"] as String;
@@ -130,9 +129,9 @@ class FrankencoinPayService extends DFXAuthService {
 
     log("Resolved URL: $url", name: runtimeType.toString());
 
-    final params = await _getFrankencoinPayParams(url);
+    final params = await _getOpenCryptoPayParams(url);
 
-    return FrankencoinPayRequest(
+    return OpenCryptoPayRequest(
         address: "",
         amount: parseFixed(
             params.$2[defaultAsset].toString(), defaultAsset.decimals),
@@ -148,8 +147,8 @@ class FrankencoinPayService extends DFXAuthService {
     return response['lightningAddress'] as String;
   }
 
-  Future<(_FrankencoinPayQuote, Map<CryptoCurrency, num>)>
-      _getFrankencoinPayParams(Uri uri) async {
+  Future<(_OpenCryptoPayQuote, Map<CryptoCurrency, num>)>
+      _getOpenCryptoPayParams(Uri uri) async {
     final response = await appStore.httpClient.get(uri);
 
     if (response.statusCode == 200) {
@@ -157,7 +156,7 @@ class FrankencoinPayService extends DFXAuthService {
 
       for (final key in ['callback', 'transferAmounts', 'quote']) {
         if (!responseBody.keys.contains(key)) {
-          throw FrankencoinPayNotSupportedException(uri.authority);
+          throw OpenCryptoPayNotSupportedException(uri.authority);
         }
       }
 
@@ -175,19 +174,19 @@ class FrankencoinPayService extends DFXAuthService {
         }
       }
 
-      final quote = _FrankencoinPayQuote.fromJson(
+      final quote = _OpenCryptoPayQuote.fromJson(
           responseBody['callback'] as String,
           responseBody['displayName'] as String?,
           responseBody['quote'] as Map);
 
       return (quote, transferAmounts);
     } else {
-      throw FrankencoinPayException(
-          'Failed to get FrankencoinPay Request. Status: ${response.statusCode} ${response.body}');
+      throw OpenCryptoPayException(
+          'Failed to get Open CryptoPay Request. Status: ${response.statusCode} ${response.body}');
     }
   }
 
-  Future<String> getFrankencoinPayAddress(
+  Future<String> getOpenCryptoPayAddress(
       String quoteId, String callbackUrl, CryptoCurrency asset) async {
     final uri = Uri.parse(callbackUrl);
     final queryParams = Map.of(uri.queryParameters);
@@ -204,21 +203,21 @@ class FrankencoinPayService extends DFXAuthService {
 
       for (final key in ['expiryDate', 'uri']) {
         if (!responseBody.keys.contains(key)) {
-          throw FrankencoinPayNotSupportedException(uri.authority);
+          throw OpenCryptoPayNotSupportedException(uri.authority);
         }
       }
 
       final paymentUri = ERC681URI.fromString(responseBody['uri']);
       return paymentUri.address;
     } else {
-      throw FrankencoinPayException(
-          'Failed to create FrankencoinPay Request. Status: ${response.statusCode} ${response.body}');
+      throw OpenCryptoPayException(
+          'Failed to create Open CryptoPay Request. Status: ${response.statusCode} ${response.body}');
     }
   }
 
   String _lightningAddressToUrl(String lightningAddress) {
     final addressParts =
-        frankencoinPayStore.getLightningAddress(walletAddress)!.split("@");
+        _openCryptoPayStore.getLightningAddress(walletAddress)!.split("@");
     return 'https://${addressParts[1]}/.well-known/lnurlp/${addressParts[0]}';
   }
 
@@ -235,20 +234,20 @@ class FrankencoinPayService extends DFXAuthService {
       case "BASE":
         return CryptoCurrency.baseZCHF;
     }
-    throw FrankencoinPayException("Unsupported Blockchain");
+    throw OpenCryptoPayException("Unsupported Blockchain");
   }
 }
 
-class _FrankencoinPayQuote {
+class _OpenCryptoPayQuote {
   final String callbackUrl;
   final String? displayName;
   final String id;
   final DateTime expiration;
 
-  _FrankencoinPayQuote(
+  _OpenCryptoPayQuote(
       this.callbackUrl, this.displayName, this.id, this.expiration);
 
-  _FrankencoinPayQuote.fromJson(this.callbackUrl, this.displayName, Map json)
+  _OpenCryptoPayQuote.fromJson(this.callbackUrl, this.displayName, Map json)
       : id = json['id'] as String,
         expiration = DateTime.parse(json['expiration']);
 }

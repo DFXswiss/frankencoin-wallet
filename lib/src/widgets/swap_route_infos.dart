@@ -18,8 +18,8 @@ class SwapRouteInfos extends StatelessWidget {
     bottomSheetService.queueBottomSheet(
       isModalDismissible: true,
       widget: BottomSheetMessageDisplayWidget(
-          title: S.current.swap_route_title,
-          message: S.current.swap_provided_by(swapRoute.provider.name),
+        title: S.current.swap_route_title,
+        message: S.current.swap_provided_by(swapRoute.provider.name),
       ),
     );
   }

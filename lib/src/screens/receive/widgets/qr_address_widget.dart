@@ -3,15 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRAddressWidget extends StatelessWidget {
-  const QRAddressWidget({super.key, required this.address, required this.subtitle});
+  const QRAddressWidget(
+      {super.key, required this.address, required this.subtitle});
 
   final String address;
   final String subtitle;
 
   @override
   Widget build(BuildContext context) {
-
-
     return Column(
       // mainAxisAlignment: MainAxisAlignment.center,
       children: [

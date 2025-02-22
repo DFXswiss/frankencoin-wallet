@@ -28,5 +28,4 @@ final defaultCustomErc20Tokens = [
     iconUrl: 'assets/images/crypto/wbtc.png',
     editable: false,
   ),
-
 ];

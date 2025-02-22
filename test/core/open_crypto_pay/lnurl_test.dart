@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/lnurl.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/lnurl.dart';
 
 void main() {
   group('LNURL', () {

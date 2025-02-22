@@ -1,17 +1,17 @@
 import 'package:frankencoin_wallet/src/entities/preferences_key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FrankencoinPayStore {
+class OpenCryptoPayStore {
   final SharedPreferences _sharedPreferences;
 
-  FrankencoinPayStore(this._sharedPreferences);
+  OpenCryptoPayStore(this._sharedPreferences);
 
   Future<void> setLightningAddress(
           String walletAddress, String lightningAddress) =>
       _sharedPreferences.setString(
-          PreferencesKey.getFrankencoinPayAddressKey(walletAddress),
+          PreferencesKey.getOpenCryptoPayAddressKey(walletAddress),
           lightningAddress);
 
   String? getLightningAddress(String walletAddress) => _sharedPreferences
-      .getString(PreferencesKey.getFrankencoinPayAddressKey(walletAddress));
+      .getString(PreferencesKey.getOpenCryptoPayAddressKey(walletAddress));
 }

@@ -17,7 +17,6 @@ class BottomSheetMessageDisplayWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
           SizedBox(
             width: double.infinity,
@@ -30,7 +29,6 @@ class BottomSheetMessageDisplayWidget extends StatelessWidget {
                 color: Colors.white,
               ),
               textAlign: TextAlign.center,
-
             ),
           ),
           const SizedBox(height: 8),

@@ -44,7 +44,9 @@ class _MoreAssetsBodyState extends State<_MoreAssetsBody> {
                     widget.balanceVM.balances[token.balanceId]?.getBalance(),
                 token: token,
                 backgroundColor: FrankencoinColors.frDark,
-                onTapSend: () => Navigator.of(context).pushNamed(Routes.sendAsset, arguments: [token, null, null]),
+                onTapSend: () => Navigator.of(context).pushNamed(
+                    Routes.sendAsset,
+                    arguments: [token, null, null]),
               ),
             )
             .toList(),

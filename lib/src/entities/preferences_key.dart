@@ -4,6 +4,6 @@ class PreferencesKey {
   static const String enableAdvancedMode = "enableAdvancedMode";
   static const String fankencoinPayAddress = "fankencoinPayAddress";
 
-  static String getFrankencoinPayAddressKey(String address) =>
+  static String getOpenCryptoPayAddressKey(String address) =>
       "$fankencoinPayAddress:$address";
 }

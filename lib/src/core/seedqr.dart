@@ -27,7 +27,7 @@ String getSeedFromCompactSeedQr(List<int> rawByteData) {
 
   final is12WordSeed = hex.encode(rawByteData).startsWith('410');
   final byteLength = is12WordSeed ? 19 : 34;
-  
+
   final hexRaw = hex.encode(rawByteData.sublist(0, byteLength));
 
   final binaryLength = is12WordSeed ? 132 : 264;

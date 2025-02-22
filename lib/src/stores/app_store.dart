@@ -1,6 +1,6 @@
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/open_crypto_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/refresh_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
@@ -25,7 +25,7 @@ abstract class AppStoreBase with Store {
           ..create();
         await walletConnectService.init();
 
-        await getIt.get<FrankencoinPayService>().setupProvider();
+        await getIt.get<OpenCryptoPayService>().setupProvider();
         await getIt.get<DFXService>().getAuthToken();
       }
     });

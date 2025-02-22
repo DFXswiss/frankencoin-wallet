@@ -1,20 +1,20 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_swap_service.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/models.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/open_crypto_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/swap/swap_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/stores/address_book_store.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/balance_store.dart';
 import 'package:frankencoin_wallet/src/stores/custom_erc20_token_store.dart';
-import 'package:frankencoin_wallet/src/stores/frankencoin_pay_store.dart';
+import 'package:frankencoin_wallet/src/stores/open_crypto_pay_store.dart';
 import 'package:frankencoin_wallet/src/stores/settings_store.dart';
 import 'package:frankencoin_wallet/src/view_model/address_book_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/balance_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/fps_asset_view_model.dart';
-import 'package:frankencoin_wallet/src/view_model/frankencoin_pay/send_frankencoin_pay_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/send_open_crypto_pay_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_asset_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/swap_view_model.dart';
@@ -38,7 +38,7 @@ void setupDependencyInjection(
 
   getIt.registerSingleton(
       AppStore(getIt.get<SettingsStore>(), getIt.get<BottomSheetService>()));
-  getIt.registerSingleton(FrankencoinPayStore(sharedPreferences));
+  getIt.registerSingleton(OpenCryptoPayStore(sharedPreferences));
   getIt.registerSingleton(AddressBookStore(getIt.get<Isar>()));
   getIt.registerSingleton(CustomErc20TokenStore(getIt.get<Isar>()));
   getIt.registerSingleton(BalanceStore(getIt.get<AppStore>(),
@@ -50,8 +50,8 @@ void setupDependencyInjection(
       SwapService(getIt.get<AppStore>(), getIt.get<DFXSwapService>()));
 
   getIt.registerSingleton(WalletConnectService(getIt.get<AppStore>()));
-  getIt.registerSingleton(FrankencoinPayService(
-      getIt.get<AppStore>(), getIt.get<FrankencoinPayStore>()));
+  getIt.registerSingleton(OpenCryptoPayService(
+      getIt.get<AppStore>(), getIt.get<OpenCryptoPayStore>()));
 
   getIt.registerFactory<BalanceViewModel>(
       () => BalanceViewModel(getIt.get<BalanceStore>()));
@@ -72,10 +72,10 @@ void setupDependencyInjection(
       () => AddressBookViewModel(getIt.get<AddressBookStore>()));
 
   getIt.registerFactoryParam<
-          SendFrankencoinPayViewModel, FrankencoinPayRequest, void>(
-      (request, _) => SendFrankencoinPayViewModel(
+          SendOpenCryptoPayViewModel, OpenCryptoPayRequest, void>(
+      (request, _) => SendOpenCryptoPayViewModel(
             getIt.get<AppStore>(),
-            getIt.get<FrankencoinPayService>(),
+            getIt.get<OpenCryptoPayService>(),
             getIt.get<BalanceStore>(),
             request: request,
           ));

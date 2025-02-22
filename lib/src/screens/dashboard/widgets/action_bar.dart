@@ -5,8 +5,8 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_exception.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/exceptions.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/open_crypto_pay_service.dart';
 import 'package:frankencoin_wallet/src/core/wallet_connect/walletconnect_service.dart';
 import 'package:frankencoin_wallet/src/di.dart';
 import 'package:frankencoin_wallet/src/screens/routes.dart';
@@ -123,7 +123,7 @@ class ActionBar extends StatelessWidget {
         validateQR: (code, _) =>
             RegExp(r'(\b0x[a-fA-F0-9]{40}\b)').hasMatch(code!) ||
             code.toLowerCase().startsWith("wc:") ||
-            FrankencoinPayService.isFrankencoinPayQR(code),
+            OpenCryptoPayService.isOpenCryptoPayQR(code),
         onData: (code, _) =>
             Navigator.of(dialogContext, rootNavigator: true).pop(code),
       ),
@@ -131,16 +131,16 @@ class ActionBar extends StatelessWidget {
 
     if (result.toLowerCase().startsWith("wc:")) {
       getIt.get<WalletConnectService>().pairWithUri(Uri.parse(result));
-    } else if (FrankencoinPayService.isFrankencoinPayQR(result)) {
+    } else if (OpenCryptoPayService.isOpenCryptoPayQR(result)) {
       try {
         final res = await getIt
-            .get<FrankencoinPayService>()
-            .getFrankencoinPayRequest(result);
+            .get<OpenCryptoPayService>()
+            .getOpenCryptoPayInvoice(result);
         if (context.mounted) {
           await Navigator.of(context)
-              .pushNamed(Routes.sendFrankencoinPay, arguments: res);
+              .pushNamed(Routes.sendOpenCryptoPay, arguments: res);
         }
-      } on FrankencoinPayException catch (e) {
+      } on OpenCryptoPayException catch (e) {
         getIt.get<BottomSheetService>().queueBottomSheet(
             isModalDismissible: true,
             widget: BottomSheetMessageDisplayWidget(

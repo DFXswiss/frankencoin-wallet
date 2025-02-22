@@ -4,9 +4,7 @@ abstract class AliasResolver {
   Future<AliasRecord?> lookupAlias(String alias, String ticker,
       [String? tickerFallback]);
 
-  static List<AliasResolver> all = [
-    OpenAliasResolver()
-  ];
+  static List<AliasResolver> all = [OpenAliasResolver()];
 
   static Future<AliasRecord?> resolve(String alias, String ticker,
       [String? tickerFallback]) async {

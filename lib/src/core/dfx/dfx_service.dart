@@ -141,13 +141,11 @@ class DFXService extends DFXAuthService {
       //
       // ToDo: Implement Sell with permits
       // } else {
-        Navigator.of(context).pushNamed(Routes.send,
-            arguments: [depositAddress, params['amount'] as String, asset]);
+      Navigator.of(context).pushNamed(Routes.send,
+          arguments: [depositAddress, params['amount'] as String, asset]);
       // }
     }
   }
-
-
 
   Future<String> _getSellDepositAddress(String routeId) async {
     final uri = Uri.https(baseUrl, 'v1/sell/$routeId');

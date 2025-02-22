@@ -55,11 +55,12 @@ class _SwapProgressModalState extends State<SwapProgressModal> {
       setState(() => _status = _SwapProgress.created);
       Navigator.of(context).pop();
 
-      getIt.get<BottomSheetService>().queueBottomSheet(isModalDismissible: true,
-        widget: BottomSheetMessageDisplayWidget(
-          message: '${S.current.error}: ${e.toString()}',
-        ),
-      );
+      getIt.get<BottomSheetService>().queueBottomSheet(
+            isModalDismissible: true,
+            widget: BottomSheetMessageDisplayWidget(
+              message: '${S.current.error}: ${e.toString()}',
+            ),
+          );
     }
   }
 
@@ -72,11 +73,12 @@ class _SwapProgressModalState extends State<SwapProgressModal> {
       setState(() => _status = _SwapProgress.created);
       Navigator.of(context).pop();
 
-      getIt.get<BottomSheetService>().queueBottomSheet(isModalDismissible: true,
-        widget: BottomSheetMessageDisplayWidget(
-          message: '${S.current.error}: ${e.toString()}',
-        ),
-      );
+      getIt.get<BottomSheetService>().queueBottomSheet(
+            isModalDismissible: true,
+            widget: BottomSheetMessageDisplayWidget(
+              message: '${S.current.error}: ${e.toString()}',
+            ),
+          );
     }
   }
 

@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:frankencoin_wallet/generated/i18n.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_service.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/models.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/open_crypto_pay_service.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/app_store.dart';
 import 'package:frankencoin_wallet/src/stores/balance_store.dart';
@@ -14,19 +14,19 @@ import 'package:frankencoin_wallet/src/wallet/transaction_priority.dart';
 import 'package:mobx/mobx.dart';
 import 'package:web3dart/web3dart.dart';
 
-part 'send_frankencoin_pay_view_model.g.dart';
+part 'send_open_crypto_pay_view_model.g.dart';
 
-class SendFrankencoinPayViewModel = SendFrankencoinPayViewModelBase
-    with _$SendFrankencoinPayViewModel;
+class SendOpenCryptoPayViewModel = SendOpenCryptoPayViewModelBase
+    with _$SendOpenCryptoPayViewModel;
 
-abstract class SendFrankencoinPayViewModelBase with Store {
+abstract class SendOpenCryptoPayViewModelBase with Store {
   final AppStore appStore;
   final BalanceStore balanceStore;
-  final FrankencoinPayService frankencoinPayService;
-  final FrankencoinPayRequest request;
+  final OpenCryptoPayService openCryptoPayService;
+  final OpenCryptoPayRequest request;
 
-  SendFrankencoinPayViewModelBase(
-      this.appStore, this.frankencoinPayService, this.balanceStore,
+  SendOpenCryptoPayViewModelBase(
+      this.appStore, this.openCryptoPayService, this.balanceStore,
       {required this.request});
 
   @observable
@@ -67,7 +67,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
       CryptoCurrency.zchf,
     ]) {
       if (balanceStore.getBalance(zchf) >= cryptoAmount) {
-        log('Choose ${zchf.blockchain.name} for Frankencoin Pay');
+        log('Choose ${zchf.blockchain.name} for Open CryptoPay');
         spendCurrency = zchf;
         return true;
       }
@@ -132,7 +132,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
   }
 
   void cancelRequest() {
-    frankencoinPayService.cancelFrankencoinPayRequest(request);
+    openCryptoPayService.cancelOpenCryptoPayRequest(request);
     stopTimers();
   }
 
@@ -152,7 +152,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
 
     state = CreatingExecutionState();
 
-    final address = await frankencoinPayService.getFrankencoinPayAddress(
+    final address = await openCryptoPayService.getOpenCryptoPayAddress(
         request.quote, request.callbackUrl, spendCurrency);
 
     log(address);
@@ -180,18 +180,18 @@ abstract class SendFrankencoinPayViewModelBase with Store {
         chainId: spendCurrency.chainId,
         priority: priority,
       );
-      state = AwaitingConfirmationExecutionState();
+      await commitTransaction(request);
     } catch (e) {
       state = FailureState(e.toString());
     }
   }
 
   @action
-  Future<void> commitTransaction(FrankencoinPayRequest request) async {
+  Future<void> commitTransaction(OpenCryptoPayRequest request) async {
     if (_signedTransaction == null) throw Exception("No pending transaction");
     state = CommittingExecutionState();
     try {
-      final txId = await frankencoinPayService.commitFrankencoinPayRequest(
+      final txId = await openCryptoPayService.commitOpenCryptoPayRequest(
         _signedTransaction!,
         callbackUrl: request.callbackUrl,
         blockchain: spendCurrency.blockchain.name,
@@ -200,7 +200,7 @@ abstract class SendFrankencoinPayViewModelBase with Store {
       );
       state = ExecutedSuccessfullyState(payload: txId);
     } catch (e) {
-      print("Failed ${e.toString()}");
+      log("Failed ${e.toString()}");
       state = FailureState(e.toString());
     }
   }

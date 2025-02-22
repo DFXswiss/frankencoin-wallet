@@ -7,11 +7,10 @@ class Routes {
   static const assetDetails = '/dashboard/asset';
   static const moreAssets = '/dashboard/assets';
   static const receive = '/dashboard/receive';
-  static const receiveFrankencoinPay = '/dashboard/receive/frankencoin_pay';
+  static const receiveOpenCryptoPay = '/dashboard/receive/open_crypto_pay';
   static const send = '/dashboard/send';
   static const sendAsset = '/dashboard/send/asset';
-  static const sendReceiver = '/dashboard/send/receiver';
-  static const sendFrankencoinPay = '/dashboard/send/frankencoin_pay';
+  static const sendOpenCryptoPay = '/dashboard/send/open_crypto_pay';
   static const settings = '/settings';
   static const settingsNodes = '/settings/nodes';
   static const settingsCustomTokens = '/settings/tokens';

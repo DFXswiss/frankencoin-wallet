@@ -32,13 +32,13 @@ class DFXSwapService extends DFXAuthService {
   DFXSwapPaymentInfosData? _storedSwapPaymentInfosData;
 
   Future<bool> getIsAvailable(CustomErc20Token spendCurrency,
-      CustomErc20Token receiveCurrency, BigInt amount) async =>
+          CustomErc20Token receiveCurrency, BigInt amount) async =>
       _isErrorHandled(
         (await _sendRequest(spendCurrency, receiveCurrency, amount)).error,
       );
 
   Future<double> getEstimatedReturn(CustomErc20Token spendCurrency,
-      CustomErc20Token receiveCurrency, BigInt amount) async =>
+          CustomErc20Token receiveCurrency, BigInt amount) async =>
       (await _sendRequest(spendCurrency, receiveCurrency, amount))
           .estimatedAmount
           .toDouble();

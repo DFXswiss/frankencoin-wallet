@@ -55,15 +55,15 @@ class SessionProposalModal extends StatelessWidget {
           child: SizedBox(
             width: double.infinity,
             child: Text(
-            S.current.connection_request,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Lato',
-              color: Colors.white,
+              S.current.connection_request,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Lato',
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
           ),
         ),
         Row(
@@ -105,7 +105,6 @@ class SessionProposalModal extends StatelessWidget {
         ],
         separatorText(S.current.methods),
         propertyChips(methods),
-
         separatorText(S.current.events),
         propertyChips(events),
       ],

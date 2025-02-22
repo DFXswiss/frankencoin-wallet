@@ -67,7 +67,7 @@ abstract class BasePage extends StatelessWidget {
             label: S.of(context).back,
             child: TextButton(
               style: ButtonStyle(
-                overlayColor: MaterialStateColor.resolveWith(
+                overlayColor: WidgetStateColor.resolveWith(
                     (states) => Colors.transparent),
               ),
               onPressed: () => onClose(context),

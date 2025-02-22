@@ -54,7 +54,7 @@ const part2 = """
   LocaleListResolutionCallback listResolution({required Locale fallback, bool withCountry = true}) {
     return (List<Locale>? locales, Iterable<Locale> supported) {
       if (locales == null || locales.isEmpty) {
-        return fallback ?? supported.first;
+        return fallback;
       } else {
         return _resolve(locales.first, fallback, supported, withCountry);
       }
@@ -70,13 +70,11 @@ const part2 = """
   @override
   Future<S> load(Locale locale) {
     final String lang = getLang(locale);
-    if (lang != null) {
-      switch (lang) {
+    switch (lang) {
 """;
 
 const part3 = """
-        default:
-      }
+      default:
     }
     S.current = const S();
     return SynchronousFuture<S>(S.current);
@@ -90,7 +88,7 @@ const part3 = """
 
   Locale _resolve(Locale? locale, Locale fallback, Iterable<Locale> supported, bool withCountry) {
     if (locale == null || !_isSupported(locale, withCountry)) {
-      return fallback ?? supported.first;
+      return fallback;
     }
 
     final Locale languageLocale = Locale(locale.languageCode, "");
@@ -99,32 +97,30 @@ const part3 = """
     } else if (supported.contains(languageLocale)) {
       return languageLocale;
     } else {
-      final Locale fallbackLocale = fallback ?? supported.first;
+      final Locale fallbackLocale = fallback;
       return fallbackLocale;
     }
   }
 
   bool _isSupported(Locale locale, bool withCountry) {
-    if (locale != null) {
-      for (Locale supportedLocale in supportedLocales) {
-        if (supportedLocale.languageCode != locale.languageCode) {
-          continue;
-        }
-        if (supportedLocale.countryCode == locale.countryCode) {
-          return true;
-        }
-        if (true != withCountry && (supportedLocale.countryCode == null || supportedLocale.countryCode!.isEmpty)) {
-          return true;
-        }
+    for (Locale supportedLocale in supportedLocales) {
+      if (supportedLocale.languageCode != locale.languageCode) {
+        continue;
+      }
+      if (supportedLocale.countryCode == locale.countryCode) {
+        return true;
+      }
+      if (true != withCountry &&
+          (supportedLocale.countryCode == null ||
+              supportedLocale.countryCode!.isEmpty)) {
+        return true;
       }
     }
     return false;
   }
 }
 
-String getLang(Locale l) => l == null
-  ? throw Exception('Incorrect local')
-  : l.countryCode != null && l.countryCode!.isEmpty
+String getLang(Locale l) => l.countryCode != null && l.countryCode!.isEmpty
     ? l.languageCode
     : l.toString();
 """;

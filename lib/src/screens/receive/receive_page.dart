@@ -53,11 +53,11 @@ class ReceivePage extends BasePage {
               ],
               if (_appStore.settingsStore.enableExperimentalFeatures)
                 OptionCard(
-                  title: S.of(context).frankencoin_pay,
-                  description: S.of(context).frankencoin_pay_description,
+                  title: S.of(context).open_crypto_pay,
+                  description: S.of(context).open_crypto_pay_description,
                   leadingIcon: Icons.currency_franc,
                   action: () => Navigator.of(context)
-                      .pushNamed(Routes.receiveFrankencoinPay),
+                      .pushNamed(Routes.receiveOpenCryptoPay),
                 ),
             ],
           );

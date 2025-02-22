@@ -47,8 +47,7 @@ abstract class FPSAssetViewModelBase with Store {
 
   @computed
   BigInt get polWFPSBalance =>
-      _balanceStore.balances[CryptoCurrency.polWFPS.balanceId]
-          ?.getBalance() ??
+      _balanceStore.balances[CryptoCurrency.polWFPS.balanceId]?.getBalance() ??
       BigInt.zero;
 
   @computed

@@ -12,7 +12,7 @@ class DFX_SwapRoute extends SwapRoute {
 
   DFX_SwapRoute(
     CustomErc20Token sendCurrency,
-      CustomErc20Token receiveCurrency,
+    CustomErc20Token receiveCurrency,
     this.dfxSwapService,
   ) : super(sendCurrency, receiveCurrency, SwapRouteProvider.dfx);
 

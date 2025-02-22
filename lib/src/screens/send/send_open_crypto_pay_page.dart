@@ -5,69 +5,65 @@ import 'package:frankencoin_wallet/generated/i18n.dart';
 import 'package:frankencoin_wallet/src/colors.dart';
 import 'package:frankencoin_wallet/src/core/bottom_sheet_service.dart';
 import 'package:frankencoin_wallet/src/core/dfx/dfx_service.dart';
-import 'package:frankencoin_wallet/src/core/frankencoin_pay/frankencoin_pay_request.dart';
+import 'package:frankencoin_wallet/src/core/open_crypto_pay/models.dart';
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
-import 'package:frankencoin_wallet/src/entities/custom_erc20_token.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:frankencoin_wallet/src/screens/send/widgets/blockchain_selector.dart';
-import 'package:frankencoin_wallet/src/screens/send/widgets/confirmation_alert.dart';
 import 'package:frankencoin_wallet/src/utils/format_fixed.dart';
-import 'package:frankencoin_wallet/src/view_model/frankencoin_pay/send_frankencoin_pay_view_model.dart';
+import 'package:frankencoin_wallet/src/view_model/send_open_crypto_pay_view_model.dart';
 import 'package:frankencoin_wallet/src/view_model/send_view_model.dart';
 import 'package:frankencoin_wallet/src/widgets/amount_info_row.dart';
 import 'package:frankencoin_wallet/src/widgets/error_dialog.dart';
-import 'package:frankencoin_wallet/src/widgets/successful_tx_dialog.dart';
 import 'package:mobx/mobx.dart';
-import 'package:web3dart/web3dart.dart';
 
-class SendFrankencoinPayPage extends BasePage {
-  SendFrankencoinPayPage(this.sendVM, this.bottomSheetService, this.dfxService,
-      {super.key, required this.frankencoinPayRequest});
+class SendOpenCryptoPayPage extends BasePage {
+  SendOpenCryptoPayPage(this.sendVM, this.bottomSheetService, this.dfxService,
+      {super.key, required this.openCryptoPayRequest});
 
   @override
   String? get title => S.current.send;
 
-  final SendFrankencoinPayViewModel sendVM;
+  final SendOpenCryptoPayViewModel sendVM;
   final BottomSheetService bottomSheetService;
   final DFXService dfxService;
-  final FrankencoinPayRequest frankencoinPayRequest;
+  final OpenCryptoPayRequest openCryptoPayRequest;
 
   @override
-  Widget body(BuildContext context) => _SendFrankencoinPayPageBody(
+  Widget body(BuildContext context) => _SendOpenCryptoPayPageBody(
         sendVM: sendVM,
         bottomSheetService: bottomSheetService,
         dfxService: dfxService,
-        frankencoinPayRequest: frankencoinPayRequest,
+        openCryptoPayRequest: openCryptoPayRequest,
       );
 }
 
-class _SendFrankencoinPayPageBody extends StatefulWidget {
-  final SendFrankencoinPayViewModel sendVM;
-  final FrankencoinPayRequest frankencoinPayRequest;
+class _SendOpenCryptoPayPageBody extends StatefulWidget {
+  final SendOpenCryptoPayViewModel sendVM;
+  final OpenCryptoPayRequest openCryptoPayRequest;
   final DFXService dfxService;
   final BottomSheetService bottomSheetService;
 
-  const _SendFrankencoinPayPageBody({
+  const _SendOpenCryptoPayPageBody({
     required this.sendVM,
     required this.bottomSheetService,
     required this.dfxService,
-    required this.frankencoinPayRequest,
+    required this.openCryptoPayRequest,
   });
 
   @override
-  State<StatefulWidget> createState() => _SendFrankencoinPayPageBodyState();
+  State<StatefulWidget> createState() => _SendOpenCryptoPayPageBodyState();
 }
 
-class _SendFrankencoinPayPageBodyState
-    extends State<_SendFrankencoinPayPageBody> {
+class _SendOpenCryptoPayPageBodyState
+    extends State<_SendOpenCryptoPayPageBody> {
   @override
   void initState() {
     super.initState();
     _setEffects(context);
 
-    widget.sendVM.cryptoAmount = widget.frankencoinPayRequest.amount;
-    widget.sendVM.timeLeft = widget.frankencoinPayRequest.expiry;
+    widget.sendVM.cryptoAmount = widget.openCryptoPayRequest.amount;
+    widget.sendVM.timeLeft = widget.openCryptoPayRequest.expiry;
     widget.sendVM.startTimeLeft();
     widget.sendVM.syncFee();
 
@@ -99,7 +95,7 @@ class _SendFrankencoinPayPageBodyState
       Padding(
         padding: const EdgeInsets.only(top: 20),
         child: Text(
-          S.of(context).frankencoin_pay_bill,
+          S.of(context).open_crypto_pay_bill,
           style: const TextStyle(
             fontSize: 20,
             fontFamily: 'Lato',
@@ -122,7 +118,7 @@ class _SendFrankencoinPayPageBodyState
               ),
             ),
             Text(
-              S.of(context).to(widget.frankencoinPayRequest.receiverName),
+              S.of(context).to(widget.openCryptoPayRequest.receiverName),
               style: const TextStyle(
                 fontSize: 20,
                 fontFamily: 'Lato',
@@ -183,8 +179,7 @@ class _SendFrankencoinPayPageBodyState
                   child: widget.sendVM.state is InitialExecutionState
                       ? Text(
                           widget.sendVM.timeLeft != 0
-                              ? S.of(context).pay
-                              // ? "${S.of(context).pay} - ${S.of(context).seconds(widget.sendVM.timeLeft.toString())}"
+                              ? "${S.of(context).pay} - ${S.of(context).seconds(widget.sendVM.timeLeft.toString())}"
                               : S.of(context).expired,
                           style: const TextStyle(fontSize: 16),
                         )
@@ -201,37 +196,7 @@ class _SendFrankencoinPayPageBodyState
   void _setEffects(BuildContext context) {
     if (_effectsInstalled) return;
     reaction((_) => widget.sendVM.state, (ExecutionState state) {
-      if (state is AwaitingConfirmationExecutionState) {
-        final estimatedFee =
-            EtherAmount.inWei(BigInt.from(widget.sendVM.estimatedFee))
-                .getValueInUnit(EtherUnit.ether);
-
-        showDialog<void>(
-          context: context,
-          builder: (BuildContext context) => ConfirmationAlert(
-            amount: formatFixed(widget.sendVM.cryptoAmount,
-                widget.sendVM.spendCurrency.decimals),
-            estimatedFee: estimatedFee.toString(),
-            spendCurrency: CustomErc20Token.fromCryptoCurrency(
-                widget.sendVM.spendCurrency),
-            onConfirm: () =>
-                widget.sendVM.commitTransaction(widget.frankencoinPayRequest),
-            onDecline: () => widget.sendVM.state = InitialExecutionState(),
-          ),
-        );
-      }
-
-      if (state is ExecutedSuccessfullyState) {
-        final txId = state.payload as String;
-        Navigator.of(context).pop();
-        showDialog<void>(
-          context: context,
-          builder: (_) => SuccessfulTxDialog(
-            txId: txId,
-            onConfirm: () {},
-          ),
-        );
-      }
+      if (state is ExecutedSuccessfullyState) Navigator.of(context).pop();
 
       if (state is FailureState) {
         showDialog(

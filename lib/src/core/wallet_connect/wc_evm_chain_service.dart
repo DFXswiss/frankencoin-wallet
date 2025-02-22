@@ -184,7 +184,8 @@ class CWEvmChainService {
 
     final paramsData = parameters[0] as Map<String, dynamic>;
 
-    final message = ""; //_convertToReadable(paramsData); // ToDo: (Konsti) Show raw TX
+    const message =
+        ""; //_convertToReadable(paramsData); // ToDo: (Konsti) Show raw TX
 
     final bool isApproved =
         await requestAuthorization(S.current.sign_transaction, message);

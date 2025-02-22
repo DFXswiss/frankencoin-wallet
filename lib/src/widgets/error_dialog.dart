@@ -15,8 +15,7 @@ class ErrorDialog extends InfoDialog {
   String get title => S.current.error;
 
   @override
-  Widget body(BuildContext context) =>
-      Column(
+  Widget body(BuildContext context) => Column(
         children: [
           Text(
             errorMessage,
