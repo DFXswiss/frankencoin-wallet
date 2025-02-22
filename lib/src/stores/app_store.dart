@@ -25,8 +25,8 @@ abstract class AppStoreBase with Store {
           ..create();
         await walletConnectService.init();
 
-        await getIt.get<OpenCryptoPayService>().setupProvider();
         await getIt.get<DFXService>().getAuthToken();
+        await getIt.get<OpenCryptoPayService>().setupProvider();
       }
     });
   }
