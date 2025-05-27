@@ -5,6 +5,7 @@ class OpenCryptoPayRequest {
   final BigInt amount;
   final String receiverName;
   final List<Blockchain> blockchains;
+  final Map<Blockchain, int> gasFees;
   final int expiry;
   final String callbackUrl;
   final String quote;
@@ -16,6 +17,7 @@ class OpenCryptoPayRequest {
     required this.expiry,
     required this.callbackUrl,
     required this.quote,
+    required this.gasFees,
     this.blockchains = Blockchain.values,
   });
 }

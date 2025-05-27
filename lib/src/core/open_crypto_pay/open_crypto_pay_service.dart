@@ -5,6 +5,7 @@ import 'package:frankencoin_wallet/src/core/dfx/dfx_auth_service.dart';
 import 'package:frankencoin_wallet/src/core/open_crypto_pay/exceptions.dart';
 import 'package:frankencoin_wallet/src/core/open_crypto_pay/lnurl.dart';
 import 'package:frankencoin_wallet/src/core/open_crypto_pay/models.dart';
+import 'package:frankencoin_wallet/src/entities/blockchain.dart';
 import 'package:frankencoin_wallet/src/entities/crypto_currency.dart';
 import 'package:frankencoin_wallet/src/stores/open_crypto_pay_store.dart';
 import 'package:frankencoin_wallet/src/utils/parse_fixed.dart';
@@ -133,13 +134,14 @@ class OpenCryptoPayService extends DFXAuthService {
 
     return OpenCryptoPayRequest(
         address: "",
-        amount: parseFixed(
-            params.$2[defaultAsset].toString(), defaultAsset.decimals),
+        amount: parseFixed(params.$2[defaultAsset]!, defaultAsset.decimals),
         receiverName: params.$1.displayName ?? "Unknown",
         expiry: params.$1.expiration.difference(DateTime.now()).inSeconds,
         blockchains: params.$2.keys.map((e) => e.blockchain).toList(),
         callbackUrl: params.$1.callbackUrl,
-        quote: params.$1.id);
+        gasFees: params.$1.minFees,
+        quote: params.$1.id,
+    );
   }
 
   Future<String> _getLightningAddress() async {
@@ -147,7 +149,7 @@ class OpenCryptoPayService extends DFXAuthService {
     return response['lightningAddress'] as String;
   }
 
-  Future<(_OpenCryptoPayQuote, Map<CryptoCurrency, num>)>
+  Future<(_OpenCryptoPayQuote, Map<CryptoCurrency, String>)>
       _getOpenCryptoPayParams(Uri uri) async {
     final response = await appStore.httpClient.get(uri);
 
@@ -160,14 +162,20 @@ class OpenCryptoPayService extends DFXAuthService {
         }
       }
 
-      final transferAmounts = <CryptoCurrency, num>{};
+      final transferAmounts = <CryptoCurrency, String>{};
+      final minFees = <Blockchain, int>{};
       for (final transferAmountRaw in responseBody['transferAmounts'] as List) {
         final transferAmount = transferAmountRaw as Map;
         final method = transferAmount['method'] as String;
 
+        final chain = Blockchain.getFromName(method);
+        if (chain != null) {
+          minFees[chain] = transferAmount['minFee'] as int;
+        }
+
         for (final asset in transferAmount['assets'] as List) {
           final assetTicker = asset['asset'] as String;
-          final amount = asset['amount'] as num;
+          final amount = asset['amount'] as String;
           if (assetTicker == 'ZCHF') {
             transferAmounts[_zchfFromBlockchain(method)] = amount;
           }
@@ -175,9 +183,11 @@ class OpenCryptoPayService extends DFXAuthService {
       }
 
       final quote = _OpenCryptoPayQuote.fromJson(
-          responseBody['callback'] as String,
-          responseBody['displayName'] as String?,
-          responseBody['quote'] as Map);
+        responseBody['callback'] as String,
+        responseBody['displayName'] as String?,
+        minFees,
+        responseBody['quote'] as Map,
+      );
 
       return (quote, transferAmounts);
     } else {
@@ -243,11 +253,21 @@ class _OpenCryptoPayQuote {
   final String? displayName;
   final String id;
   final DateTime expiration;
+  final Map<Blockchain, int> minFees;
 
   _OpenCryptoPayQuote(
-      this.callbackUrl, this.displayName, this.id, this.expiration);
+    this.callbackUrl,
+    this.displayName,
+    this.id,
+    this.expiration,
+    this.minFees,
+  );
 
-  _OpenCryptoPayQuote.fromJson(this.callbackUrl, this.displayName, Map json)
-      : id = json['id'] as String,
+  _OpenCryptoPayQuote.fromJson(
+    this.callbackUrl,
+    this.displayName,
+    this.minFees,
+    Map json,
+  )   : id = json['id'] as String,
         expiration = DateTime.parse(json['expiration']);
 }

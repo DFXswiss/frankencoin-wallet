@@ -3,7 +3,6 @@ PODS:
     - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
-    - FlutterMacOS
   - Flutter (1.0.0)
   - flutter_inappwebview_ios (0.0.1):
     - Flutter
@@ -34,7 +33,7 @@ PODS:
 
 DEPENDENCIES:
   - app_links (from `.symlinks/plugins/app_links/ios`)
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
@@ -54,7 +53,7 @@ EXTERNAL SOURCES:
   app_links:
     :path: ".symlinks/plugins/app_links/ios"
   connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/darwin"
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   Flutter:
     :path: Flutter
   flutter_inappwebview_ios:
@@ -75,20 +74,20 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  app_links: e7a6750a915a9e161c58d91bc610e8cd1d4d0ad0
-  connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
+  app_links: 3da4c36b46cac3bf24eb897f1a6ce80bda109874
+  connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_inappwebview_ios: 97215cf7d4677db55df76782dbd2930c5e1c1ea0
-  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
-  isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
+  flutter_inappwebview_ios: 25b61a1b550d1068e4ddaf490fc1d03c2ce6828d
+  flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
+  isar_flutter_libs: 9fc2cfb928c539e1b76c481ba5d143d556d94920
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
-  package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  qr_code_scanner: d77f94ecc9abf96d9b9b8fc04ef13f611e5a147a
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
 
 PODFILE CHECKSUM: 24faff971d08aff4b87b2f317051d1a02cbfdca6
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

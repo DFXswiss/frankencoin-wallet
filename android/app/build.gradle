@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "swiss.dfx.frankencoin_wallet"
-    compileSdkVersion 34 // flutter.compileSdkVersion
+    compileSdkVersion = 35 // flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -51,7 +51,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 24 // flutter.minSdkVersion
-        targetSdkVersion 34 //flutter.targetSdkVersion
+        targetSdkVersion 35 //flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

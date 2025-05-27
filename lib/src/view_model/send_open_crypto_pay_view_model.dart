@@ -178,7 +178,7 @@ abstract class SendOpenCryptoPayViewModelBase with Store {
         amount: cryptoAmount,
         contractAddress: spendCurrency.address,
         chainId: spendCurrency.chainId,
-        priority: priority,
+        gasPrice: request.gasFees[spendCurrency.blockchain]!,
       );
       await commitTransaction(request);
     } catch (e) {

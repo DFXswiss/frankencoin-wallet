@@ -13,6 +13,9 @@ enum Blockchain {
   static Blockchain getFromChainId(int chainId) =>
       Blockchain.values.firstWhere((e) => e.chainId == chainId);
 
+  static Blockchain? getFromName(String name) =>
+      Blockchain.values.where((e) => e.name == name).firstOrNull;
+
   final int chainId;
   final String nativeSymbol;
   final String name;

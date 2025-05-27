@@ -65,14 +65,18 @@ Future<String> prepareERC20Transaction(
   required BigInt amount,
   required String contractAddress,
   required int chainId,
-  required TransactionPriority priority,
+  TransactionPriority? priority,
+  int? gasPrice,
 }) {
   final transaction = Transaction(
     from: currentAccount.address,
     to: EthereumAddress.fromHex(contractAddress),
-    maxPriorityFeePerGas:
-        chainId == 1 ? EtherAmount.fromInt(EtherUnit.gwei, priority.tip) : null,
+    maxPriorityFeePerGas: chainId == 1 && priority != null
+        ? EtherAmount.fromInt(EtherUnit.gwei, priority.tip)
+        : null,
     value: EtherAmount.zero(),
+    gasPrice:
+        gasPrice != null ? EtherAmount.fromInt(EtherUnit.wei, gasPrice) : null,
   );
 
   final erc20 = ERC20(
