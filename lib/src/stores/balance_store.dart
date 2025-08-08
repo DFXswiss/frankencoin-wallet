@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:erc20/erc20.dart';
+import 'package:frankencoin_wallet/src/core/contracts/ReferredSavings.g.dart';
 import 'package:frankencoin_wallet/src/core/fiat_conversion_service.dart';
 import 'package:frankencoin_wallet/src/entities/balance_info.dart';
 import 'package:frankencoin_wallet/src/entities/blockchain.dart';
@@ -57,12 +58,18 @@ abstract class BalanceStoreBase with Store {
           erc20Balance.chainId, erc20Balance.contractAddress)] = erc20Balance;
     }
 
+    final savingsBalance = await _updateSavingsBalance(address);
+    balances[_getBalanceId(
+        CryptoCurrency.savings.chainId, CryptoCurrency.savings.address)] =
+        savingsBalance;
+
     // final fiatBalance = await _updateFiatBalance("ETH.ETH");
 
     _isar.writeTxn(() async {
       _isar.balanceInfos.putAll(nativeBalances);
       _isar.balanceInfos.putAll(erc20Balances);
       _isar.balanceInfos.putAll(customERC20Balances);
+      _isar.balanceInfos.put(savingsBalance);
     });
   }
 
@@ -84,6 +91,11 @@ abstract class BalanceStoreBase with Store {
       balances[_getBalanceId(erc20Token.chainId, erc20Token.address)] =
           _loadBalanceInfo(erc20Token.chainId, erc20Token.address, address);
     }
+
+    balances[_getBalanceId(
+            CryptoCurrency.savings.chainId, CryptoCurrency.savings.address)] =
+        _loadBalanceInfo(CryptoCurrency.savings.chainId,
+            CryptoCurrency.savings.address, address);
   }
 
   Future<void> startSyncBalances() async {
@@ -115,6 +127,23 @@ abstract class BalanceStoreBase with Store {
     }
 
     return balances;
+  }
+
+  Future<BalanceInfo> _updateSavingsBalance(EthereumAddress address) async {
+    final savingsAddress =
+    EthereumAddress.fromHex("0x27d9AD987BdE08a0d083ef7e0e4043C857A17B38");
+    final savings = ReferredSavings(
+      address: savingsAddress,
+      client: _appStore.getClient(CryptoCurrency.savings.chainId),
+    );
+
+    final balance = await savings.savings(($param18: address));
+    return BalanceInfo(
+      chainId: CryptoCurrency.savings.chainId,
+      contractAddress: CryptoCurrency.savings.address,
+      address: address.hex,
+      balance: balance.saved.toString(),
+    );
   }
 
   Future<List<BalanceInfo>> _updateCustomERC20Balances(

@@ -26,7 +26,7 @@ class BalanceCard extends StatelessWidget {
     this.action,
     this.backgroundColor = FrankencoinColors.frLightDark,
     this.showBlockchainIcon = false,
-    this.navigateToDetails = true,
+    this.navigateToDetails = false,
   });
 
   String get leadingImagePath => showBlockchainIcon
@@ -36,11 +36,10 @@ class BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:
-          cryptoCurrency.childCryptoCurrencies.isNotEmpty && navigateToDetails
-              ? () => Navigator.of(context)
-                  .pushNamed(Routes.assetDetails, arguments: cryptoCurrency)
-              : null,
+      onTap: navigateToDetails
+          ? () => Navigator.of(context)
+              .pushNamed(Routes.assetDetails, arguments: cryptoCurrency)
+          : null,
       child: Container(
         margin: const EdgeInsets.only(left: 10, right: 10, top: 15),
         decoration: BoxDecoration(

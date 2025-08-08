@@ -19,6 +19,8 @@ String getCryptoAssetImagePath(CryptoCurrency cryptoCurrency) {
     case CryptoCurrency.wfps:
     case CryptoCurrency.polWFPS:
       return "assets/images/crypto/fps.png";
+    case CryptoCurrency.savings:
+      return "assets/images/Savings.png";
     default:
       return "assets/images/frankencoin.png";
   }

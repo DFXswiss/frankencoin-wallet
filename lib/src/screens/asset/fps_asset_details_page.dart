@@ -118,7 +118,6 @@ class _FPSAssetDetailsPageBodyState extends State<_FPSAssetDetailsPageBody> {
             backgroundColor: FrankencoinColors.frDark,
             actionLabel: S.of(context).trade,
             action: () => Navigator.of(context).pushNamed(Routes.swap),
-            navigateToDetails: false,
           ),
           // ToDo: (Konsti) Make dynamic using childCurrencies
           if (widget.assetVM.wfpsBalance != BigInt.zero)

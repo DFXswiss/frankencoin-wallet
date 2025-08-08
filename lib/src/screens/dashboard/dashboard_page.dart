@@ -30,109 +30,116 @@ class DashboardPageState extends State<DashboardPage> {
   final settingsStore = getIt.get<SettingsStore>();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: FrankencoinColors.frLightDark,
-      body: PopScope(
-        canPop: false,
-        child: BottomSheetListener(
-          bottomSheetService: bottomSheetService,
-          child: SafeArea(
-            bottom: false,
-            child: Container(
-              color: FrankencoinColors.frDark,
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Observer(
-                    builder: (_) => BalanceSection(
-                      balance: widget.balanceVM.zchfBalanceAggregated,
-                      cryptoCurrency: CryptoCurrency.zchf,
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: FrankencoinColors.frLightDark,
+        body: PopScope(
+          canPop: false,
+          child: BottomSheetListener(
+            bottomSheetService: bottomSheetService,
+            child: SafeArea(
+              bottom: false,
+              child: Container(
+                color: FrankencoinColors.frDark,
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Observer(
+                      builder: (_) => BalanceSection(
+                        balance: widget.balanceVM.zchfBalanceAggregated,
+                        cryptoCurrency: CryptoCurrency.zchf,
+                      ),
                     ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [0, 1],
-                        colors: [
-                          FrankencoinColors.frLightDark,
-                          FrankencoinColors.frDark,
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: [0, 1],
+                          colors: [
+                            FrankencoinColors.frLightDark,
+                            FrankencoinColors.frDark,
+                          ],
+                        ),
+                      ),
+                      height: 8,
+                    ),
+                    Expanded(
+                      child: Stack(
+                        alignment: AlignmentDirectional.bottomCenter,
+                        children: [
+                          CustomScrollView(
+                            slivers: [
+                              SliverFillRemaining(
+                                hasScrollBody: false,
+                                child: Observer(
+                                  builder: (_) => Column(
+                                    children: <Widget>[
+                                      BalanceCard(
+                                        balance: widget
+                                            .balanceVM.zchfBalanceAggregated,
+                                        cryptoCurrency: CryptoCurrency.zchf,
+                                        navigateToDetails: true,
+                                      ),
+                                      BalanceCard(
+                                        balanceInfo: widget.balanceVM.balances[
+                                            CryptoCurrency.savings.balanceId],
+                                        cryptoCurrency: CryptoCurrency.savings,
+                                        navigateToDetails: true,
+                                      ),
+                                      BalanceCard(
+                                        balance: widget.balanceVM
+                                            .getAggregatedBalance(
+                                                CryptoCurrency.eth),
+                                        cryptoCurrency: CryptoCurrency.eth,
+                                        navigateToDetails: true,
+                                      ),
+                                      BalanceCard(
+                                        balanceInfo: widget.balanceVM.balances[
+                                            CryptoCurrency.pol.balanceId],
+                                        cryptoCurrency: CryptoCurrency.pol,
+                                      ),
+                                      Offstage(
+                                        offstage: !(settingsStore
+                                                .enableAdvancedMode ||
+                                            widget.balanceVM
+                                                    .fpsBalanceAggregated >
+                                                BigInt.zero),
+                                        child: BalanceCard(
+                                          balance: widget
+                                              .balanceVM.fpsBalanceAggregated,
+                                          cryptoCurrency: CryptoCurrency.fps,
+                                          navigateToDetails: true,
+                                        ),
+                                      ),
+                                      Offstage(
+                                        offstage:
+                                            !settingsStore.enableAdvancedMode,
+                                        child: FullwidthButton(
+                                          label: S.of(context).more_assets,
+                                          onPressed: () => Navigator.of(context)
+                                              .pushNamed(Routes.moreAssets),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 110)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Observer(
+                            builder: (_) => ActionBar(
+                              showDFX: widget.appStore.dfxAuthToken != null,
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    height: 8,
-                  ),
-                  Expanded(
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomCenter,
-                      children: [
-                        CustomScrollView(
-                          slivers: [
-                            SliverFillRemaining(
-                              hasScrollBody: false,
-                              child: Observer(
-                                builder: (_) => Column(
-                                  children: <Widget>[
-                                    BalanceCard(
-                                      balance: widget
-                                          .balanceVM.zchfBalanceAggregated,
-                                      cryptoCurrency: CryptoCurrency.zchf,
-                                    ),
-                                    BalanceCard(
-                                      balance: widget.balanceVM
-                                          .getAggregatedBalance(
-                                              CryptoCurrency.eth),
-                                      cryptoCurrency: CryptoCurrency.eth,
-                                    ),
-                                    BalanceCard(
-                                      balanceInfo: widget.balanceVM.balances[
-                                          CryptoCurrency.pol.balanceId],
-                                      cryptoCurrency: CryptoCurrency.pol,
-                                    ),
-                                    Offstage(
-                                      offstage:
-                                          !(settingsStore.enableAdvancedMode ||
-                                              widget.balanceVM
-                                                      .fpsBalanceAggregated >
-                                                  BigInt.zero),
-                                      child: BalanceCard(
-                                        balance: widget
-                                            .balanceVM.fpsBalanceAggregated,
-                                        cryptoCurrency: CryptoCurrency.fps,
-                                      ),
-                                    ),
-                                    Offstage(
-                                      offstage:
-                                          !settingsStore.enableAdvancedMode,
-                                      child: FullwidthButton(
-                                        label: S.of(context).more_assets,
-                                        onPressed: () => Navigator.of(context)
-                                            .pushNamed(Routes.moreAssets),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 110)
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Observer(
-                          builder: (_) => ActionBar(
-                            showDFX: widget.appStore.dfxAuthToken != null,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }

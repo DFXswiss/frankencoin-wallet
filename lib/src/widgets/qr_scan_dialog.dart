@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 typedef FuncValidateQR = bool Function(String? code, List<int>? rawBytes);
 typedef FuncOnQRData = void Function(String? code, List<int>? rawBytes);
@@ -75,11 +75,5 @@ class _QRScanDialogState extends State<QRScanDialog> {
         _scannedOnce = true;
       }
     });
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }

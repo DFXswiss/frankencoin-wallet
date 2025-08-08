@@ -21,7 +21,8 @@ enum CryptoCurrency {
       "Frankencoin (Optimism)", 18, zchf),
   arbETH(42161, "0x0", "ETH", "Arbitrum Ethereum", 18, eth),
   arbZCHF(42161, "0xB33c4255938de7A6ec1200d397B2b2F329397F9B", "ZCHF",
-      "Frankencoin (Arbitrum)", 18, zchf);
+      "Frankencoin (Arbitrum)", 18, zchf),
+  savings(1, "0x27d9AD987BdE08a0d083ef7e0e4043C857A17B38", "ZCHF", "Savings", 18);
 
   const CryptoCurrency(
       this.chainId, this.address, this.symbol, this.name, this.decimals,
