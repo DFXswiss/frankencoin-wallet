@@ -7,21 +7,23 @@ PODS:
   - flutter_inappwebview_ios (0.0.1):
     - Flutter
     - flutter_inappwebview_ios/Core (= 0.0.1)
-    - OrderedSet (~> 5.0)
+    - OrderedSet (~> 6.0.3)
   - flutter_inappwebview_ios/Core (0.0.1):
     - Flutter
-    - OrderedSet (~> 5.0)
+    - OrderedSet (~> 6.0.3)
   - flutter_secure_storage (6.0.0):
     - Flutter
   - isar_flutter_libs (1.0.0):
     - Flutter
   - MTBBarcodeScanner (5.0.11)
-  - OrderedSet (5.0.0)
+  - OrderedSet (6.0.3)
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - permission_handler_apple (9.4.8):
+    - Flutter
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
@@ -40,6 +42,7 @@ DEPENDENCIES:
   - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -66,6 +69,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   shared_preferences_foundation:
@@ -74,20 +79,21 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  app_links: 3da4c36b46cac3bf24eb897f1a6ce80bda109874
-  connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
+  app_links: e7a6750a915a9e161c58d91bc610e8cd1d4d0ad0
+  connectivity_plus: 2a701ffec2c0ae28a48cf7540e279787e77c447d
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_inappwebview_ios: 25b61a1b550d1068e4ddaf490fc1d03c2ce6828d
-  flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
-  isar_flutter_libs: 9fc2cfb928c539e1b76c481ba5d143d556d94920
+  flutter_inappwebview_ios: 6f63631e2c62a7c350263b13fa5427aedefe81d4
+  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
-  OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
-  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
-  qr_code_scanner: d77f94ecc9abf96d9b9b8fc04ef13f611e5a147a
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: ee2fe0fd04551b304eb002714ff067c371c822ed
+  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
-PODFILE CHECKSUM: 24faff971d08aff4b87b2f317051d1a02cbfdca6
+PODFILE CHECKSUM: 3b10b6b2e39acb754508de247e430d057d220d0b
 
 COCOAPODS: 1.16.2
