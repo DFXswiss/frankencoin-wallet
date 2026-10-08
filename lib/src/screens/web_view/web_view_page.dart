@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:frankencoin_wallet/src/screens/base_page.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -27,6 +28,8 @@ class WebViewPageBody extends StatefulWidget {
 
 class WebViewPageBodyState extends State<WebViewPageBody> {
   static const _mediaPermissionHosts = ["dfx.swiss", "sumsub.com"];
+
+  Future<bool> _pendingOsPermissionRequest = Future.value(true);
 
   @override
   Widget build(BuildContext context) => InAppWebView(
@@ -69,7 +72,23 @@ class WebViewPageBodyState extends State<WebViewPageBody> {
       }
     }
 
-    final statuses = await permissions.toList().request();
-    return statuses.values.every((status) => status.isGranted);
+    return _requestOsPermissions(permissions.toList());
+  }
+
+  // Only one OS permission request may run at a time, so queue them.
+  Future<bool> _requestOsPermissions(List<Permission> permissions) {
+    final result = _pendingOsPermissionRequest.then((_) async {
+      try {
+        final statuses = await Future.wait(permissions.map((p) => p.status));
+        if (statuses.every((status) => status.isGranted)) return true;
+
+        final requested = await permissions.request();
+        return requested.values.every((status) => status.isGranted);
+      } on PlatformException {
+        return false;
+      }
+    });
+    _pendingOsPermissionRequest = result.catchError((_) => false);
+    return result;
   }
 }
