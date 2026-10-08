@@ -29,7 +29,7 @@ class WebViewPageBody extends StatefulWidget {
 class WebViewPageBodyState extends State<WebViewPageBody> {
   static const _mediaPermissionHosts = ["dfx.swiss", "sumsub.com"];
 
-  Future<bool> _pendingOsPermissionRequest = Future.value(true);
+  static Future<bool> _pendingOsPermissionRequest = Future.value(true);
 
   @override
   Widget build(BuildContext context) => InAppWebView(
@@ -75,12 +75,14 @@ class WebViewPageBodyState extends State<WebViewPageBody> {
     return _requestOsPermissions(permissions.toList());
   }
 
-  // Only one OS permission request may run at a time, so queue them.
+  // Only one OS permission request may run at a time app-wide, so queue them.
   Future<bool> _requestOsPermissions(List<Permission> permissions) {
     final result = _pendingOsPermissionRequest.then((_) async {
       try {
+        if (!mounted) return false;
         final statuses = await Future.wait(permissions.map((p) => p.status));
         if (statuses.every((status) => status.isGranted)) return true;
+        if (!mounted) return false;
 
         final requested = await permissions.request();
         return requested.values.every((status) => status.isGranted);
